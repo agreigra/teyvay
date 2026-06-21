@@ -1,4 +1,20 @@
 {
   "title": "Admin",
-  "comingSoon": "Admin dashboard (all listings, users) is coming soon."
+  "tabs": {
+    "listings": "Listings",
+    "users": "Users"
+  },
+  "listings": {
+    "empty": "No listings yet.",
+    "filteredBy": "Listings by {{name}}",
+    "clear": "Clear"
+  },
+  "users": {
+    "empty": "No users yet.",
+    "unnamed": "Unnamed user",
+    "viewListings": "View listings"
+  },
+  "errors": {
+    "loadFailed": "Couldn't load data."
+  }
 }

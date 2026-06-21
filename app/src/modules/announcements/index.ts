@@ -7,6 +7,9 @@ import fr from './locales/fr.json';
 
 export { ANNOUNCEMENTS_NS } from './constants';
 export { AnnouncementsStack } from './navigation/AnnouncementsStack';
+export { AnnouncementCard } from './components/AnnouncementCard';
+export { useAnnouncements } from './hooks/useAnnouncements';
+export type { ListScope } from './hooks/useAnnouncements';
 
 // Register this module's translations. Call after initI18n().
 export function registerAnnouncementsLocales(): void {

@@ -1,4 +1,20 @@
 {
   "title": "Admin",
-  "comingSoon": "Le tableau de bord admin (annonces, utilisateurs) arrive bientôt."
+  "tabs": {
+    "listings": "Annonces",
+    "users": "Utilisateurs"
+  },
+  "listings": {
+    "empty": "Aucune annonce pour le moment.",
+    "filteredBy": "Annonces de {{name}}",
+    "clear": "Effacer"
+  },
+  "users": {
+    "empty": "Aucun utilisateur pour le moment.",
+    "unnamed": "Utilisateur sans nom",
+    "viewListings": "Voir les annonces"
+  },
+  "errors": {
+    "loadFailed": "Impossible de charger les données."
+  }
 }
