@@ -22,7 +22,7 @@ export function CreateAnnouncementScreen({ navigation }: Props) {
   };
 
   return (
-    <Screen>
+    <Screen scroll>
       <AnnouncementForm
         heading={t('create.title')}
         submitLabel={t('create.submit')}

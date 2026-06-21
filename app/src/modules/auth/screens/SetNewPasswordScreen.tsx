@@ -45,7 +45,7 @@ export function SetNewPasswordScreen() {
   };
 
   return (
-    <Screen>
+    <Screen scroll>
       <View style={styles.header}>
         <Text style={[styles.title, rtl && rtlTextStyle]}>{t('setPassword.title')}</Text>
         <Text style={[styles.subtitle, rtl && rtlTextStyle]}>{t('setPassword.subtitle')}</Text>

@@ -47,7 +47,7 @@ export function EditAnnouncementScreen({ route, navigation }: Props) {
   }
 
   return (
-    <Screen>
+    <Screen scroll>
       <AnnouncementForm
         heading={t('edit.title')}
         submitLabel={t('edit.submit')}

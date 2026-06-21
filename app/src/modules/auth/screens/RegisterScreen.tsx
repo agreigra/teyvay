@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 
@@ -73,11 +73,10 @@ export function RegisterScreen({ navigation }: Props) {
   };
 
   return (
-    <Screen>
-      <ScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="handled">
-        <View style={styles.brand}>
-          <Brand showTagline={false} />
-        </View>
+    <Screen scroll>
+      <View style={styles.brand}>
+        <Brand showTagline={false} />
+      </View>
 
         <View style={styles.header}>
           <Text style={[styles.title, rtl && rtlTextStyle]}>{t('register.title')}</Text>
@@ -136,7 +135,6 @@ export function RegisterScreen({ navigation }: Props) {
         <Pressable onPress={() => navigation.navigate('SignIn')} style={styles.link}>
           <Text style={styles.linkText}>{t('register.haveAccount')}</Text>
         </Pressable>
-      </ScrollView>
     </Screen>
   );
 }

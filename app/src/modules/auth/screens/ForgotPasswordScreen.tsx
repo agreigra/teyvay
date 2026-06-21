@@ -47,7 +47,7 @@ export function ForgotPasswordScreen({ navigation }: Props) {
   };
 
   return (
-    <Screen>
+    <Screen scroll>
       <View style={styles.header}>
         <Text style={[styles.title, rtl && rtlTextStyle]}>{t('forgot.title')}</Text>
         <Text style={[styles.subtitle, rtl && rtlTextStyle]}>{t('forgot.subtitle')}</Text>

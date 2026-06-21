@@ -54,7 +54,7 @@ export function OtpVerifyScreen({ route }: Props) {
   };
 
   return (
-    <Screen>
+    <Screen scroll>
       <View style={styles.header}>
         <Text style={[styles.title, rtl && rtlTextStyle]}>{t('otp.title')}</Text>
         <Text style={[styles.subtitle, rtl && rtlTextStyle]}>{t('otp.subtitle', { phone })}</Text>

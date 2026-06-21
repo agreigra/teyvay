@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Alert, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Alert, StyleSheet, Text, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 
 import { Button } from '../../../core/components/Button';
@@ -76,9 +76,8 @@ export function ProfileScreen() {
   };
 
   return (
-    <Screen>
-      <ScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="handled">
-        <Field
+    <Screen scroll>
+      <Field
           label={t('fields.firstName')}
           value={firstName}
           onChangeText={(v) => {
@@ -133,7 +132,6 @@ export function ProfileScreen() {
           loading={deleting}
           style={styles.deleteBtn}
         />
-      </ScrollView>
     </Screen>
   );
 }

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Alert, ScrollView, StyleSheet, Text } from 'react-native';
+import { Alert, StyleSheet, Text } from 'react-native';
 import { useTranslation } from 'react-i18next';
 
 import { Button } from '../../../core/components/Button';
@@ -61,7 +61,7 @@ export function AnnouncementForm({
   };
 
   return (
-    <ScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="handled">
+    <>
       <Text style={[styles.title, rtl && rtlTextStyle]}>{heading}</Text>
 
       <Field
@@ -93,7 +93,7 @@ export function AnnouncementForm({
         onPress={submit}
         loading={loading}
       />
-    </ScrollView>
+    </>
   );
 }
 
