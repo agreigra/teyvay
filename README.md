@@ -25,6 +25,7 @@ The original spec ([prompt.md](prompt.md)) is solid but leaves gaps that must be
 | 7   | Currency unspecified.                                                                 | **MRU** (Mauritanian Ouguiya). `price` stored as `numeric(12,2)`.                                                                                                                                                          |
 | 8   | Images not mentioned.                                                                 | Out of scope for MVP (listings are text + price). Noted as a future enhancement (Supabase Storage).                                                                                                                        |
 | 9   | Seeding an admin via pure SQL is awkward (auth.users is managed).                     | `seed.sql` seeds `app_settings` + sample announcements; admin promotion is a documented one-liner UPDATE after the admin signs in once.                                                                                    |
+| 10  | Should browsing require login? (Spec §9 said "only authenticated users access data".) | **No — guests browse.** Unauthenticated visitors can view **active** listings, open details, and Contact via WhatsApp. Login is required only to **post/manage** listings (merchant), or for admin. This overrides spec §9 for the public read path. |
 
 ---
 
@@ -99,24 +100,37 @@ Migrations mirror the modules — each module contributes its own migration so t
 
 ### RLS policy matrix
 
-| Table                  | Merchant                        | Client                     | Admin |
-| ---------------------- | ------------------------------- | -------------------------- | ----- |
-| `announcements` SELECT | own (any status) + active       | active only                | all   |
-| `announcements` INSERT | own (`created_by = auth.uid()`) | ✗                          | ✓     |
-| `announcements` UPDATE | own only                        | ✗                          | all   |
-| `announcements` DELETE | own only                        | ✗                          | all   |
-| `profiles` SELECT      | self                            | self                       | all   |
-| `profiles` UPDATE      | self (role change blocked)      | self (role change blocked) | all   |
-| `app_settings` SELECT  | ✓ (authenticated)               | ✓                          | ✓     |
-| `app_settings` UPDATE  | ✗                               | ✗                          | ✓     |
+| Table                  | Guest (anon) | Merchant                        | Client                     | Admin |
+| ---------------------- | ------------ | ------------------------------- | -------------------------- | ----- |
+| `announcements` SELECT | active only  | own (any status) + active       | active only                | all   |
+| `announcements` INSERT | ✗            | own (`created_by = auth.uid()`) | ✗                          | ✓     |
+| `announcements` UPDATE | ✗            | own only                        | ✗                          | all   |
+| `announcements` DELETE | ✗            | own only                        | ✗                          | all   |
+| `profiles` SELECT      | ✗            | self                            | self                       | all   |
+| `profiles` UPDATE      | ✗            | self (role change blocked)      | self (role change blocked) | all   |
+| `app_settings` SELECT  | ✓            | ✓                               | ✓                          | ✓     |
+| `app_settings` UPDATE  | ✗            | ✗                               | ✗                          | ✓     |
 
-All access requires an authenticated user (`auth.uid() is not null`).
+**Public read path:** active `announcements` and `app_settings` (the admin WhatsApp number) are readable by the `anon` role so guests can browse and contact. Everything else requires an authenticated user (`auth.uid() is not null`); all writes require auth.
 
 ---
 
 ## 4. WhatsApp deep link
 
-`utils/whatsapp.ts` builds: `https://wa.me/<adminPhone>?text=<encoded>` where the message includes the **announcement title**, **announcement ID**, and **interest text** (translated via i18n). Admin phone comes from `app_settings`.
+`utils/whatsapp.ts` builds: `https://wa.me/<adminPhone>?text=<encoded>` where the message includes the **announcement title**, **announcement ID**, and **interest text** (translated via i18n). Admin phone comes from `app_settings` (publicly readable, so guests can contact too).
+
+---
+
+## 4b. Guest browsing (no login)
+
+The app opens directly to the **public browse** of active listings — no account needed. From there a visitor can open a listing's detail and **Contact via WhatsApp**. A persistent **Sign in** entry point lets them authenticate when they want to post (merchant) or manage (admin).
+
+Navigation gate:
+
+- **No session →** guest browse (announcements list + detail + contact) with a "Sign in" CTA into the auth flow.
+- **Session →** role-based home: merchant (my listings + create), client (browse), admin (dashboard).
+
+So `AuthStack` is reachable on demand rather than forced at startup.
 
 ---
 
@@ -139,8 +153,9 @@ Build one module at a time. After each step the app **compiles and runs** — yo
 | **2** | ✅ done | **settings**      | `0002_settings`      | Language Selection screen, `settings.service` (read/write whatsapp no.)                                                     | First-launch language pick persists; RTL flips for Arabic                            |
 | **3** | ✅ done | **auth**          | _(uses 0001)_        | Phone+password auth (OTP only for first-time verify + password recovery), `useAuth`, onboarding role pick (merchant/client) | Register→OTP confirm→password login; forgot→OTP→new password; role stored on profile |
 | **4** | ✅ done | **announcements** | `0003_announcements` | List, Detail, Create (merchant), `announcements.service`, WhatsApp deep-link on Detail                                      | Merchant creates a listing; client browses active ones; Contact opens WhatsApp       |
+| **4b**| ✅ done | **guest browse**  | _(uses 0003)_        | Navigation gate change: open to public browse without login; "Sign in" CTA; guest list/detail/contact                      | Logged-out user sees active listings, opens detail, contacts via WhatsApp            |
 | **5** | ⬜ todo | **admin**         | _(uses 0003)_        | Admin dashboard: view all, activate/deactivate/mark sold, moderate                                                          | Admin manages any listing                                                            |
-| **6** | ⬜ todo | _RLS hardening_   | `0004_rls_policies`  | — (enable + verify policies for every table)                                                                                | Each role is confirmed limited to its matrix rows; `db reset` clean                  |
+| **6** | ⬜ todo | _RLS hardening_   | `0004_rls_policies`  | — (enable + verify policies for every table, incl. **public/anon** read of active listings + whatsapp number)               | Guest reads active only; each role limited to its matrix rows; `db reset` clean      |
 | **7** | ⬜ todo | _Polish_          | —                    | loading/error/empty states, finalize setup guide + `.env.example`                                                           | MVP demo-ready end-to-end                                                            |
 
 > RLS policies (step 6) are written incrementally as each table lands, but consolidated/verified in `0004` so the whole security surface is auditable at once. For real deployments, enable RLS per-table in the same migration that creates the table.

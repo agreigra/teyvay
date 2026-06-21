@@ -8,6 +8,7 @@ import { Field } from '../../../core/components/Field';
 import { Screen } from '../../../core/components/Screen';
 import { colors, spacing, typography } from '../../../core/theme';
 import { AUTH_NS, DEFAULT_COUNTRY_CODE } from '../constants';
+import { useAuth } from '../hooks/useAuth';
 import type { AuthStackParamList } from '../navigation/AuthStack';
 import { signInWithPassword } from '../services/auth.service';
 import { isValidPhone, normalizePhone } from '../utils';
@@ -16,6 +17,7 @@ type Props = NativeStackScreenProps<AuthStackParamList, 'SignIn'>;
 
 export function SignInScreen({ navigation }: Props) {
   const { t } = useTranslation(AUTH_NS);
+  const { closeAuth } = useAuth();
   const [phone, setPhone] = useState(DEFAULT_COUNTRY_CODE);
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
@@ -73,6 +75,9 @@ export function SignInScreen({ navigation }: Props) {
       <Pressable onPress={() => navigation.navigate('Register')} style={styles.link}>
         <Text style={styles.linkText}>{t('signIn.noAccount')}</Text>
       </Pressable>
+      <Pressable onPress={closeAuth} style={styles.link}>
+        <Text style={styles.browseText}>{t('signIn.browse')}</Text>
+      </Pressable>
     </Screen>
   );
 }
@@ -100,5 +105,9 @@ const styles = StyleSheet.create({
     color: colors.primary,
     fontSize: typography.body,
     fontWeight: '600',
+  },
+  browseText: {
+    color: colors.textMuted,
+    fontSize: typography.body,
   },
 });

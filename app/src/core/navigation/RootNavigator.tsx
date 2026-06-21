@@ -59,22 +59,28 @@ function Splash() {
 
 // Top-level gate: auth flow -> onboarding -> main app.
 export function RootNavigator() {
-  const { initializing, session, needsOnboarding, passwordResetPending } =
-    useAuth();
+  const {
+    initializing,
+    session,
+    needsOnboarding,
+    passwordResetPending,
+    authPrompt,
+  } = useAuth();
 
   if (initializing) return <Splash />;
 
-  return (
-    <NavigationContainer>
-      {!session ? (
-        <AuthStack />
-      ) : passwordResetPending ? (
-        <ResetPasswordNavigator />
-      ) : needsOnboarding ? (
-        <OnboardingNavigator />
-      ) : (
-        <MainNavigator />
-      )}
-    </NavigationContainer>
-  );
+  // Logged out: browse publicly by default; show the auth flow only when the
+  // guest asks to sign in.
+  let content;
+  if (!session) {
+    content = authPrompt ? <AuthStack /> : <MainNavigator />;
+  } else if (passwordResetPending) {
+    content = <ResetPasswordNavigator />;
+  } else if (needsOnboarding) {
+    content = <OnboardingNavigator />;
+  } else {
+    content = <MainNavigator />;
+  }
+
+  return <NavigationContainer>{content}</NavigationContainer>;
 }

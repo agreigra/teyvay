@@ -31,6 +31,11 @@ type AuthContextValue = {
   passwordResetPending: boolean;
   beginPasswordReset: () => void;
   completePasswordReset: () => void;
+  // Guests browse without a session; openAuth() reveals the sign-in flow on
+  // demand, closeAuth() returns them to public browsing.
+  authPrompt: boolean;
+  openAuth: () => void;
+  closeAuth: () => void;
   selectRole: (role: UserRole) => Promise<void>;
   signOut: () => Promise<void>;
 };
@@ -43,6 +48,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [profile, setProfile] = useState<Profile | null>(null);
   const [needsOnboarding, setNeedsOnboarding] = useState(false);
   const [passwordResetPending, setPasswordResetPending] = useState(false);
+  const [authPrompt, setAuthPrompt] = useState(false);
 
   // Load profile + onboarding flag for a signed-in user.
   const loadUser = useCallback(async (userId: string) => {
@@ -74,6 +80,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setProfile(null);
         setNeedsOnboarding(false);
         setPasswordResetPending(false);
+        setAuthPrompt(false);
       }
     });
 
@@ -99,6 +106,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     () => setPasswordResetPending(false),
     [],
   );
+  const openAuth = useCallback(() => setAuthPrompt(true), []);
+  const closeAuth = useCallback(() => setAuthPrompt(false), []);
 
   const value = useMemo<AuthContextValue>(
     () => ({
@@ -109,6 +118,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       passwordResetPending,
       beginPasswordReset,
       completePasswordReset,
+      authPrompt,
+      openAuth,
+      closeAuth,
       selectRole,
       signOut: signOutService,
     }),
@@ -120,6 +132,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       passwordResetPending,
       beginPasswordReset,
       completePasswordReset,
+      authPrompt,
+      openAuth,
+      closeAuth,
       selectRole,
     ],
   );

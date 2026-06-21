@@ -16,9 +16,10 @@ type Props = NativeStackScreenProps<AnnouncementsStackParamList, 'List'>;
 
 export function AnnouncementListScreen({ navigation }: Props) {
   const { t } = useTranslation(ANNOUNCEMENTS_NS);
-  const { profile, signOut } = useAuth();
+  const { session, profile, signOut, openAuth } = useAuth();
   const role = profile?.role;
   const isMerchant = role === 'merchant';
+  const isGuest = !session;
 
   const scope = isMerchant ? 'mine' : role === 'admin' ? 'all' : 'active';
   const { items, loading, error, reload } = useAnnouncements(scope, profile?.id);
@@ -30,9 +31,15 @@ export function AnnouncementListScreen({ navigation }: Props) {
           <Text style={styles.title}>
             {isMerchant ? t('list.myTitle') : t('list.browseTitle')}
           </Text>
-          <Pressable onPress={signOut} hitSlop={8}>
-            <Text style={styles.signOut}>{t('signOut', { ns: AUTH_NS })}</Text>
-          </Pressable>
+          {isGuest ? (
+            <Pressable onPress={openAuth} hitSlop={8}>
+              <Text style={styles.signOut}>{t('signIn.submit', { ns: AUTH_NS })}</Text>
+            </Pressable>
+          ) : (
+            <Pressable onPress={signOut} hitSlop={8}>
+              <Text style={styles.signOut}>{t('signOut', { ns: AUTH_NS })}</Text>
+            </Pressable>
+          )}
         </View>
         <LanguageSwitcher />
       </View>

@@ -8,7 +8,8 @@
     "submit": "Sign in",
     "submitting": "Signing in…",
     "noAccount": "Don't have an account? Create one",
-    "forgot": "Forgot password?"
+    "forgot": "Forgot password?",
+    "browse": "← Browse listings"
   },
   "register": {
     "title": "Create account",

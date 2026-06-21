@@ -169,4 +169,5 @@ These resolve ambiguities in the spec above. See README.md for full rationale.
 - Currency: MRU (Mauritanian Ouguiya); `price` is `numeric(12,2)`.
 - Phone OTP: requires an SMS provider (Twilio/MessageBird) in Supabase Auth; default country code +222.
 - Auth model: phone + password. OTP (SMS) is used ONLY for first-time registration confirmation and for password recovery ("forgot password"). Normal returning logins use the password — no OTP. (Local dev uses a test OTP number to avoid sending real SMS.)
+- Guest browsing (overrides §9 "only authenticated users can access data"): unauthenticated visitors CAN view active announcements, open details, and Contact via WhatsApp. Login is required only to post/manage listings (merchant) or for admin. RLS grants the `anon` role read access to active announcements and to the admin WhatsApp number; all writes and all other tables remain auth-only.
 - Images: out of scope for MVP; listings are text + price. Future enhancement via Supabase Storage.

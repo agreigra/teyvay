@@ -8,7 +8,8 @@
     "submit": "Se connecter",
     "submitting": "Connexion…",
     "noAccount": "Pas de compte ? Créez-en un",
-    "forgot": "Mot de passe oublié ?"
+    "forgot": "Mot de passe oublié ?",
+    "browse": "← Parcourir les annonces"
   },
   "register": {
     "title": "Créer un compte",
