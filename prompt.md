@@ -168,4 +168,5 @@ These resolve ambiguities in the spec above. See README.md for full rationale.
 - Admin WhatsApp number: stored in an `app_settings(key,value)` table (readable by authenticated users, writable by admin), so it can change without an app release.
 - Currency: MRU (Mauritanian Ouguiya); `price` is `numeric(12,2)`.
 - Phone OTP: requires an SMS provider (Twilio/MessageBird) in Supabase Auth; default country code +222.
+- Auth model: phone + password. OTP (SMS) is used ONLY for first-time registration confirmation and for password recovery ("forgot password"). Normal returning logins use the password — no OTP. (Local dev uses a test OTP number to avoid sending real SMS.)
 - Images: out of scope for MVP; listings are text + price. Future enhancement via Supabase Storage.

@@ -1,6 +1,6 @@
 # Teyvay — Mauritania Marketplace (MVP)
 
-A mobile marketplace connecting **Sailors (sellers)**, **Clients (buyers)**, and an **Admin (intermediary)**.
+A mobile marketplace connecting **Merchants (sellers)**, **Clients (buyers)**, and an **Admin (intermediary)**.
 The app manages listings only; communication and transactions happen externally via **WhatsApp**.
 
 - **Mobile:** React Native (Expo) + TypeScript + React Navigation
@@ -17,9 +17,9 @@ The original spec ([prompt.md](prompt.md)) is solid but leaves gaps that must be
 | # | Gap in spec | Decision |
 |---|-------------|----------|
 | 1 | Spec defines a custom `users` table, but Supabase already owns `auth.users`. | Use a **`profiles`** table with `id` = FK to `auth.users(id)`. Never duplicate the auth table. Phone lives in `auth.users`; `profiles` holds `role` + display data. |
-| 2 | How does a user get a role? Not specified. | On first login a profile row is auto-created (trigger) with default role **`client`**. A user self-selects `sailor` or `client` at onboarding; **`admin` is assigned manually** (seed/SQL only — never self-assignable). |
+| 2 | How does a user get a role? Not specified. | On first login a profile row is auto-created (trigger) with default role **`client`**. A user self-selects `merchant` or `client` at onboarding; **`admin` is assigned manually** (seed/SQL only — never self-assignable). |
 | 3 | RLS needs to read a user's role; naive policies recurse on `profiles`. | Use a `SECURITY DEFINER` helper `public.current_user_role()` (and `is_admin()`) that reads `profiles` without triggering RLS recursion. |
-| 4 | Status values inconsistent: spec says `active/sold` but sailor can "mark inactive". | Status enum = **`active` \| `sold` \| `inactive`**. Clients see only `active`. |
+| 4 | Status values inconsistent: spec says `active/sold` but merchant can "mark inactive". | Status enum = **`active` \| `sold` \| `inactive`**. Clients see only `active`. |
 | 5 | Admin WhatsApp number — where stored? | Stored in an **`app_settings`** table (key/value), readable by all authenticated users. Lets admin change it without an app release. Fallback to an Expo env var. |
 | 6 | Phone OTP for Mauritania needs an SMS provider. | Supabase Auth phone OTP requires Twilio/MessageBird. Default country code **+222**. Documented in setup; dev can use Supabase test OTP. |
 | 7 | Currency unspecified. | **MRU** (Mauritanian Ouguiya). `price` stored as `numeric(12,2)`. |
@@ -52,7 +52,7 @@ teyvay/
 │  │     │  ├─ services/         # auth.service.ts
 │  │     │  ├─ locales/{ar,fr,en}.json
 │  │     │  └─ index.ts          # public API: routes, exported hooks
-│  │     ├─ announcements/       # list, detail, create (sailor)
+│  │     ├─ announcements/       # list, detail, create (merchant)
 │  │     ├─ admin/               # admin dashboard + moderation
 │  │     └─ settings/            # language select, app_settings (whatsapp no.)
 │  ├─ App.tsx
@@ -86,7 +86,7 @@ All schema changes go through `supabase/migrations/*.sql`. The DB must rebuild f
 
 Migrations mirror the modules — each module contributes its own migration so the schema grows incrementally alongside the app code:
 
-- **0001_core_init.sql** *(core)* — `role` enum (`admin`,`sailor`,`client`), `announcement_status` enum (`active`,`sold`,`inactive`); `profiles(id uuid PK→auth.users, phone, role, display_name, created_at)`; `handle_new_user()` trigger (default role `client`); `current_user_role()` / `is_admin()` `SECURITY DEFINER` helpers.
+- **0001_core_init.sql** *(core)* — `role` enum (`admin`,`merchant`,`client`), `announcement_status` enum (`active`,`sold`,`inactive`); `profiles(id uuid PK→auth.users, phone, role, display_name, created_at)`; `handle_new_user()` trigger (default role `client`); `current_user_role()` / `is_admin()` `SECURITY DEFINER` helpers.
 - **0002_settings.sql** *(settings module)* — `app_settings(key text PK, value text)` for the admin WhatsApp number.
 - **0003_announcements.sql** *(announcements module)* — `announcements(id uuid PK, title, description, price numeric(12,2), status, created_by→profiles, created_at, updated_at)`; indexes on `status` and `created_by`.
 - **0004_rls_policies.sql** — enable RLS on all tables + policies (below). Kept as one file so the full security surface is reviewable in one place.
@@ -95,7 +95,7 @@ Migrations mirror the modules — each module contributes its own migration so t
 > Adding a new module later = add `app/src/modules/<name>/` + a new `00NN_<name>.sql` migration (+ its RLS). Nothing existing changes.
 
 ### RLS policy matrix
-| Table | Sailor | Client | Admin |
+| Table | Merchant | Client | Admin |
 |-------|--------|--------|-------|
 | `announcements` SELECT | own (any status) + active | active only | all |
 | `announcements` INSERT | own (`created_by = auth.uid()`) | ✗ | ✓ |
@@ -133,8 +133,8 @@ Build one module at a time. After each step the app **compiles and runs** — yo
 | **0** | ✅ done | *Scaffold* | — | `supabase init`; Expo TS app + `core/` skeleton; deps installed | `npx expo start` boots a blank screen |
 | **1** | ✅ done | **core** | `0001_core_init` | `core/supabase`, `core/i18n` (+ RTL), `core/theme`, `core/navigation` shell | `supabase db reset` succeeds; app renders themed shell in 3 languages |
 | **2** | ✅ done | **settings** | `0002_settings` | Language Selection screen, `settings.service` (read/write whatsapp no.) | First-launch language pick persists; RTL flips for Arabic |
-| **3** | ✅ done | **auth** | *(uses 0001)* | Phone+OTP login, `useAuth`, onboarding role pick (sailor/client) | Sign in via OTP → session persists → role stored on profile |
-| **4** | ⬜ todo | **announcements** | `0003_announcements` | List, Detail, Create (sailor), `announcements.service`, WhatsApp deep-link on Detail | Sailor creates a listing; client browses active ones; Contact opens WhatsApp |
+| **3** | ✅ done | **auth** | *(uses 0001)* | Phone+password auth (OTP only for first-time verify + password recovery), `useAuth`, onboarding role pick (merchant/client) | Register→OTP confirm→password login; forgot→OTP→new password; role stored on profile |
+| **4** | ⬜ todo | **announcements** | `0003_announcements` | List, Detail, Create (merchant), `announcements.service`, WhatsApp deep-link on Detail | Merchant creates a listing; client browses active ones; Contact opens WhatsApp |
 | **5** | ⬜ todo | **admin** | *(uses 0003)* | Admin dashboard: view all, activate/deactivate/mark sold, moderate | Admin manages any listing |
 | **6** | ⬜ todo | *RLS hardening* | `0004_rls_policies` | — (enable + verify policies for every table) | Each role is confirmed limited to its matrix rows; `db reset` clean |
 | **7** | ⬜ todo | *Polish* | — | loading/error/empty states, finalize setup guide + `.env.example` | MVP demo-ready end-to-end |

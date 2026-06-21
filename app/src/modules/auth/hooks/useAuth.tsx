@@ -14,10 +14,8 @@ import { supabase } from '../../../core/supabase';
 import type { Profile, UserRole } from '../../../core/types/database';
 import {
   fetchProfile,
-  requestOtp,
   signOut as signOutService,
   updateRole,
-  verifyOtp,
 } from '../services/auth.service';
 
 const onboardedKey = (userId: string) => `teyvay.onboarded.${userId}`;
@@ -28,8 +26,11 @@ type AuthContextValue = {
   profile: Profile | null;
   // True once authenticated but the user hasn't confirmed a role yet.
   needsOnboarding: boolean;
-  requestOtp: (phone: string) => Promise<void>;
-  verifyOtp: (phone: string, token: string) => Promise<void>;
+  // True while in the forgot-password flow: a recovery OTP has (or will) create
+  // a session, but the user must set a new password before entering the app.
+  passwordResetPending: boolean;
+  beginPasswordReset: () => void;
+  completePasswordReset: () => void;
   selectRole: (role: UserRole) => Promise<void>;
   signOut: () => Promise<void>;
 };
@@ -41,6 +42,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [session, setSession] = useState<Session | null>(null);
   const [profile, setProfile] = useState<Profile | null>(null);
   const [needsOnboarding, setNeedsOnboarding] = useState(false);
+  const [passwordResetPending, setPasswordResetPending] = useState(false);
 
   // Load profile + onboarding flag for a signed-in user.
   const loadUser = useCallback(async (userId: string) => {
@@ -71,6 +73,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       } else {
         setProfile(null);
         setNeedsOnboarding(false);
+        setPasswordResetPending(false);
       }
     });
 
@@ -91,20 +94,34 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     [session, loadUser],
   );
 
+  const beginPasswordReset = useCallback(() => setPasswordResetPending(true), []);
+  const completePasswordReset = useCallback(
+    () => setPasswordResetPending(false),
+    [],
+  );
+
   const value = useMemo<AuthContextValue>(
     () => ({
       initializing,
       session,
       profile,
       needsOnboarding,
-      requestOtp,
-      verifyOtp: async (phone, token) => {
-        await verifyOtp(phone, token);
-      },
+      passwordResetPending,
+      beginPasswordReset,
+      completePasswordReset,
       selectRole,
       signOut: signOutService,
     }),
-    [initializing, session, profile, needsOnboarding, selectRole],
+    [
+      initializing,
+      session,
+      profile,
+      needsOnboarding,
+      passwordResetPending,
+      beginPasswordReset,
+      completePasswordReset,
+      selectRole,
+    ],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

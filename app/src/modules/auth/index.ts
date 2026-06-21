@@ -9,6 +9,7 @@ export { AUTH_NS } from './constants';
 export { AuthProvider, useAuth } from './hooks/useAuth';
 export { AuthStack } from './navigation/AuthStack';
 export { RoleSelectScreen } from './screens/RoleSelectScreen';
+export { SetNewPasswordScreen } from './screens/SetNewPasswordScreen';
 
 // Register this module's translations. Call after initI18n().
 export function registerAuthLocales(): void {

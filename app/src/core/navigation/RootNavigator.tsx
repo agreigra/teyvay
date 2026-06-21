@@ -2,7 +2,12 @@ import { ActivityIndicator, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-import { AuthStack, RoleSelectScreen, useAuth } from '../../modules/auth';
+import {
+  AuthStack,
+  RoleSelectScreen,
+  SetNewPasswordScreen,
+  useAuth,
+} from '../../modules/auth';
 import { colors } from '../theme';
 import { ShellScreen } from './ShellScreen';
 
@@ -32,6 +37,15 @@ function OnboardingNavigator() {
   );
 }
 
+// Recovery: set a new password after a successful reset OTP.
+function ResetPasswordNavigator() {
+  return (
+    <Stack.Navigator screenOptions={screenOptions}>
+      <Stack.Screen name="SetNewPassword" component={SetNewPasswordScreen} />
+    </Stack.Navigator>
+  );
+}
+
 function Splash() {
   return (
     <View
@@ -49,7 +63,8 @@ function Splash() {
 
 // Top-level gate: auth flow -> onboarding -> main app.
 export function RootNavigator() {
-  const { initializing, session, needsOnboarding } = useAuth();
+  const { initializing, session, needsOnboarding, passwordResetPending } =
+    useAuth();
 
   if (initializing) return <Splash />;
 
@@ -57,6 +72,8 @@ export function RootNavigator() {
     <NavigationContainer>
       {!session ? (
         <AuthStack />
+      ) : passwordResetPending ? (
+        <ResetPasswordNavigator />
       ) : needsOnboarding ? (
         <OnboardingNavigator />
       ) : (

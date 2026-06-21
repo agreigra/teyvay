@@ -1,17 +1,24 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import { colors } from '../../../core/theme';
+import { ForgotPasswordScreen } from '../screens/ForgotPasswordScreen';
 import { OtpVerifyScreen } from '../screens/OtpVerifyScreen';
-import { PhoneLoginScreen } from '../screens/PhoneLoginScreen';
+import { RegisterScreen } from '../screens/RegisterScreen';
+import { SignInScreen } from '../screens/SignInScreen';
+
+export type OtpMode = 'register' | 'reset';
 
 export type AuthStackParamList = {
-  PhoneLogin: undefined;
-  OtpVerify: { phone: string };
+  SignIn: undefined;
+  Register: undefined;
+  ForgotPassword: undefined;
+  OtpVerify: { phone: string; mode: OtpMode };
 };
 
 const Stack = createNativeStackNavigator<AuthStackParamList>();
 
-// Unauthenticated flow: phone entry -> OTP verification.
+// Unauthenticated flow: password sign-in by default; OTP is used only for
+// first-time registration confirmation and password recovery.
 export function AuthStack() {
   return (
     <Stack.Navigator
@@ -22,7 +29,9 @@ export function AuthStack() {
         headerTitle: '',
       }}
     >
-      <Stack.Screen name="PhoneLogin" component={PhoneLoginScreen} />
+      <Stack.Screen name="SignIn" component={SignInScreen} />
+      <Stack.Screen name="Register" component={RegisterScreen} />
+      <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />
       <Stack.Screen name="OtpVerify" component={OtpVerifyScreen} />
     </Stack.Navigator>
   );

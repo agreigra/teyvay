@@ -24,7 +24,9 @@ export function ShellScreen() {
       {profile && (
         <View style={styles.card}>
           <Text style={styles.cardLabel}>{profile.phone ?? '—'}</Text>
-          <Text style={styles.role}>{profile.role}</Text>
+          <Text style={styles.role}>
+            {t(`roleName.${profile.role}`, { ns: AUTH_NS })}
+          </Text>
         </View>
       )}
 

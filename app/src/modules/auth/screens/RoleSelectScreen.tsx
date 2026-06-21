@@ -9,7 +9,7 @@ import { colors, spacing, typography } from '../../../core/theme';
 import { AUTH_NS } from '../constants';
 import { useAuth } from '../hooks/useAuth';
 
-// Onboarding: the user confirms whether they sell (sailor) or buy (client).
+// Onboarding: the user confirms whether they sell (merchant) or buy (client).
 // admin is never self-assignable here — it's granted via SQL only.
 export function RoleSelectScreen() {
   const { t } = useTranslation(AUTH_NS);
@@ -35,9 +35,9 @@ export function RoleSelectScreen() {
 
       <View style={styles.options}>
         <Button
-          label={saving === 'sailor' ? t('role.saving') : t('role.sailor')}
-          onPress={() => choose('sailor')}
-          loading={saving === 'sailor'}
+          label={saving === 'merchant' ? t('role.saving') : t('role.merchant')}
+          onPress={() => choose('merchant')}
+          loading={saving === 'merchant'}
           disabled={saving != null}
         />
         <Button

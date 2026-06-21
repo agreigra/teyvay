@@ -3,14 +3,50 @@ import type { Session } from '@supabase/supabase-js';
 import { supabase } from '../../../core/supabase';
 import type { Profile, UserRole } from '../../../core/types/database';
 
-// Request an SMS OTP for a phone number (E.164, e.g. +22231234567).
-export async function requestOtp(phone: string): Promise<void> {
-  const { error } = await supabase.auth.signInWithOtp({ phone });
+// --- Registration (first time): phone + password, confirmed via SMS OTP -------
+
+// Create an account. With phone confirmations enabled, no session is returned
+// until the OTP is verified.
+export async function signUpWithPassword(
+  phone: string,
+  password: string,
+): Promise<void> {
+  const { error } = await supabase.auth.signUp({ phone, password });
   if (error) throw error;
 }
 
-// Verify the SMS OTP. On success a session is created and persisted.
-export async function verifyOtp(phone: string, token: string): Promise<Session | null> {
+// --- Normal login: phone + password (no OTP) ----------------------------------
+
+export async function signInWithPassword(
+  phone: string,
+  password: string,
+): Promise<Session | null> {
+  const { data, error } = await supabase.auth.signInWithPassword({
+    phone,
+    password,
+  });
+  if (error) throw error;
+  return data.session;
+}
+
+// --- OTP: used for first-time confirmation and password recovery only ---------
+
+// Send an SMS OTP. shouldCreateUser=false for recovery (must already exist).
+export async function requestOtp(
+  phone: string,
+  shouldCreateUser = false,
+): Promise<void> {
+  const { error } = await supabase.auth.signInWithOtp({
+    phone,
+    options: { shouldCreateUser },
+  });
+  if (error) throw error;
+}
+
+export async function verifyOtp(
+  phone: string,
+  token: string,
+): Promise<Session | null> {
   const { data, error } = await supabase.auth.verifyOtp({
     phone,
     token,
@@ -19,6 +55,14 @@ export async function verifyOtp(phone: string, token: string): Promise<Session |
   if (error) throw error;
   return data.session;
 }
+
+// Set a new password for the currently-authenticated user (recovery flow).
+export async function updatePassword(newPassword: string): Promise<void> {
+  const { error } = await supabase.auth.updateUser({ password: newPassword });
+  if (error) throw error;
+}
+
+// --- Session / profile --------------------------------------------------------
 
 export async function signOut(): Promise<void> {
   const { error } = await supabase.auth.signOut();

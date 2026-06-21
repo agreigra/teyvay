@@ -1,31 +1,67 @@
 {
-  "login": {
+  "signIn": {
     "title": "Connexion",
-    "subtitle": "Saisissez votre numéro de téléphone pour recevoir un code",
+    "subtitle": "Saisissez votre numéro de téléphone et votre mot de passe",
     "phoneLabel": "Numéro de téléphone",
     "phonePlaceholder": "+222 XX XX XX XX",
-    "sendCode": "Envoyer le code",
-    "sending": "Envoi…"
+    "passwordLabel": "Mot de passe",
+    "submit": "Se connecter",
+    "submitting": "Connexion…",
+    "noAccount": "Pas de compte ? Créez-en un",
+    "forgot": "Mot de passe oublié ?"
+  },
+  "register": {
+    "title": "Créer un compte",
+    "subtitle": "Nous enverrons un code à usage unique pour vérifier votre téléphone",
+    "passwordLabel": "Mot de passe",
+    "confirmLabel": "Confirmer le mot de passe",
+    "submit": "Continuer",
+    "submitting": "Envoi du code…",
+    "haveAccount": "Vous avez déjà un compte ? Connectez-vous"
   },
   "otp": {
-    "title": "Vérifier le code",
+    "title": "Vérifiez votre téléphone",
     "subtitle": "Saisissez le code à 6 chiffres envoyé au {{phone}}",
     "codeLabel": "Code de vérification",
     "verify": "Vérifier",
     "verifying": "Vérification…",
     "resend": "Renvoyer le code"
   },
+  "forgot": {
+    "title": "Réinitialiser le mot de passe",
+    "subtitle": "Saisissez votre numéro de téléphone pour recevoir un code à usage unique",
+    "submit": "Envoyer le code",
+    "submitting": "Envoi…"
+  },
+  "setPassword": {
+    "title": "Définir un nouveau mot de passe",
+    "subtitle": "Choisissez un nouveau mot de passe pour votre compte",
+    "newPasswordLabel": "Nouveau mot de passe",
+    "confirmLabel": "Confirmer le mot de passe",
+    "submit": "Enregistrer le mot de passe",
+    "submitting": "Enregistrement…"
+  },
   "role": {
     "title": "Comment utiliserez-vous Teyvay ?",
     "subtitle": "Vous pouvez utiliser l'application comme vendeur ou acheteur",
-    "sailor": "Je suis un Marin (vendeur)",
+    "merchant": "Je suis un Commerçant (vendeur)",
     "client": "Je suis un Client (acheteur)",
     "saving": "Enregistrement…"
+  },
+  "roleName": {
+    "admin": "Admin",
+    "merchant": "Commerçant",
+    "client": "Client"
   },
   "signOut": "Se déconnecter",
   "errors": {
     "invalidPhone": "Veuillez saisir un numéro de téléphone valide",
     "invalidCode": "Code invalide ou expiré",
+    "invalidCredentials": "Numéro de téléphone ou mot de passe incorrect",
+    "passwordTooShort": "Le mot de passe doit comporter au moins 6 caractères",
+    "passwordsDontMatch": "Les mots de passe ne correspondent pas",
+    "userExists": "Un compte avec ce téléphone existe déjà. Veuillez vous connecter.",
+    "userNotFound": "Aucun compte trouvé pour ce numéro de téléphone",
     "generic": "Une erreur s'est produite. Veuillez réessayer."
   }
 }

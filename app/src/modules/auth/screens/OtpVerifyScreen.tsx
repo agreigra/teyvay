@@ -8,20 +8,23 @@ import { Field } from '../../../core/components/Field';
 import { Screen } from '../../../core/components/Screen';
 import { colors, spacing, typography } from '../../../core/theme';
 import { AUTH_NS } from '../constants';
+import { useAuth } from '../hooks/useAuth';
 import type { AuthStackParamList } from '../navigation/AuthStack';
 import { requestOtp, verifyOtp } from '../services/auth.service';
 
 type Props = NativeStackScreenProps<AuthStackParamList, 'OtpVerify'>;
 
 export function OtpVerifyScreen({ route }: Props) {
-  const { phone } = route.params;
+  const { phone, mode } = route.params;
   const { t } = useTranslation(AUTH_NS);
+  const { beginPasswordReset } = useAuth();
   const [code, setCode] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
-  // On success, the auth state change drives navigation (RootNavigator swaps
-  // to onboarding / home), so there's no manual navigate here.
+  // On success the auth state change drives navigation:
+  //   register -> session -> onboarding (via the root gate)
+  //   reset    -> session + passwordResetPending -> SetNewPassword
   const onVerify = async () => {
     if (code.trim().length < 4) {
       setError(t('errors.invalidCode'));
@@ -29,6 +32,9 @@ export function OtpVerifyScreen({ route }: Props) {
     }
     setError(null);
     setLoading(true);
+    // Mark the reset flow BEFORE the session appears so the gate routes to the
+    // set-password screen instead of the main app.
+    if (mode === 'reset') beginPasswordReset();
     try {
       await verifyOtp(phone, code.trim());
     } catch {
@@ -39,7 +45,7 @@ export function OtpVerifyScreen({ route }: Props) {
 
   const onResend = async () => {
     try {
-      await requestOtp(phone);
+      await requestOtp(phone, false);
     } catch {
       setError(t('errors.generic'));
     }

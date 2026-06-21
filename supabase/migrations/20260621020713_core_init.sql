@@ -10,7 +10,7 @@
 do $$
 begin
   if not exists (select 1 from pg_type where typname = 'user_role') then
-    create type public.user_role as enum ('admin', 'sailor', 'client');
+    create type public.user_role as enum ('admin', 'merchant', 'client');
   end if;
   if not exists (select 1 from pg_type where typname = 'announcement_status') then
     create type public.announcement_status as enum ('active', 'sold', 'inactive');

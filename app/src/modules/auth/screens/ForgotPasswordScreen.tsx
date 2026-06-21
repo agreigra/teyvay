@@ -10,31 +10,35 @@ import { colors, spacing, typography } from '../../../core/theme';
 import { AUTH_NS, DEFAULT_COUNTRY_CODE } from '../constants';
 import type { AuthStackParamList } from '../navigation/AuthStack';
 import { requestOtp } from '../services/auth.service';
+import { isValidPhone, normalizePhone } from '../utils';
 
-type Props = NativeStackScreenProps<AuthStackParamList, 'PhoneLogin'>;
+type Props = NativeStackScreenProps<AuthStackParamList, 'ForgotPassword'>;
 
-// Basic E.164 check: leading + and 8–15 digits.
-const isValidPhone = (p: string) => /^\+\d{8,15}$/.test(p.replace(/\s/g, ''));
-
-export function PhoneLoginScreen({ navigation }: Props) {
+export function ForgotPasswordScreen({ navigation }: Props) {
   const { t } = useTranslation(AUTH_NS);
   const [phone, setPhone] = useState(DEFAULT_COUNTRY_CODE);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
-  const onSend = async () => {
-    const normalized = phone.replace(/\s/g, '');
-    if (!isValidPhone(normalized)) {
+  const onSubmit = async () => {
+    if (!isValidPhone(phone)) {
       setError(t('errors.invalidPhone'));
       return;
     }
     setError(null);
     setLoading(true);
+    const normalized = normalizePhone(phone);
     try {
-      await requestOtp(normalized);
-      navigation.navigate('OtpVerify', { phone: normalized });
-    } catch {
-      setError(t('errors.generic'));
+      // Recovery: only send OTP to an existing account.
+      await requestOtp(normalized, false);
+      navigation.navigate('OtpVerify', { phone: normalized, mode: 'reset' });
+    } catch (e) {
+      const msg = (e as { message?: string })?.message ?? '';
+      setError(
+        /not found|no user|signups not allowed/i.test(msg)
+          ? t('errors.userNotFound')
+          : t('errors.generic'),
+      );
     } finally {
       setLoading(false);
     }
@@ -43,23 +47,23 @@ export function PhoneLoginScreen({ navigation }: Props) {
   return (
     <Screen>
       <View style={styles.header}>
-        <Text style={styles.title}>{t('login.title')}</Text>
-        <Text style={styles.subtitle}>{t('login.subtitle')}</Text>
+        <Text style={styles.title}>{t('forgot.title')}</Text>
+        <Text style={styles.subtitle}>{t('forgot.subtitle')}</Text>
       </View>
 
       <Field
-        label={t('login.phoneLabel')}
-        placeholder={t('login.phonePlaceholder')}
+        label={t('signIn.phoneLabel')}
+        placeholder={t('signIn.phonePlaceholder')}
         value={phone}
-        onChangeText={(v) => setPhone(v)}
+        onChangeText={setPhone}
         keyboardType="phone-pad"
         autoComplete="tel"
         error={error}
       />
 
       <Button
-        label={loading ? t('login.sending') : t('login.sendCode')}
-        onPress={onSend}
+        label={loading ? t('forgot.submitting') : t('forgot.submit')}
+        onPress={onSubmit}
         loading={loading}
       />
     </Screen>

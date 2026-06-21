@@ -1,31 +1,67 @@
 {
-  "login": {
+  "signIn": {
     "title": "Sign in",
-    "subtitle": "Enter your phone number to receive a code",
+    "subtitle": "Enter your phone number and password",
     "phoneLabel": "Phone number",
     "phonePlaceholder": "+222 XX XX XX XX",
-    "sendCode": "Send code",
-    "sending": "Sending…"
+    "passwordLabel": "Password",
+    "submit": "Sign in",
+    "submitting": "Signing in…",
+    "noAccount": "Don't have an account? Create one",
+    "forgot": "Forgot password?"
+  },
+  "register": {
+    "title": "Create account",
+    "subtitle": "We'll send a one-time code to verify your phone",
+    "passwordLabel": "Password",
+    "confirmLabel": "Confirm password",
+    "submit": "Continue",
+    "submitting": "Sending code…",
+    "haveAccount": "Already have an account? Sign in"
   },
   "otp": {
-    "title": "Verify code",
+    "title": "Verify your phone",
     "subtitle": "Enter the 6-digit code sent to {{phone}}",
     "codeLabel": "Verification code",
     "verify": "Verify",
     "verifying": "Verifying…",
     "resend": "Resend code"
   },
+  "forgot": {
+    "title": "Reset password",
+    "subtitle": "Enter your phone number to receive a one-time code",
+    "submit": "Send code",
+    "submitting": "Sending…"
+  },
+  "setPassword": {
+    "title": "Set a new password",
+    "subtitle": "Choose a new password for your account",
+    "newPasswordLabel": "New password",
+    "confirmLabel": "Confirm password",
+    "submit": "Save password",
+    "submitting": "Saving…"
+  },
   "role": {
     "title": "How will you use Teyvay?",
     "subtitle": "You can use the app as a seller or a buyer",
-    "sailor": "I'm a Sailor (seller)",
+    "merchant": "I'm a Merchant (seller)",
     "client": "I'm a Client (buyer)",
     "saving": "Saving…"
+  },
+  "roleName": {
+    "admin": "Admin",
+    "merchant": "Merchant",
+    "client": "Client"
   },
   "signOut": "Sign out",
   "errors": {
     "invalidPhone": "Please enter a valid phone number",
     "invalidCode": "Invalid or expired code",
+    "invalidCredentials": "Incorrect phone number or password",
+    "passwordTooShort": "Password must be at least 6 characters",
+    "passwordsDontMatch": "Passwords do not match",
+    "userExists": "An account with this phone already exists. Please sign in.",
+    "userNotFound": "No account found for this phone number",
     "generic": "Something went wrong. Please try again."
   }
 }
