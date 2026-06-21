@@ -1,5 +1,13 @@
 import { useLayoutEffect, useMemo, useState } from 'react';
-import { ActivityIndicator, FlatList, Pressable, StyleSheet, Text, View } from 'react-native';
+import {
+  ActivityIndicator,
+  FlatList,
+  Pressable,
+  RefreshControl,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import { useTranslation } from 'react-i18next';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 
@@ -54,7 +62,7 @@ export function AnnouncementListScreen({ navigation }: Props) {
         </>
       )}
 
-      {loading ? (
+      {loading && visibleItems.length === 0 ? (
         <ActivityIndicator color={colors.primary} style={styles.center} />
       ) : error ? (
         <View style={styles.center}>
@@ -67,6 +75,9 @@ export function AnnouncementListScreen({ navigation }: Props) {
         <FlatList
           data={visibleItems}
           keyExtractor={(item) => item.id}
+          refreshControl={
+            <RefreshControl refreshing={loading} onRefresh={reload} tintColor={colors.primary} />
+          }
           renderItem={({ item }) => (
             <AnnouncementCard
               item={item}

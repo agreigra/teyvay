@@ -1,5 +1,13 @@
 import { useState } from 'react';
-import { ActivityIndicator, FlatList, Pressable, StyleSheet, Text, View } from 'react-native';
+import {
+  ActivityIndicator,
+  FlatList,
+  Pressable,
+  RefreshControl,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useNavigation } from '@react-navigation/native';
 
@@ -93,7 +101,7 @@ export function AdminHomeScreen() {
             </View>
           )}
 
-          {listings.loading ? (
+          {listings.loading && listings.items.length === 0 ? (
             <ActivityIndicator color={colors.primary} style={styles.center} />
           ) : listings.error ? (
             <View style={styles.center}>
@@ -106,6 +114,13 @@ export function AdminHomeScreen() {
             <FlatList
               data={listings.items}
               keyExtractor={(item) => item.id}
+              refreshControl={
+                <RefreshControl
+                  refreshing={listings.loading}
+                  onRefresh={listings.reload}
+                  tintColor={colors.primary}
+                />
+              }
               renderItem={({ item }) => (
                 <AnnouncementCard
                   item={item}
@@ -126,7 +141,7 @@ export function AdminHomeScreen() {
             />
           )}
         </>
-      ) : users.loading ? (
+      ) : users.loading && users.items.length === 0 ? (
         <ActivityIndicator color={colors.primary} style={styles.center} />
       ) : users.error ? (
         <View style={styles.center}>
@@ -139,6 +154,13 @@ export function AdminHomeScreen() {
         <FlatList
           data={users.items}
           keyExtractor={(item) => item.id}
+          refreshControl={
+            <RefreshControl
+              refreshing={users.loading}
+              onRefresh={users.reload}
+              tintColor={colors.primary}
+            />
+          }
           renderItem={({ item }) => (
             <UserRow
               item={item}

@@ -2,7 +2,7 @@
 -- 0003 announcements — listings table
 -- Module: announcements
 -- A merchant creates listings; clients browse active ones. RLS is added in the
--- 0004 hardening step (merchant manages own, client reads active, admin all).
+-- 0006 hardening step (merchant manages own, public reads active, admin all).
 -- ============================================================================
 
 create table if not exists public.announcements (
