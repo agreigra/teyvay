@@ -50,6 +50,7 @@ export function EditAnnouncementScreen({ route, navigation }: Props) {
     <Screen scroll>
       <AnnouncementForm
         heading={t('edit.title')}
+        icon="edit-2"
         submitLabel={t('edit.submit')}
         submittingLabel={t('edit.submitting')}
         initial={{ title: item.title, description: item.description ?? '', price: item.price }}

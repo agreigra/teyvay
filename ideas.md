@@ -19,3 +19,4 @@ As admin I can see all the annoucements, I can filter them by user, I can see al
 - I want the menu with the language switcher to be visible even on login and signin pages
 - leteral menu is very large
 - I want a search bar on the home page
+- big spacing between the header and the page content when I scroll it gets hidden before reaching the header bottom

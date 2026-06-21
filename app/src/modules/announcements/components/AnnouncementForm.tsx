@@ -1,16 +1,21 @@
 import { useState } from 'react';
-import { Alert, StyleSheet, Text } from 'react-native';
+import { Alert, StyleSheet, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
+import { Feather } from '@expo/vector-icons';
 
 import { Button } from '../../../core/components/Button';
 import { Field } from '../../../core/components/Field';
-import { useIsRTL } from '../../../core/i18n';
-import { colors, rtlTextStyle, spacing, typography } from '../../../core/theme';
+import { colors, radius, spacing } from '../../../core/theme';
 import type { NewAnnouncement } from '../../../core/types/database';
 import { ANNOUNCEMENTS_NS } from '../constants';
+import { GradientHeader } from './GradientHeader';
+
+type FeatherName = keyof typeof Feather.glyphMap;
 
 type Props = {
   heading: string;
+  icon: FeatherName;
+  subtitle?: string;
   submitLabel: string;
   submittingLabel: string;
   initial?: Partial<NewAnnouncement>;
@@ -20,13 +25,14 @@ type Props = {
 // Shared create/edit form for a listing's content (title/description/price).
 export function AnnouncementForm({
   heading,
+  icon,
+  subtitle,
   submitLabel,
   submittingLabel,
   initial,
   onSubmit,
 }: Props) {
   const { t } = useTranslation(ANNOUNCEMENTS_NS);
-  const rtl = useIsRTL();
 
   const [title, setTitle] = useState(initial?.title ?? '');
   const [description, setDescription] = useState(initial?.description ?? '');
@@ -62,31 +68,33 @@ export function AnnouncementForm({
 
   return (
     <>
-      <Text style={[styles.title, rtl && rtlTextStyle]}>{heading}</Text>
+      <GradientHeader icon={icon} title={heading} subtitle={subtitle} />
 
-      <Field
-        label={t('create.titleLabel')}
-        placeholder={t('create.titlePlaceholder')}
-        value={title}
-        onChangeText={setTitle}
-      />
-      <Field
-        label={t('create.descriptionLabel')}
-        placeholder={t('create.descriptionPlaceholder')}
-        value={description}
-        onChangeText={setDescription}
-        multiline
-        numberOfLines={4}
-        style={styles.multiline}
-      />
-      <Field
-        label={t('create.priceLabel')}
-        placeholder={t('create.pricePlaceholder')}
-        value={price}
-        onChangeText={setPrice}
-        keyboardType="numeric"
-        error={error}
-      />
+      <View style={styles.card}>
+        <Field
+          label={t('create.titleLabel')}
+          placeholder={t('create.titlePlaceholder')}
+          value={title}
+          onChangeText={setTitle}
+        />
+        <Field
+          label={t('create.descriptionLabel')}
+          placeholder={t('create.descriptionPlaceholder')}
+          value={description}
+          onChangeText={setDescription}
+          multiline
+          numberOfLines={4}
+          style={styles.multiline}
+        />
+        <Field
+          label={t('create.priceLabel')}
+          placeholder={t('create.pricePlaceholder')}
+          value={price}
+          onChangeText={setPrice}
+          keyboardType="numeric"
+          error={error}
+        />
+      </View>
 
       <Button
         label={loading ? submittingLabel : submitLabel}
@@ -98,12 +106,13 @@ export function AnnouncementForm({
 }
 
 const styles = StyleSheet.create({
-  title: {
-    fontSize: typography.title,
-    fontWeight: '700',
-    color: colors.text,
-    marginTop: spacing.sm,
-    marginBottom: spacing.lg,
+  card: {
+    backgroundColor: colors.surface,
+    borderRadius: radius.md,
+    borderWidth: 1,
+    borderColor: colors.border,
+    padding: spacing.md,
+    marginBottom: spacing.md,
   },
   multiline: {
     minHeight: 100,

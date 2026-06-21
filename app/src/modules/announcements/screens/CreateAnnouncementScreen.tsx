@@ -28,6 +28,8 @@ export function CreateAnnouncementScreen({ navigation }: Props) {
     <Screen scroll>
       <AnnouncementForm
         heading={t('create.title')}
+        icon="plus-square"
+        subtitle={t('create.reviewNote')}
         submitLabel={t('create.submit')}
         submittingLabel={t('create.submitting')}
         onSubmit={onSubmit}

@@ -53,6 +53,7 @@
     "descriptionPlaceholder": "Décrivez ce que vous vendez",
     "priceLabel": "Prix (MRU)",
     "pricePlaceholder": "0",
+    "reviewNote": "Les nouveaux produits sont validés par un administrateur avant publication.",
     "submit": "Soumettre pour validation",
     "submitting": "Envoi…",
     "submittedTitle": "Soumis pour validation",

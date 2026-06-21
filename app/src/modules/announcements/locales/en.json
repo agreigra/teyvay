@@ -53,6 +53,7 @@
     "descriptionPlaceholder": "Describe what you're selling",
     "priceLabel": "Price (MRU)",
     "pricePlaceholder": "0",
+    "reviewNote": "New products are reviewed by an admin before going live.",
     "submit": "Submit for review",
     "submitting": "Submitting…",
     "submittedTitle": "Submitted for review",
