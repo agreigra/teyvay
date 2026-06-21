@@ -30,49 +30,53 @@ The original spec ([prompt.md](prompt.md)) is solid but leaves gaps that must be
 
 ## 2. Target architecture
 
+The app is built as **self-contained feature modules**. A thin `core/` layer holds shared infrastructure; every feature lives in its own `modules/<name>/` folder that owns its screens, hooks, services, types, and translations, and exposes a small public API through `index.ts`. You can add modules **one at a time** — each is independently buildable and only depends on `core/` (never on a sibling module's internals).
+
 ### Folder structure
 ```
 teyvay/
 ├─ app/                          # Expo app source
 │  ├─ src/
-│  │  ├─ components/             # Reusable presentational UI
-│  │  ├─ screens/                # One folder per screen
-│  │  │  ├─ LanguageSelect/
-│  │  │  ├─ Login/               # Phone + OTP
-│  │  │  ├─ Home/                # Role-based dispatch
-│  │  │  ├─ AnnouncementList/
-│  │  │  ├─ AnnouncementDetail/
-│  │  │  ├─ CreateAnnouncement/  # Sailor
-│  │  │  └─ AdminDashboard/
-│  │  ├─ navigation/             # Stacks + role-based routing
-│  │  ├─ services/               # Supabase API calls (data layer)
-│  │  │  ├─ supabase.ts          # Client init
-│  │  │  ├─ auth.service.ts
-│  │  │  ├─ announcements.service.ts
-│  │  │  └─ settings.service.ts
-│  │  ├─ hooks/                  # useAuth, useAnnouncements, useRole...
-│  │  ├─ i18n/                   # i18next config + RTL handling
-│  │  ├─ locales/{ar,fr,en}/     # translation.json per language
-│  │  ├─ types/                  # Shared TS types (DB row types)
-│  │  ├─ theme/                  # Colors, spacing, RTL-aware styles
-│  │  └─ utils/                  # whatsapp.ts deep-link builder, etc.
+│  │  ├─ core/                   # shared infra — used by ALL modules
+│  │  │  ├─ supabase/            # client init + typed DB helpers
+│  │  │  ├─ i18n/                # i18next config, RTL toggle, locale loader
+│  │  │  ├─ navigation/          # root navigator; composes module routes
+│  │  │  ├─ components/          # shared UI primitives (Button, Field, Screen)
+│  │  │  ├─ theme/               # colors, spacing, RTL-aware styles
+│  │  │  ├─ hooks/               # cross-cutting hooks (useSession)
+│  │  │  └─ types/               # shared DB row types
+│  │  └─ modules/                # one folder per feature module
+│  │     ├─ auth/                # phone OTP login, session, onboarding role pick
+│  │     │  ├─ screens/
+│  │     │  ├─ hooks/            # useAuth
+│  │     │  ├─ services/         # auth.service.ts
+│  │     │  ├─ locales/{ar,fr,en}.json
+│  │     │  └─ index.ts          # public API: routes, exported hooks
+│  │     ├─ announcements/       # list, detail, create (sailor)
+│  │     ├─ admin/               # admin dashboard + moderation
+│  │     └─ settings/            # language select, app_settings (whatsapp no.)
 │  ├─ App.tsx
 │  ├─ app.json / app.config.ts
 │  └─ .env.example
 ├─ supabase/
-│  ├─ migrations/
-│  │  ├─ 0001_init_schema.sql    # profiles, announcements, enums
-│  │  ├─ 0002_roles.sql          # role helpers + profile auto-create trigger
-│  │  ├─ 0003_app_settings.sql   # admin whatsapp number table
-│  │  └─ 0004_rls_policies.sql   # all RLS policies
+│  ├─ migrations/                # one (or more) migration PER module, ordered
+│  │  ├─ 0001_core_init.sql      # enums, profiles, role helpers, trigger  (core)
+│  │  ├─ 0002_settings.sql       # app_settings table                      (settings)
+│  │  ├─ 0003_announcements.sql  # announcements table + indexes           (announcements)
+│  │  └─ 0004_rls_policies.sql   # RLS policies for all of the above
 │  ├─ seed.sql
 │  └─ config.toml
 └─ README.md
 ```
 
-### Layering (separation of concerns)
-`screens` → `hooks` (state logic) → `services` (Supabase calls) → Supabase.
-UI never calls Supabase directly; all DB access flows through `services`.
+### Module contract
+Each module is a vertical slice and must:
+1. Expose its screens/routes and any shared hooks **only** through `index.ts`.
+2. Ship its own translation files (merged into i18next under a namespace).
+3. Reach the DB only through its own `services/` (which use `core/supabase`).
+4. Depend on `core/` and other modules' **public API** — never their internal files.
+
+Within a module the flow is: `screens` → `hooks` (state logic) → `services` (Supabase calls) → Supabase. UI never calls Supabase directly.
 
 ---
 
@@ -80,11 +84,15 @@ UI never calls Supabase directly; all DB access flows through `services`.
 
 All schema changes go through `supabase/migrations/*.sql`. The DB must rebuild from scratch with `supabase db reset`. No dashboard edits.
 
-- **0001_init_schema.sql** — `role` enum (`admin`,`sailor`,`client`), `announcement_status` enum (`active`,`sold`,`inactive`); `profiles(id uuid PK→auth.users, phone, role, display_name, created_at)`; `announcements(id uuid PK, title, description, price numeric(12,2), status, created_by→profiles, created_at, updated_at)`; indexes on `status` and `created_by`.
-- **0002_roles.sql** — `handle_new_user()` trigger on `auth.users` insert → creates a `profiles` row (default `client`); `current_user_role()` and `is_admin()` `SECURITY DEFINER` helpers.
-- **0003_app_settings.sql** — `app_settings(key text PK, value text)` for the admin WhatsApp number.
-- **0004_rls_policies.sql** — enable RLS on all tables + policies (below).
+Migrations mirror the modules — each module contributes its own migration so the schema grows incrementally alongside the app code:
+
+- **0001_core_init.sql** *(core)* — `role` enum (`admin`,`sailor`,`client`), `announcement_status` enum (`active`,`sold`,`inactive`); `profiles(id uuid PK→auth.users, phone, role, display_name, created_at)`; `handle_new_user()` trigger (default role `client`); `current_user_role()` / `is_admin()` `SECURITY DEFINER` helpers.
+- **0002_settings.sql** *(settings module)* — `app_settings(key text PK, value text)` for the admin WhatsApp number.
+- **0003_announcements.sql** *(announcements module)* — `announcements(id uuid PK, title, description, price numeric(12,2), status, created_by→profiles, created_at, updated_at)`; indexes on `status` and `created_by`.
+- **0004_rls_policies.sql** — enable RLS on all tables + policies (below). Kept as one file so the full security surface is reviewable in one place.
 - **seed.sql** — sample announcements + `app_settings` row for the WhatsApp number.
+
+> Adding a new module later = add `app/src/modules/<name>/` + a new `00NN_<name>.sql` migration (+ its RLS). Nothing existing changes.
 
 ### RLS policy matrix
 | Table | Sailor | Client | Admin |
@@ -116,18 +124,22 @@ All access requires an authenticated user (`auth.uid() is not null`).
 
 ---
 
-## 6. Execution phases
+## 6. Incremental module roadmap
 
-> Build order. Each phase ends in a commit. DB-first per the spec.
+Build one module at a time. After each step the app **compiles and runs** — you can stop, review, and commit before starting the next. Each module ships its app slice **and** its migration together.
 
-- **Phase 0 — Scaffold:** `supabase init`; create Expo TS app under `app/`; install deps (supabase-js, react-navigation, i18next, async-storage); commit.
-- **Phase 1 — Database:** write migrations 0001–0004 + seed; `supabase db reset` to verify reproducibility; commit.
-- **Phase 2 — Supabase client + auth:** `supabase.ts`, `auth.service.ts`, `useAuth`; phone → OTP → session flow.
-- **Phase 3 — i18n + RTL:** i18next config, three locale files, Language Selection screen, RTL toggle.
-- **Phase 4 — Navigation:** auth gate + role-based home dispatch (sailor / client / admin stacks).
-- **Phase 5 — Core screens:** List, Detail, Create (sailor), Admin Dashboard; wired through hooks/services.
-- **Phase 6 — WhatsApp:** deep-link util + Contact button on Detail.
-- **Phase 7 — Polish & docs:** loading/error/empty states, finalize setup guide, env example.
+| Step | Module | Migration | App slice | Done when… |
+|------|--------|-----------|-----------|------------|
+| **0** | *Scaffold* | — | `supabase init`; Expo TS app + `core/` skeleton; deps installed | `npx expo start` boots a blank screen |
+| **1** | **core** | `0001_core_init` | `core/supabase`, `core/i18n` (+ RTL), `core/theme`, `core/navigation` shell | `supabase db reset` succeeds; app renders themed shell in 3 languages |
+| **2** | **settings** | `0002_settings` | Language Selection screen, `settings.service` (read/write whatsapp no.) | First-launch language pick persists; RTL flips for Arabic |
+| **3** | **auth** | *(uses 0001)* | Phone+OTP login, `useAuth`, onboarding role pick (sailor/client) | Sign in via OTP → session persists → role stored on profile |
+| **4** | **announcements** | `0003_announcements` | List, Detail, Create (sailor), `announcements.service`, WhatsApp deep-link on Detail | Sailor creates a listing; client browses active ones; Contact opens WhatsApp |
+| **5** | **admin** | *(uses 0003)* | Admin dashboard: view all, activate/deactivate/mark sold, moderate | Admin manages any listing |
+| **6** | *RLS hardening* | `0004_rls_policies` | — (enable + verify policies for every table) | Each role is confirmed limited to its matrix rows; `db reset` clean |
+| **7** | *Polish* | — | loading/error/empty states, finalize setup guide + `.env.example` | MVP demo-ready end-to-end |
+
+> RLS policies (step 6) are written incrementally as each table lands, but consolidated/verified in `0004` so the whole security surface is auditable at once. For real deployments, enable RLS per-table in the same migration that creates the table.
 
 ---
 
