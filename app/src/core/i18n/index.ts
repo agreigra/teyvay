@@ -50,6 +50,24 @@ export async function initI18n(): Promise<typeof i18n> {
   return i18n;
 }
 
+// Has the user explicitly chosen a language? (false on very first launch).
+// Presence of the stored key means the Language Selection screen was completed.
+export async function hasSelectedLanguage(): Promise<boolean> {
+  const stored = await AsyncStorage.getItem(LANGUAGE_STORAGE_KEY);
+  return stored != null && isSupportedLanguage(stored);
+}
+
+// Let a feature module register its own translations under a namespace.
+// Call after initI18n(); safe to call at runtime (merges into the live store).
+export function registerModuleLocales(
+  namespace: string,
+  byLang: Record<AppLanguage, Record<string, unknown>>,
+): void {
+  (Object.keys(byLang) as AppLanguage[]).forEach((lang) => {
+    i18n.addResourceBundle(lang, namespace, byLang[lang], true, true);
+  });
+}
+
 // Change language app-wide: persist, switch i18next, and flip RTL/LTR if needed.
 export async function changeAppLanguage(lang: AppLanguage): Promise<void> {
   await AsyncStorage.setItem(LANGUAGE_STORAGE_KEY, lang);

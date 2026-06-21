@@ -4,15 +4,21 @@ import { StatusBar } from 'expo-status-bar';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { I18nextProvider } from 'react-i18next';
 
-import i18n, { initI18n } from './src/core/i18n';
+import i18n, { hasSelectedLanguage, initI18n } from './src/core/i18n';
 import { RootNavigator } from './src/core/navigation/RootNavigator';
 import { colors } from './src/core/theme';
+import { registerSettingsLocales } from './src/modules/settings';
 
 export default function App() {
   const [ready, setReady] = useState(false);
+  const [languageSelected, setLanguageSelected] = useState(false);
 
   useEffect(() => {
-    initI18n().finally(() => setReady(true));
+    (async () => {
+      await initI18n();
+      registerSettingsLocales();
+      setLanguageSelected(await hasSelectedLanguage());
+    })().finally(() => setReady(true));
   }, []);
 
   if (!ready) {
@@ -33,7 +39,7 @@ export default function App() {
   return (
     <SafeAreaProvider>
       <I18nextProvider i18n={i18n}>
-        <RootNavigator />
+        <RootNavigator languageSelected={languageSelected} />
         <StatusBar style="auto" />
       </I18nextProvider>
     </SafeAreaProvider>

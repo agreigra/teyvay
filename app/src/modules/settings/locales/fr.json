@@ -1,0 +1,10 @@
+{
+  "languageSelect": {
+    "title": "Choisissez votre langue",
+    "subtitle": "اختر لغتك · Choose your language",
+    "continue": "Continuer"
+  },
+  "whatsapp": {
+    "label": "Numéro WhatsApp de l'administrateur"
+  }
+}
