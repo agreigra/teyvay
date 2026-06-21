@@ -5,7 +5,21 @@
     "empty": "No listings yet",
     "emptyMine": "You haven't posted any listings yet",
     "emptyFiltered": "No listings match this filter",
+    "emptySearch": "No products match your search",
+    "countLabel": "{{count}} products",
+    "footer": "Teyvay · {{year}}",
     "create": "New listing"
+  },
+  "home": {
+    "welcome": "Welcome",
+    "welcomeName": "Welcome, {{name}}",
+    "headline": "A safe, trusted marketplace overseen by admins",
+    "featAnon": "Anonymous trading",
+    "featSecure": "Safe & trusted",
+    "featAdmin": "All deals via admin",
+    "products": "Products",
+    "addProduct": "Add product",
+    "search": "Search…"
   },
   "filter": {
     "all": "All"

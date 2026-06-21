@@ -1,16 +1,19 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
+import { Feather } from '@expo/vector-icons';
 
 import { useIsRTL } from '../../../core/i18n';
 import { colors, radius, rtlTextStyle, spacing, typography } from '../../../core/theme';
-import { formatPrice } from '../../../core/utils/format';
+import { CURRENCY, formatAmount, refCode } from '../../../core/utils/format';
 import type { Announcement } from '../../../core/types/database';
 import { ANNOUNCEMENTS_NS } from '../constants';
 
-const statusColor: Record<Announcement['status'], string> = {
-  active: colors.success,
-  sold: colors.textMuted,
-  inactive: colors.danger,
+type FeatherName = keyof typeof Feather.glyphMap;
+
+const statusMeta: Record<Announcement['status'], { color: string; bg: string; icon: FeatherName }> = {
+  active: { color: colors.success, bg: 'rgba(22,163,74,0.12)', icon: 'check-circle' },
+  sold: { color: colors.textMuted, bg: 'rgba(107,114,128,0.14)', icon: 'shopping-bag' },
+  inactive: { color: colors.danger, bg: 'rgba(220,38,38,0.12)', icon: 'slash' },
 };
 
 type Props = {
@@ -23,28 +26,38 @@ type Props = {
 export function AnnouncementCard({ item, onPress, showStatus = false }: Props) {
   const { t } = useTranslation(ANNOUNCEMENTS_NS);
   const rtl = useIsRTL();
+  const status = statusMeta[item.status];
 
   return (
     <Pressable
       onPress={onPress}
       style={({ pressed }) => [styles.card, pressed && styles.pressed]}
     >
-      <View style={[styles.row, rtl && styles.rowRtl]}>
-        <Text style={[styles.title, rtl && rtlTextStyle]} numberOfLines={1}>
-          {item.title}
-        </Text>
+      <View style={[styles.topRow, rtl && styles.rowRev]}>
+        <Text style={styles.ref}>#{refCode(item.id)}</Text>
         {showStatus && (
-          <Text style={[styles.status, { color: statusColor[item.status] }]}>
-            {t(`status.${item.status}`)}
-          </Text>
+          <View style={[styles.pill, { backgroundColor: status.bg }, rtl && styles.rowRev]}>
+            <Feather name={status.icon} size={12} color={status.color} />
+            <Text style={[styles.pillText, { color: status.color }]}>
+              {t(`status.${item.status}`)}
+            </Text>
+          </View>
         )}
       </View>
-      <Text style={[styles.price, rtl && rtlTextStyle]}>{formatPrice(item.price)}</Text>
+
+      <Text style={[styles.title, rtl && rtlTextStyle]} numberOfLines={1}>
+        {item.title}
+      </Text>
       {!!item.description && (
         <Text style={[styles.description, rtl && rtlTextStyle]} numberOfLines={2}>
           {item.description}
         </Text>
       )}
+
+      <View style={[styles.priceRow, rtl && styles.rowRev]}>
+        <Text style={styles.price}>{formatAmount(item.price)}</Text>
+        <Text style={styles.currency}>{CURRENCY}</Text>
+      </View>
     </Pressable>
   );
 }
@@ -61,34 +74,57 @@ const styles = StyleSheet.create({
   pressed: {
     opacity: 0.9,
   },
-  row: {
+  rowRev: {
+    flexDirection: 'row-reverse',
+  },
+  topRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    gap: spacing.sm,
+    marginBottom: spacing.sm,
   },
-  rowRtl: {
-    flexDirection: 'row-reverse',
+  ref: {
+    fontSize: typography.caption,
+    fontWeight: '700',
+    color: colors.primary,
+    letterSpacing: 0.5,
+  },
+  pill: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: spacing.xs,
+    borderRadius: radius.lg,
+    paddingVertical: 4,
+    paddingHorizontal: spacing.sm,
+  },
+  pillText: {
+    fontSize: typography.caption,
+    fontWeight: '700',
   },
   title: {
-    flex: 1,
     fontSize: typography.subtitle,
     fontWeight: '700',
     color: colors.text,
-  },
-  status: {
-    fontSize: typography.caption,
-    fontWeight: '600',
-  },
-  price: {
-    fontSize: typography.body,
-    fontWeight: '600',
-    color: colors.primary,
-    marginTop: spacing.xs,
   },
   description: {
     fontSize: typography.body,
     color: colors.textMuted,
     marginTop: spacing.xs,
+  },
+  priceRow: {
+    flexDirection: 'row',
+    alignItems: 'baseline',
+    gap: spacing.xs,
+    marginTop: spacing.md,
+  },
+  price: {
+    fontSize: typography.title,
+    fontWeight: '900',
+    color: colors.primary,
+  },
+  currency: {
+    fontSize: typography.caption,
+    fontWeight: '700',
+    color: colors.textMuted,
   },
 });

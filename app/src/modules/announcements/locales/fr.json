@@ -5,7 +5,21 @@
     "empty": "Aucune annonce pour le moment",
     "emptyMine": "Vous n'avez pas encore publié d'annonce",
     "emptyFiltered": "Aucune annonce ne correspond à ce filtre",
+    "emptySearch": "Aucun produit ne correspond à votre recherche",
+    "countLabel": "{{count}} produits",
+    "footer": "Teyvay · {{year}}",
     "create": "Nouvelle annonce"
+  },
+  "home": {
+    "welcome": "Bienvenue",
+    "welcomeName": "Bienvenue, {{name}}",
+    "headline": "Une place de marché sûre et fiable, supervisée par l'administration",
+    "featAnon": "Échanges anonymes",
+    "featSecure": "Sûr et fiable",
+    "featAdmin": "Toutes les transactions via l'administration",
+    "products": "Produits",
+    "addProduct": "Ajouter un produit",
+    "search": "Rechercher…"
   },
   "filter": {
     "all": "Toutes"

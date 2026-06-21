@@ -5,7 +5,21 @@
     "empty": "لا توجد إعلانات بعد",
     "emptyMine": "لم تنشر أي إعلان بعد",
     "emptyFiltered": "لا توجد إعلانات تطابق هذا المرشّح",
+    "emptySearch": "لا توجد منتجات تطابق بحثك",
+    "countLabel": "{{count}} منتجات",
+    "footer": "تيڤاي · {{year}}",
     "create": "إعلان جديد"
+  },
+  "home": {
+    "welcome": "مرحبًا",
+    "welcomeName": "مرحبًا، {{name}}",
+    "headline": "سوق آمن وموثوق بإشراف الإدارة",
+    "featAnon": "تداول مجهول الهوية",
+    "featSecure": "آمن وموثوق",
+    "featAdmin": "جميع المعاملات عبر الإدارة",
+    "products": "المنتجات",
+    "addProduct": "إضافة منتج",
+    "search": "بحث…"
   },
   "filter": {
     "all": "الكل"
