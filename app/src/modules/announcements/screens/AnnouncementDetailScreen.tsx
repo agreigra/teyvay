@@ -20,7 +20,7 @@ import { getById, setStatus } from '../services/announcements.service';
 type Props = NativeStackScreenProps<AnnouncementsStackParamList, 'Detail'>;
 
 export function AnnouncementDetailScreen({ route, navigation }: Props) {
-  const { id } = route.params;
+  const { id, manage } = route.params;
   const { t } = useTranslation(ANNOUNCEMENTS_NS);
   const { profile } = useAuth();
   const rtl = useIsRTL();
@@ -40,8 +40,10 @@ export function AnnouncementDetailScreen({ route, navigation }: Props) {
 
   const isOwner = !!item && item.created_by === profile?.id;
   const isAdmin = profile?.role === 'admin';
-  // Owner or admin can manage status; editing is limited to active listings.
-  const canManage = isOwner || isAdmin;
+  // Management (edit / status) is shown only when arriving from the merchant's
+  // "My listings" or the admin dashboard (manage=true). The public browse always
+  // shows the contact view, even for merchants/admins.
+  const canManage = !!manage && (isOwner || isAdmin);
 
   const onContact = async () => {
     if (!item) return;

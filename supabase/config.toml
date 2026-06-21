@@ -245,9 +245,18 @@ max_frequency = "5s"
 # Use pre-defined map of phone number to OTP for local testing (no SMS provider).
 # Key is the E.164 number WITHOUT the leading '+'. Mauritania = +222.
 [auth.sms.test_otp]
+# Local dev: these numbers short-circuit Twilio and accept the fixed code below.
+# Any number NOT listed here triggers a real SMS send, which fails locally
+# (dummy Twilio creds). Add more entries here to register more local accounts.
 22231234567 = "123456"
 22231234568 = "123456"
 22231234569 = "123456"
+22222016804 = "123456"
+22220000001 = "123456"
+22220000002 = "123456"
+22220000003 = "123456"
+22220000004 = "123456"
+22220000005 = "123456"
 
 # Configure logged in session timeouts.
 # [auth.sessions]

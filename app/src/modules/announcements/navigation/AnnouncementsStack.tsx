@@ -7,10 +7,13 @@ import { AnnouncementDetailScreen } from '../screens/AnnouncementDetailScreen';
 import { AnnouncementListScreen } from '../screens/AnnouncementListScreen';
 import { CreateAnnouncementScreen } from '../screens/CreateAnnouncementScreen';
 import { EditAnnouncementScreen } from '../screens/EditAnnouncementScreen';
+import { MyListingsScreen } from '../screens/MyListingsScreen';
 
 export type AnnouncementsStackParamList = {
   List: undefined;
-  Detail: { id: string };
+  MyList: undefined;
+  // manage=true opens owner/admin controls (edit, status); otherwise contact view.
+  Detail: { id: string; manage?: boolean };
   Create: undefined;
   Edit: { id: string };
 };
@@ -24,6 +27,7 @@ export function AnnouncementsStack() {
   return (
     <Stack.Navigator screenOptions={{ header: (props) => <AppBar {...props} /> }}>
       <Stack.Screen name="List" component={AnnouncementListScreen} />
+      <Stack.Screen name="MyList" component={MyListingsScreen} />
       <Stack.Screen
         name="Detail"
         component={AnnouncementDetailScreen}

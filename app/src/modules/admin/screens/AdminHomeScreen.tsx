@@ -128,7 +128,7 @@ export function AdminHomeScreen() {
                   onPress={() =>
                     navigation.navigate('Announcements', {
                       screen: 'Detail',
-                      params: { id: item.id },
+                      params: { id: item.id, manage: true },
                     })
                   }
                 />
