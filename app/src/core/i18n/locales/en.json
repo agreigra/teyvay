@@ -21,6 +21,9 @@
     "admin": "Admin",
     "signIn": "Sign in",
     "signUp": "Sign up",
-    "signOut": "Sign out"
+    "signOut": "Sign out",
+    "support": "Help & support",
+    "supportMessage": "Hello, I need help with Teyvay.",
+    "supportUnavailable": "Support is unavailable right now."
   }
 }

@@ -21,6 +21,9 @@
     "admin": "Admin",
     "signIn": "Connexion",
     "signUp": "Inscription",
-    "signOut": "Se déconnecter"
+    "signOut": "Se déconnecter",
+    "support": "Aide et assistance",
+    "supportMessage": "Bonjour, j'ai besoin d'aide avec Teyvay.",
+    "supportUnavailable": "L'assistance n'est pas disponible pour le moment."
   }
 }

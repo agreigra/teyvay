@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react';
 import {
+  Alert,
   Animated,
   Dimensions,
   Pressable,
@@ -12,8 +13,10 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 
 import { AUTH_NS, useAuth } from '../../modules/auth';
+import { getAdminWhatsappNumber } from '../../modules/settings';
 import { useIsRTL } from '../i18n';
 import { colors, radius, rtlTextStyle, spacing, typography } from '../theme';
+import { openWhatsapp } from '../utils/whatsapp';
 import type { AppMenuParamList } from './AppMenuStack';
 
 type Props = NativeStackScreenProps<AppMenuParamList, 'Menu'>;
@@ -42,6 +45,16 @@ export function MenuScreen({ navigation }: Props) {
 
   const goSection = (name: keyof AppMenuParamList) => {
     navigation.reset({ index: 0, routes: [{ name }] });
+  };
+
+  const contactSupport = async () => {
+    const number = await getAdminWhatsappNumber();
+    if (!number) {
+      Alert.alert(t('app.name'), t('menu.supportUnavailable'));
+      return;
+    }
+    close();
+    await openWhatsapp(number, t('menu.supportMessage'));
   };
 
   const items: { name: keyof AppMenuParamList; label: string }[] = [
@@ -74,6 +87,12 @@ export function MenuScreen({ navigation }: Props) {
               <Text style={[styles.itemText, rtl && rtlTextStyle]}>{it.label}</Text>
             </Pressable>
           ))}
+
+          <View style={styles.separator} />
+
+          <Pressable style={styles.item} onPress={contactSupport}>
+            <Text style={[styles.itemText, rtl && rtlTextStyle]}>{t('menu.support')}</Text>
+          </Pressable>
         </View>
       </Animated.View>
     </View>
@@ -117,6 +136,11 @@ const styles = StyleSheet.create({
   items: {
     paddingTop: spacing.md,
     gap: spacing.xs,
+  },
+  separator: {
+    height: 1,
+    backgroundColor: colors.border,
+    marginVertical: spacing.sm,
   },
   item: {
     paddingVertical: spacing.md,
