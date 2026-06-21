@@ -1,0 +1,40 @@
+{
+  "list": {
+    "browseTitle": "Listings",
+    "myTitle": "My listings",
+    "empty": "No listings yet",
+    "emptyMine": "You haven't posted any listings yet",
+    "create": "New listing"
+  },
+  "status": {
+    "active": "Active",
+    "sold": "Sold",
+    "inactive": "Inactive"
+  },
+  "detail": {
+    "contact": "Contact via WhatsApp",
+    "markSold": "Mark as sold",
+    "markActive": "Mark as active",
+    "markInactive": "Deactivate",
+    "postedBy": "Listing",
+    "interest": "Hello, I'm interested in your listing \"{{title}}\" (ref: {{id}})."
+  },
+  "create": {
+    "title": "New listing",
+    "titleLabel": "Title",
+    "titlePlaceholder": "e.g. Fresh fish — 10kg",
+    "descriptionLabel": "Description",
+    "descriptionPlaceholder": "Describe what you're selling",
+    "priceLabel": "Price (MRU)",
+    "pricePlaceholder": "0",
+    "submit": "Publish",
+    "submitting": "Publishing…"
+  },
+  "errors": {
+    "titleRequired": "Please enter a title",
+    "invalidPrice": "Please enter a valid price",
+    "loadFailed": "Couldn't load listings",
+    "saveFailed": "Couldn't save. Please try again.",
+    "noWhatsapp": "Contact number is not configured yet"
+  }
+}

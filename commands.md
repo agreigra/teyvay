@@ -46,9 +46,12 @@ Simulator / emulator / web can use `127.0.0.1` and don't need this.
 
 Real SMS is not sent locally, so only ONE test number works, with a fixed code:
 
-- Phone: `+22231234567`
-- OTP code: `123456`
+- Phone: `+22231234567`, `+22231234568`, or `+22231234569` (3 test accounts)
+- OTP code: `123456` (same for all)
 - Password: any value you choose (min 6 characters)
+
+> Use two different numbers to test both sides: register one as **Merchant**
+> (create a listing), another as **Client** (browse + Contact via WhatsApp).
 
 Auth model: **password login by default**; OTP is used ONLY for first-time
 registration and for password recovery.

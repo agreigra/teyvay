@@ -2,6 +2,7 @@ import { ActivityIndicator, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
+import { AnnouncementsStack } from '../../modules/announcements';
 import {
   AuthStack,
   RoleSelectScreen,
@@ -9,7 +10,6 @@ import {
   useAuth,
 } from '../../modules/auth';
 import { colors } from '../theme';
-import { ShellScreen } from './ShellScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -19,13 +19,9 @@ const screenOptions = {
   headerShown: false,
 } as const;
 
-// Authenticated, onboarded home. Role-based screens land here in later steps.
+// Authenticated, onboarded home: the role-aware announcements stack.
 function MainNavigator() {
-  return (
-    <Stack.Navigator screenOptions={screenOptions}>
-      <Stack.Screen name="Shell" component={ShellScreen} />
-    </Stack.Navigator>
-  );
+  return <AnnouncementsStack />;
 }
 
 // Post-login onboarding (role selection).

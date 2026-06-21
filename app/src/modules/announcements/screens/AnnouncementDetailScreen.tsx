@@ -1,0 +1,166 @@
+import { useEffect, useState } from 'react';
+import { ActivityIndicator, Alert, StyleSheet, Text, View } from 'react-native';
+import { useTranslation } from 'react-i18next';
+import type { NativeStackScreenProps } from '@react-navigation/native-stack';
+
+import { Button } from '../../../core/components/Button';
+import { Screen } from '../../../core/components/Screen';
+import { colors, radius, spacing, typography } from '../../../core/theme';
+import { formatPrice } from '../../../core/utils/format';
+import { openWhatsapp } from '../../../core/utils/whatsapp';
+import type { Announcement, AnnouncementStatus } from '../../../core/types/database';
+import { useAuth } from '../../auth';
+import { getAdminWhatsappNumber } from '../../settings';
+import { ANNOUNCEMENTS_NS } from '../constants';
+import type { AnnouncementsStackParamList } from '../navigation/AnnouncementsStack';
+import { getById, setStatus } from '../services/announcements.service';
+
+type Props = NativeStackScreenProps<AnnouncementsStackParamList, 'Detail'>;
+
+export function AnnouncementDetailScreen({ route, navigation }: Props) {
+  const { id } = route.params;
+  const { t } = useTranslation(ANNOUNCEMENTS_NS);
+  const { profile } = useAuth();
+
+  const [item, setItem] = useState<Announcement | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [busy, setBusy] = useState(false);
+
+  useEffect(() => {
+    getById(id)
+      .then(setItem)
+      .finally(() => setLoading(false));
+  }, [id]);
+
+  const isOwner = !!item && item.created_by === profile?.id;
+
+  const onContact = async () => {
+    if (!item) return;
+    const number = await getAdminWhatsappNumber();
+    if (!number) {
+      Alert.alert(t('errors.noWhatsapp'));
+      return;
+    }
+    const message = t('detail.interest', { title: item.title, id: item.id });
+    await openWhatsapp(number, message);
+  };
+
+  const changeStatus = async (status: AnnouncementStatus) => {
+    if (!item) return;
+    setBusy(true);
+    try {
+      await setStatus(item.id, status);
+      setItem({ ...item, status });
+    } catch {
+      Alert.alert(t('errors.saveFailed'));
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  if (loading) {
+    return (
+      <Screen>
+        <ActivityIndicator color={colors.primary} style={styles.center} />
+      </Screen>
+    );
+  }
+
+  if (!item) {
+    return (
+      <Screen>
+        <Text style={styles.muted}>{t('errors.loadFailed')}</Text>
+      </Screen>
+    );
+  }
+
+  return (
+    <Screen>
+      <View style={styles.statusPill}>
+        <Text style={styles.statusText}>{t(`status.${item.status}`)}</Text>
+      </View>
+
+      <Text style={styles.title}>{item.title}</Text>
+      <Text style={styles.price}>{formatPrice(item.price)}</Text>
+      {!!item.description && <Text style={styles.description}>{item.description}</Text>}
+
+      <View style={styles.spacer} />
+
+      {isOwner ? (
+        <View style={styles.actions}>
+          {item.status !== 'active' && (
+            <Button label={t('detail.markActive')} onPress={() => changeStatus('active')} loading={busy} />
+          )}
+          {item.status !== 'sold' && (
+            <Button
+              label={t('detail.markSold')}
+              onPress={() => changeStatus('sold')}
+              loading={busy}
+              variant="outline"
+            />
+          )}
+          {item.status !== 'inactive' && (
+            <Button
+              label={t('detail.markInactive')}
+              onPress={() => changeStatus('inactive')}
+              loading={busy}
+              variant="outline"
+            />
+          )}
+        </View>
+      ) : (
+        <Button label={t('detail.contact')} onPress={onContact} />
+      )}
+    </Screen>
+  );
+}
+
+const styles = StyleSheet.create({
+  center: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  statusPill: {
+    alignSelf: 'flex-start',
+    backgroundColor: colors.background,
+    borderRadius: radius.sm,
+    borderWidth: 1,
+    borderColor: colors.border,
+    paddingVertical: spacing.xs,
+    paddingHorizontal: spacing.sm,
+    marginBottom: spacing.md,
+  },
+  statusText: {
+    fontSize: typography.caption,
+    color: colors.textMuted,
+    fontWeight: '600',
+  },
+  title: {
+    fontSize: typography.title,
+    fontWeight: '700',
+    color: colors.text,
+  },
+  price: {
+    fontSize: typography.subtitle,
+    fontWeight: '700',
+    color: colors.primary,
+    marginTop: spacing.sm,
+  },
+  description: {
+    fontSize: typography.body,
+    color: colors.text,
+    marginTop: spacing.md,
+    lineHeight: 22,
+  },
+  spacer: {
+    flex: 1,
+  },
+  actions: {
+    gap: spacing.sm,
+  },
+  muted: {
+    color: colors.textMuted,
+    fontSize: typography.body,
+  },
+});

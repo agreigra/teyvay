@@ -7,6 +7,7 @@ import { I18nextProvider } from 'react-i18next';
 import i18n, { hasSelectedLanguage, initI18n } from './src/core/i18n';
 import { RootNavigator } from './src/core/navigation/RootNavigator';
 import { colors } from './src/core/theme';
+import { registerAnnouncementsLocales } from './src/modules/announcements';
 import { AuthProvider, registerAuthLocales } from './src/modules/auth';
 import { LanguageSelectScreen, registerSettingsLocales } from './src/modules/settings';
 
@@ -19,6 +20,7 @@ export default function App() {
       await initI18n();
       registerSettingsLocales();
       registerAuthLocales();
+      registerAnnouncementsLocales();
       setLanguageSelected(await hasSelectedLanguage());
     })().finally(() => setReady(true));
   }, []);

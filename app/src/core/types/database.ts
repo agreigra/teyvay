@@ -11,3 +11,21 @@ export interface Profile {
   display_name: string | null;
   created_at: string;
 }
+
+export interface Announcement {
+  id: string;
+  title: string;
+  description: string | null;
+  price: number;
+  status: AnnouncementStatus;
+  created_by: string;
+  created_at: string;
+  updated_at: string;
+}
+
+// Fields a merchant supplies when creating a listing.
+export interface NewAnnouncement {
+  title: string;
+  description: string;
+  price: number;
+}

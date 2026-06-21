@@ -1,0 +1,40 @@
+{
+  "list": {
+    "browseTitle": "Annonces",
+    "myTitle": "Mes annonces",
+    "empty": "Aucune annonce pour le moment",
+    "emptyMine": "Vous n'avez pas encore publié d'annonce",
+    "create": "Nouvelle annonce"
+  },
+  "status": {
+    "active": "Active",
+    "sold": "Vendue",
+    "inactive": "Inactive"
+  },
+  "detail": {
+    "contact": "Contacter via WhatsApp",
+    "markSold": "Marquer comme vendue",
+    "markActive": "Réactiver",
+    "markInactive": "Désactiver",
+    "postedBy": "Annonce",
+    "interest": "Bonjour, je suis intéressé par votre annonce « {{title}} » (réf : {{id}})."
+  },
+  "create": {
+    "title": "Nouvelle annonce",
+    "titleLabel": "Titre",
+    "titlePlaceholder": "ex. Poisson frais — 10 kg",
+    "descriptionLabel": "Description",
+    "descriptionPlaceholder": "Décrivez ce que vous vendez",
+    "priceLabel": "Prix (MRU)",
+    "pricePlaceholder": "0",
+    "submit": "Publier",
+    "submitting": "Publication…"
+  },
+  "errors": {
+    "titleRequired": "Veuillez saisir un titre",
+    "invalidPrice": "Veuillez saisir un prix valide",
+    "loadFailed": "Impossible de charger les annonces",
+    "saveFailed": "Échec de l'enregistrement. Veuillez réessayer.",
+    "noWhatsapp": "Le numéro de contact n'est pas encore configuré"
+  }
+}

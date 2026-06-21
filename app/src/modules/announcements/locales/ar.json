@@ -1,0 +1,40 @@
+{
+  "list": {
+    "browseTitle": "الإعلانات",
+    "myTitle": "إعلاناتي",
+    "empty": "لا توجد إعلانات بعد",
+    "emptyMine": "لم تنشر أي إعلان بعد",
+    "create": "إعلان جديد"
+  },
+  "status": {
+    "active": "نشط",
+    "sold": "مُباع",
+    "inactive": "غير نشط"
+  },
+  "detail": {
+    "contact": "التواصل عبر واتساب",
+    "markSold": "وضع علامة مُباع",
+    "markActive": "إعادة التفعيل",
+    "markInactive": "إلغاء التفعيل",
+    "postedBy": "إعلان",
+    "interest": "مرحبًا، أنا مهتم بإعلانك «{{title}}» (المرجع: {{id}})."
+  },
+  "create": {
+    "title": "إعلان جديد",
+    "titleLabel": "العنوان",
+    "titlePlaceholder": "مثال: سمك طازج — 10 كغ",
+    "descriptionLabel": "الوصف",
+    "descriptionPlaceholder": "صف ما تبيعه",
+    "priceLabel": "السعر (أوقية)",
+    "pricePlaceholder": "0",
+    "submit": "نشر",
+    "submitting": "جارٍ النشر…"
+  },
+  "errors": {
+    "titleRequired": "يرجى إدخال عنوان",
+    "invalidPrice": "يرجى إدخال سعر صالح",
+    "loadFailed": "تعذّر تحميل الإعلانات",
+    "saveFailed": "تعذّر الحفظ. يرجى المحاولة مرة أخرى.",
+    "noWhatsapp": "لم يتم إعداد رقم التواصل بعد"
+  }
+}
