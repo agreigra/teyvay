@@ -14,6 +14,9 @@
   "register": {
     "title": "إنشاء حساب",
     "subtitle": "سنرسل رمزًا لمرة واحدة للتحقق من هاتفك",
+    "firstNameLabel": "الاسم الأول",
+    "lastNameLabel": "اسم العائلة",
+    "ageLabel": "العمر",
     "passwordLabel": "كلمة المرور",
     "confirmLabel": "تأكيد كلمة المرور",
     "submit": "متابعة",
@@ -57,6 +60,8 @@
   "signOut": "تسجيل الخروج",
   "errors": {
     "invalidPhone": "يرجى إدخال رقم هاتف صالح",
+    "nameRequired": "يرجى إدخال اسمك الأول واسم العائلة",
+    "ageTooYoung": "يجب أن يكون عمرك {{min}} عامًا على الأقل",
     "invalidCode": "الرمز غير صالح أو منتهي الصلاحية",
     "invalidCredentials": "رقم الهاتف أو كلمة المرور غير صحيحة",
     "passwordTooShort": "يجب أن تتكوّن كلمة المرور من 6 أحرف على الأقل",

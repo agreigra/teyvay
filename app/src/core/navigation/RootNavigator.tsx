@@ -8,6 +8,7 @@ import {
   SetNewPasswordScreen,
   useAuth,
 } from '../../modules/auth';
+import { ReactivateAccountScreen } from '../../modules/profile';
 import { colors } from '../theme';
 import { AppMenuStack } from './AppMenuStack';
 
@@ -42,6 +43,15 @@ function ResetPasswordNavigator() {
   );
 }
 
+// Soft-deleted account: reactivate or sign out before using the app.
+function ReactivateNavigator() {
+  return (
+    <Stack.Navigator screenOptions={screenOptions}>
+      <Stack.Screen name="Reactivate" component={ReactivateAccountScreen} />
+    </Stack.Navigator>
+  );
+}
+
 function Splash() {
   return (
     <View
@@ -63,6 +73,7 @@ export function RootNavigator() {
     initializing,
     session,
     needsOnboarding,
+    accountDeleted,
     passwordResetPending,
     authPrompt,
   } = useAuth();
@@ -76,6 +87,8 @@ export function RootNavigator() {
     content = authPrompt ? <AuthStack /> : <MainNavigator />;
   } else if (passwordResetPending) {
     content = <ResetPasswordNavigator />;
+  } else if (accountDeleted) {
+    content = <ReactivateNavigator />;
   } else if (needsOnboarding) {
     content = <OnboardingNavigator />;
   } else {

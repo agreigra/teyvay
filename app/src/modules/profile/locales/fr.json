@@ -2,5 +2,32 @@
   "title": "Profil",
   "phone": "Téléphone",
   "role": "Rôle",
-  "comingSoon": "La modification de vos infos et la suppression du compte arrivent bientôt."
+  "fields": {
+    "firstName": "Prénom",
+    "lastName": "Nom",
+    "age": "Âge"
+  },
+  "save": "Enregistrer",
+  "saving": "Enregistrement…",
+  "saved": "Modifications enregistrées.",
+  "delete": {
+    "button": "Désactiver mon compte",
+    "title": "Désactiver le compte",
+    "message": "Votre compte et vos annonces seront masqués. Vous pourrez réactiver en vous reconnectant. Continuer ?",
+    "cancel": "Annuler",
+    "confirm": "Désactiver"
+  },
+  "reactivate": {
+    "title": "Compte désactivé",
+    "message": "Votre compte est actuellement désactivé. Réactivez-le pour continuer, ou déconnectez-vous.",
+    "confirm": "Réactiver le compte",
+    "working": "Réactivation…",
+    "signOut": "Se déconnecter"
+  },
+  "errors": {
+    "nameRequired": "Veuillez saisir votre prénom et votre nom",
+    "ageTooYoung": "Vous devez avoir au moins {{min}} ans",
+    "saveFailed": "Impossible d'enregistrer les modifications. Veuillez réessayer.",
+    "deleteFailed": "Impossible de désactiver votre compte. Veuillez réessayer."
+  }
 }

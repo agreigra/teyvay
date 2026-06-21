@@ -12,7 +12,10 @@
   "users": {
     "empty": "No users yet.",
     "unnamed": "Unnamed user",
-    "viewListings": "View listings"
+    "viewListings": "View listings",
+    "deactivated": "Deactivated",
+    "ban": "Deactivate user",
+    "unban": "Reactivate user"
   },
   "errors": {
     "loadFailed": "Couldn't load data."

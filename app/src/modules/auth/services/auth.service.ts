@@ -5,13 +5,26 @@ import type { Profile, UserRole } from '../../../core/types/database';
 
 // --- Registration (first time): phone + password, confirmed via SMS OTP -------
 
+// Personal info collected at registration; lands in user metadata and is copied
+// into the profile by the 0005 trigger.
+export type SignUpMeta = {
+  first_name: string;
+  last_name: string;
+  age: number;
+};
+
 // Create an account. With phone confirmations enabled, no session is returned
 // until the OTP is verified.
 export async function signUpWithPassword(
   phone: string,
   password: string,
+  meta?: SignUpMeta,
 ): Promise<void> {
-  const { error } = await supabase.auth.signUp({ phone, password });
+  const { error } = await supabase.auth.signUp({
+    phone,
+    password,
+    options: meta ? { data: meta } : undefined,
+  });
   if (error) throw error;
 }
 

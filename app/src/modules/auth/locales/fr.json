@@ -14,6 +14,9 @@
   "register": {
     "title": "Créer un compte",
     "subtitle": "Nous enverrons un code à usage unique pour vérifier votre téléphone",
+    "firstNameLabel": "Prénom",
+    "lastNameLabel": "Nom",
+    "ageLabel": "Âge",
     "passwordLabel": "Mot de passe",
     "confirmLabel": "Confirmer le mot de passe",
     "submit": "Continuer",
@@ -57,6 +60,8 @@
   "signOut": "Se déconnecter",
   "errors": {
     "invalidPhone": "Veuillez saisir un numéro de téléphone valide",
+    "nameRequired": "Veuillez saisir votre prénom et votre nom",
+    "ageTooYoung": "Vous devez avoir au moins {{min}} ans",
     "invalidCode": "Code invalide ou expiré",
     "invalidCredentials": "Numéro de téléphone ou mot de passe incorrect",
     "passwordTooShort": "Le mot de passe doit comporter au moins 6 caractères",

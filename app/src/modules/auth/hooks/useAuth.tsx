@@ -26,6 +26,11 @@ type AuthContextValue = {
   profile: Profile | null;
   // True once authenticated but the user hasn't confirmed a role yet.
   needsOnboarding: boolean;
+  // True when the signed-in user's profile is soft-deleted (deactivated). The
+  // app gates to a reactivate-or-sign-out screen.
+  accountDeleted: boolean;
+  // Re-fetch the current user's profile (after editing or reactivating).
+  refreshProfile: () => Promise<void>;
   // True while in the forgot-password flow: a recovery OTP has (or will) create
   // a session, but the user must set a new password before entering the app.
   passwordResetPending: boolean;
@@ -48,6 +53,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [session, setSession] = useState<Session | null>(null);
   const [profile, setProfile] = useState<Profile | null>(null);
   const [needsOnboarding, setNeedsOnboarding] = useState(false);
+  const [accountDeleted, setAccountDeleted] = useState(false);
   const [passwordResetPending, setPasswordResetPending] = useState(false);
   const [authPrompt, setAuthPrompt] = useState(false);
   const [authInitialRoute, setAuthInitialRoute] = useState<'SignIn' | 'Register'>(
@@ -61,8 +67,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       AsyncStorage.getItem(onboardedKey(userId)),
     ]);
     setProfile(prof);
+    setAccountDeleted(prof?.deleted_at != null);
     setNeedsOnboarding(onboarded == null);
   }, []);
+
+  const refreshProfile = useCallback(async () => {
+    if (!session?.user) return;
+    await loadUser(session.user.id);
+  }, [session, loadUser]);
 
   useEffect(() => {
     let active = true;
@@ -83,6 +95,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       } else {
         setProfile(null);
         setNeedsOnboarding(false);
+        setAccountDeleted(false);
         setPasswordResetPending(false);
         setAuthPrompt(false);
       }
@@ -122,6 +135,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       session,
       profile,
       needsOnboarding,
+      accountDeleted,
+      refreshProfile,
       passwordResetPending,
       beginPasswordReset,
       completePasswordReset,
@@ -137,6 +152,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       session,
       profile,
       needsOnboarding,
+      accountDeleted,
+      refreshProfile,
       passwordResetPending,
       beginPasswordReset,
       completePasswordReset,

@@ -11,7 +11,7 @@ import { AnnouncementCard, useAnnouncements } from '../../announcements';
 import { UserRow } from '../components/UserRow';
 import { ADMIN_NS } from '../constants';
 import { useProfiles } from '../hooks/useProfiles';
-import { setUserRole } from '../services/admin.service';
+import { setUserDeleted, setUserRole } from '../services/admin.service';
 import { useAuth } from '../../auth';
 
 type Tab = 'listings' | 'users';
@@ -34,6 +34,18 @@ export function AdminHomeScreen() {
     setBusyUserId(user.id);
     try {
       await setUserRole(user.id, role);
+      users.reload();
+    } catch {
+      // swallow; reload reflects the unchanged state
+    } finally {
+      setBusyUserId(null);
+    }
+  };
+
+  const toggleBan = async (user: Profile, deleted: boolean) => {
+    setBusyUserId(user.id);
+    try {
+      await setUserDeleted(user.id, deleted);
       users.reload();
     } catch {
       // swallow; reload reflects the unchanged state
@@ -133,6 +145,7 @@ export function AdminHomeScreen() {
               busy={busyUserId === item.id}
               isSelf={item.id === me?.id}
               onChangeRole={(role) => changeRole(item, role)}
+              onToggleBan={(deleted) => toggleBan(item, deleted)}
               onViewListings={() => viewUserListings(item)}
             />
           )}

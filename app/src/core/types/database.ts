@@ -9,7 +9,19 @@ export interface Profile {
   phone: string | null;
   role: UserRole;
   display_name: string | null;
+  first_name: string | null;
+  last_name: string | null;
+  age: number | null;
+  // Non-null = soft-deleted (account deactivated).
+  deleted_at: string | null;
   created_at: string;
+}
+
+// Personal info a user can edit on their profile.
+export interface ProfileUpdate {
+  first_name: string;
+  last_name: string;
+  age: number;
 }
 
 export interface Announcement {

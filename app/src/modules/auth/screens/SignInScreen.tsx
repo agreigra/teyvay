@@ -60,7 +60,7 @@ export function SignInScreen({ navigation }: Props) {
         label={t('signIn.passwordLabel')}
         value={password}
         onChangeText={setPassword}
-        secureTextEntry
+        toggleSecure
         autoComplete="current-password"
         error={error}
       />

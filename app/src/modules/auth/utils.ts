@@ -1,6 +1,9 @@
 // Minimum password length (matches Supabase auth default).
 export const MIN_PASSWORD_LENGTH = 6;
 
+// Users must be adults to register (enforced client-side and by a DB check).
+export const MIN_AGE = 18;
+
 // Normalize a phone input: strip spaces. Expected E.164, e.g. +22231234567.
 export const normalizePhone = (p: string) => p.replace(/\s/g, '');
 

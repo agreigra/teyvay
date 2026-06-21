@@ -12,7 +12,10 @@
   "users": {
     "empty": "Aucun utilisateur pour le moment.",
     "unnamed": "Utilisateur sans nom",
-    "viewListings": "Voir les annonces"
+    "viewListings": "Voir les annonces",
+    "deactivated": "Désactivé",
+    "ban": "Désactiver l'utilisateur",
+    "unban": "Réactiver l'utilisateur"
   },
   "errors": {
     "loadFailed": "Impossible de charger les données."

@@ -2,5 +2,32 @@
   "title": "Profile",
   "phone": "Phone",
   "role": "Role",
-  "comingSoon": "Editing your info and deleting your account are coming soon."
+  "fields": {
+    "firstName": "First name",
+    "lastName": "Last name",
+    "age": "Age"
+  },
+  "save": "Save changes",
+  "saving": "Saving…",
+  "saved": "Changes saved.",
+  "delete": {
+    "button": "Deactivate my account",
+    "title": "Deactivate account",
+    "message": "Your account and listings will be hidden. You can reactivate by signing in again. Continue?",
+    "cancel": "Cancel",
+    "confirm": "Deactivate"
+  },
+  "reactivate": {
+    "title": "Account deactivated",
+    "message": "Your account is currently deactivated. Reactivate it to continue, or sign out.",
+    "confirm": "Reactivate account",
+    "working": "Reactivating…",
+    "signOut": "Sign out"
+  },
+  "errors": {
+    "nameRequired": "Please enter your first and last name",
+    "ageTooYoung": "You must be at least {{min}} years old",
+    "saveFailed": "Couldn't save your changes. Please try again.",
+    "deleteFailed": "Couldn't deactivate your account. Please try again."
+  }
 }

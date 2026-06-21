@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 
@@ -11,13 +11,16 @@ import { colors, rtlTextStyle, spacing, typography } from '../../../core/theme';
 import { AUTH_NS, DEFAULT_COUNTRY_CODE } from '../constants';
 import type { AuthStackParamList } from '../navigation/AuthStack';
 import { signUpWithPassword } from '../services/auth.service';
-import { MIN_PASSWORD_LENGTH, isValidPhone, normalizePhone } from '../utils';
+import { MIN_AGE, MIN_PASSWORD_LENGTH, isValidPhone, normalizePhone } from '../utils';
 
 type Props = NativeStackScreenProps<AuthStackParamList, 'Register'>;
 
 export function RegisterScreen({ navigation }: Props) {
   const { t } = useTranslation(AUTH_NS);
   const rtl = useIsRTL();
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [age, setAge] = useState('');
   const [phone, setPhone] = useState(DEFAULT_COUNTRY_CODE);
   const [password, setPassword] = useState('');
   const [confirm, setConfirm] = useState('');
@@ -25,6 +28,15 @@ export function RegisterScreen({ navigation }: Props) {
   const [loading, setLoading] = useState(false);
 
   const onSubmit = async () => {
+    if (!firstName.trim() || !lastName.trim()) {
+      setError(t('errors.nameRequired'));
+      return;
+    }
+    const ageNum = Number(age);
+    if (!Number.isInteger(ageNum) || ageNum < MIN_AGE) {
+      setError(t('errors.ageTooYoung', { min: MIN_AGE }));
+      return;
+    }
     if (!isValidPhone(phone)) {
       setError(t('errors.invalidPhone'));
       return;
@@ -41,7 +53,11 @@ export function RegisterScreen({ navigation }: Props) {
     setLoading(true);
     const normalized = normalizePhone(phone);
     try {
-      await signUpWithPassword(normalized, password);
+      await signUpWithPassword(normalized, password, {
+        first_name: firstName.trim(),
+        last_name: lastName.trim(),
+        age: ageNum,
+      });
       navigation.navigate('OtpVerify', { phone: normalized, mode: 'register' });
     } catch (e) {
       const msg = (e as { message?: string })?.message ?? '';
@@ -57,44 +73,65 @@ export function RegisterScreen({ navigation }: Props) {
 
   return (
     <Screen>
-      <View style={styles.header}>
-        <Text style={[styles.title, rtl && rtlTextStyle]}>{t('register.title')}</Text>
-        <Text style={[styles.subtitle, rtl && rtlTextStyle]}>{t('register.subtitle')}</Text>
-      </View>
+      <ScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="handled">
+        <View style={styles.header}>
+          <Text style={[styles.title, rtl && rtlTextStyle]}>{t('register.title')}</Text>
+          <Text style={[styles.subtitle, rtl && rtlTextStyle]}>{t('register.subtitle')}</Text>
+        </View>
 
-      <Field
-        label={t('signIn.phoneLabel')}
-        placeholder={t('signIn.phonePlaceholder')}
-        value={phone}
-        onChangeText={setPhone}
-        keyboardType="phone-pad"
-        autoComplete="tel"
-      />
-      <Field
-        label={t('register.passwordLabel')}
-        value={password}
-        onChangeText={setPassword}
-        secureTextEntry
-        autoComplete="new-password"
-      />
-      <Field
-        label={t('register.confirmLabel')}
-        value={confirm}
-        onChangeText={setConfirm}
-        secureTextEntry
-        autoComplete="new-password"
-        error={error}
-      />
+        <Field
+          label={t('register.firstNameLabel')}
+          value={firstName}
+          onChangeText={setFirstName}
+          autoComplete="name-given"
+        />
+        <Field
+          label={t('register.lastNameLabel')}
+          value={lastName}
+          onChangeText={setLastName}
+          autoComplete="name-family"
+        />
+        <Field
+          label={t('register.ageLabel')}
+          value={age}
+          onChangeText={setAge}
+          keyboardType="number-pad"
+          maxLength={3}
+        />
+        <Field
+          label={t('signIn.phoneLabel')}
+          placeholder={t('signIn.phonePlaceholder')}
+          value={phone}
+          onChangeText={setPhone}
+          keyboardType="phone-pad"
+          autoComplete="tel"
+        />
+        <Field
+          label={t('register.passwordLabel')}
+          value={password}
+          onChangeText={setPassword}
+          toggleSecure
+          autoComplete="new-password"
+        />
+        <Field
+          label={t('register.confirmLabel')}
+          value={confirm}
+          onChangeText={setConfirm}
+          toggleSecure
+          autoComplete="new-password"
+          error={error}
+        />
 
-      <Button
-        label={loading ? t('register.submitting') : t('register.submit')}
-        onPress={onSubmit}
-        loading={loading}
-      />
+        <Button
+          label={loading ? t('register.submitting') : t('register.submit')}
+          onPress={onSubmit}
+          loading={loading}
+        />
 
-      <Pressable onPress={() => navigation.navigate('SignIn')} style={styles.link}>
-        <Text style={styles.linkText}>{t('register.haveAccount')}</Text>
-      </Pressable>
+        <Pressable onPress={() => navigation.navigate('SignIn')} style={styles.link}>
+          <Text style={styles.linkText}>{t('register.haveAccount')}</Text>
+        </Pressable>
+      </ScrollView>
     </Screen>
   );
 }

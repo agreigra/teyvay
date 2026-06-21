@@ -19,3 +19,15 @@ export async function setUserRole(userId: string, role: UserRole): Promise<void>
   const { error } = await supabase.from(TABLE).update({ role }).eq('id', userId);
   if (error) throw error;
 }
+
+// Ban (soft-delete) or unban a user. deleted=true deactivates the account.
+export async function setUserDeleted(
+  userId: string,
+  deleted: boolean,
+): Promise<void> {
+  const { error } = await supabase
+    .from(TABLE)
+    .update({ deleted_at: deleted ? new Date().toISOString() : null })
+    .eq('id', userId);
+  if (error) throw error;
+}

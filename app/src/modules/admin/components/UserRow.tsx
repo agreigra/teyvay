@@ -12,18 +12,27 @@ const ROLES: UserRole[] = ['client', 'merchant', 'admin'];
 type Props = {
   item: Profile;
   busy?: boolean;
-  // Disable role editing for the signed-in admin's own row.
+  // Disable role/ban editing for the signed-in admin's own row.
   isSelf?: boolean;
   onChangeRole: (role: UserRole) => void;
+  onToggleBan: (deleted: boolean) => void;
   onViewListings: () => void;
 };
 
-export function UserRow({ item, busy, isSelf, onChangeRole, onViewListings }: Props) {
+export function UserRow({
+  item,
+  busy,
+  isSelf,
+  onChangeRole,
+  onToggleBan,
+  onViewListings,
+}: Props) {
   const { t } = useTranslation(ADMIN_NS);
   const rtl = useIsRTL();
+  const banned = item.deleted_at != null;
 
   return (
-    <View style={styles.card}>
+    <View style={[styles.card, banned && styles.cardBanned]}>
       <View style={[styles.headerRow, rtl && styles.rowRtl]}>
         <Text style={[styles.name, rtl && rtlTextStyle]} numberOfLines={1}>
           {item.display_name || item.phone || t('users.unnamed')}
@@ -35,6 +44,10 @@ export function UserRow({ item, busy, isSelf, onChangeRole, onViewListings }: Pr
 
       {!!item.display_name && !!item.phone && (
         <Text style={[styles.phone, rtl && rtlTextStyle]}>{item.phone}</Text>
+      )}
+
+      {banned && (
+        <Text style={[styles.bannedTag, rtl && rtlTextStyle]}>{t('users.deactivated')}</Text>
       )}
 
       <View style={[styles.roleRow, rtl && styles.rowRtl]}>
@@ -55,6 +68,18 @@ export function UserRow({ item, busy, isSelf, onChangeRole, onViewListings }: Pr
           );
         })}
       </View>
+
+      {!isSelf && (
+        <Pressable
+          disabled={busy}
+          onPress={() => onToggleBan(!banned)}
+          style={[styles.banBtn, busy && styles.chipDisabled]}
+        >
+          <Text style={[styles.banText, banned && styles.unbanText]}>
+            {banned ? t('users.unban') : t('users.ban')}
+          </Text>
+        </Pressable>
+      )}
     </View>
   );
 }
@@ -67,6 +92,10 @@ const styles = StyleSheet.create({
     borderColor: colors.border,
     padding: spacing.md,
     marginBottom: spacing.md,
+  },
+  cardBanned: {
+    opacity: 0.75,
+    borderColor: colors.danger,
   },
   headerRow: {
     flexDirection: 'row',
@@ -92,6 +121,12 @@ const styles = StyleSheet.create({
     fontSize: typography.caption,
     color: colors.textMuted,
     marginTop: 2,
+  },
+  bannedTag: {
+    fontSize: typography.caption,
+    fontWeight: '700',
+    color: colors.danger,
+    marginTop: spacing.xs,
   },
   roleRow: {
     flexDirection: 'row',
@@ -121,5 +156,17 @@ const styles = StyleSheet.create({
   },
   chipTextActive: {
     color: colors.surface,
+  },
+  banBtn: {
+    marginTop: spacing.md,
+    alignSelf: 'flex-start',
+  },
+  banText: {
+    fontSize: typography.caption,
+    fontWeight: '700',
+    color: colors.danger,
+  },
+  unbanText: {
+    color: colors.success,
   },
 });

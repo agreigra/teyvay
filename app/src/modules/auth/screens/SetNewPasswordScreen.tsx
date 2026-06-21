@@ -55,14 +55,14 @@ export function SetNewPasswordScreen() {
         label={t('setPassword.newPasswordLabel')}
         value={password}
         onChangeText={setPassword}
-        secureTextEntry
+        toggleSecure
         autoComplete="new-password"
       />
       <Field
         label={t('setPassword.confirmLabel')}
         value={confirm}
         onChangeText={setConfirm}
-        secureTextEntry
+        toggleSecure
         autoComplete="new-password"
         error={error}
       />

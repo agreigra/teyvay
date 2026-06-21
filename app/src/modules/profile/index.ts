@@ -7,6 +7,7 @@ import fr from './locales/fr.json';
 
 export { PROFILE_NS } from './constants';
 export { ProfileScreen } from './screens/ProfileScreen';
+export { ReactivateAccountScreen } from './screens/ReactivateAccountScreen';
 
 export function registerProfileLocales(): void {
   registerModuleLocales(PROFILE_NS, { ar, fr, en });
