@@ -47,7 +47,7 @@ export function AppBar({ navigation, options, back }: NativeStackHeaderProps) {
         {title}
       </Text>
 
-      <View style={styles.right}>
+      <View style={[styles.right, rtl && styles.rightRtl]}>
         <Pressable hitSlop={8} onPress={() => setOpen('lang')} style={styles.iconBtn}>
           <Text style={styles.icon}>🌐</Text>
         </Pressable>
@@ -167,6 +167,11 @@ const styles = StyleSheet.create({
   right: {
     flexDirection: 'row',
     alignItems: 'center',
+    gap: spacing.md,
+  },
+  // In RTL the user icon sits on the left (before the language switcher).
+  rightRtl: {
+    flexDirection: 'row-reverse',
   },
   backdrop: {
     flex: 1,
