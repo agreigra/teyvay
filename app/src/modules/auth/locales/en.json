@@ -1,0 +1,31 @@
+{
+  "login": {
+    "title": "Sign in",
+    "subtitle": "Enter your phone number to receive a code",
+    "phoneLabel": "Phone number",
+    "phonePlaceholder": "+222 XX XX XX XX",
+    "sendCode": "Send code",
+    "sending": "Sending…"
+  },
+  "otp": {
+    "title": "Verify code",
+    "subtitle": "Enter the 6-digit code sent to {{phone}}",
+    "codeLabel": "Verification code",
+    "verify": "Verify",
+    "verifying": "Verifying…",
+    "resend": "Resend code"
+  },
+  "role": {
+    "title": "How will you use Teyvay?",
+    "subtitle": "You can use the app as a seller or a buyer",
+    "sailor": "I'm a Sailor (seller)",
+    "client": "I'm a Client (buyer)",
+    "saving": "Saving…"
+  },
+  "signOut": "Sign out",
+  "errors": {
+    "invalidPhone": "Please enter a valid phone number",
+    "invalidCode": "Invalid or expired code",
+    "generic": "Something went wrong. Please try again."
+  }
+}

@@ -133,7 +133,7 @@ Build one module at a time. After each step the app **compiles and runs** — yo
 | **0** | ✅ done | *Scaffold* | — | `supabase init`; Expo TS app + `core/` skeleton; deps installed | `npx expo start` boots a blank screen |
 | **1** | ✅ done | **core** | `0001_core_init` | `core/supabase`, `core/i18n` (+ RTL), `core/theme`, `core/navigation` shell | `supabase db reset` succeeds; app renders themed shell in 3 languages |
 | **2** | ✅ done | **settings** | `0002_settings` | Language Selection screen, `settings.service` (read/write whatsapp no.) | First-launch language pick persists; RTL flips for Arabic |
-| **3** | ⬜ todo | **auth** | *(uses 0001)* | Phone+OTP login, `useAuth`, onboarding role pick (sailor/client) | Sign in via OTP → session persists → role stored on profile |
+| **3** | ✅ done | **auth** | *(uses 0001)* | Phone+OTP login, `useAuth`, onboarding role pick (sailor/client) | Sign in via OTP → session persists → role stored on profile |
 | **4** | ⬜ todo | **announcements** | `0003_announcements` | List, Detail, Create (sailor), `announcements.service`, WhatsApp deep-link on Detail | Sailor creates a listing; client browses active ones; Contact opens WhatsApp |
 | **5** | ⬜ todo | **admin** | *(uses 0003)* | Admin dashboard: view all, activate/deactivate/mark sold, moderate | Admin manages any listing |
 | **6** | ⬜ todo | *RLS hardening* | `0004_rls_policies` | — (enable + verify policies for every table) | Each role is confirmed limited to its matrix rows; `db reset` clean |

@@ -1,47 +1,67 @@
-import { NavigationContainer, useNavigation } from '@react-navigation/native';
-import {
-  NativeStackNavigationProp,
-  createNativeStackNavigator,
-} from '@react-navigation/native-stack';
+import { ActivityIndicator, View } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-import { LanguageSelectScreen } from '../../modules/settings';
+import { AuthStack, RoleSelectScreen, useAuth } from '../../modules/auth';
 import { colors } from '../theme';
 import { ShellScreen } from './ShellScreen';
 
-// Root navigation shell. Feature modules register their stacks here as they
-// land (auth gate + role-based home in later steps).
-export type RootStackParamList = {
-  LanguageSelect: undefined;
-  Shell: undefined;
-};
+const Stack = createNativeStackNavigator();
 
-const Stack = createNativeStackNavigator<RootStackParamList>();
+const screenOptions = {
+  headerStyle: { backgroundColor: colors.primary },
+  headerTintColor: colors.surface,
+  headerShown: false,
+} as const;
 
-// Bridges the settings module's onDone callback to navigation.
-function LanguageSelectRoute() {
-  const navigation =
-    useNavigation<NativeStackNavigationProp<RootStackParamList>>();
-  return <LanguageSelectScreen onDone={() => navigation.replace('Shell')} />;
+// Authenticated, onboarded home. Role-based screens land here in later steps.
+function MainNavigator() {
+  return (
+    <Stack.Navigator screenOptions={screenOptions}>
+      <Stack.Screen name="Shell" component={ShellScreen} />
+    </Stack.Navigator>
+  );
 }
 
-export function RootNavigator({
-  languageSelected,
-}: {
-  languageSelected: boolean;
-}) {
+// Post-login onboarding (role selection).
+function OnboardingNavigator() {
+  return (
+    <Stack.Navigator screenOptions={screenOptions}>
+      <Stack.Screen name="RoleSelect" component={RoleSelectScreen} />
+    </Stack.Navigator>
+  );
+}
+
+function Splash() {
+  return (
+    <View
+      style={{
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: colors.background,
+      }}
+    >
+      <ActivityIndicator color={colors.primary} />
+    </View>
+  );
+}
+
+// Top-level gate: auth flow -> onboarding -> main app.
+export function RootNavigator() {
+  const { initializing, session, needsOnboarding } = useAuth();
+
+  if (initializing) return <Splash />;
+
   return (
     <NavigationContainer>
-      <Stack.Navigator
-        initialRouteName={languageSelected ? 'Shell' : 'LanguageSelect'}
-        screenOptions={{
-          headerStyle: { backgroundColor: colors.primary },
-          headerTintColor: colors.surface,
-          headerShown: false,
-        }}
-      >
-        <Stack.Screen name="LanguageSelect" component={LanguageSelectRoute} />
-        <Stack.Screen name="Shell" component={ShellScreen} />
-      </Stack.Navigator>
+      {!session ? (
+        <AuthStack />
+      ) : needsOnboarding ? (
+        <OnboardingNavigator />
+      ) : (
+        <MainNavigator />
+      )}
     </NavigationContainer>
   );
 }
