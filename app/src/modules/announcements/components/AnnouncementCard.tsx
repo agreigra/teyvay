@@ -11,9 +11,11 @@ import { ANNOUNCEMENTS_NS } from '../constants';
 type FeatherName = keyof typeof Feather.glyphMap;
 
 const statusMeta: Record<Announcement['status'], { color: string; bg: string; icon: FeatherName }> = {
+  pending: { color: '#D97706', bg: 'rgba(217,119,6,0.12)', icon: 'clock' },
   active: { color: colors.success, bg: 'rgba(22,163,74,0.12)', icon: 'check-circle' },
   sold: { color: colors.textMuted, bg: 'rgba(107,114,128,0.14)', icon: 'shopping-bag' },
   inactive: { color: colors.danger, bg: 'rgba(220,38,38,0.12)', icon: 'slash' },
+  rejected: { color: colors.danger, bg: 'rgba(220,38,38,0.12)', icon: 'x-circle' },
 };
 
 type Props = {

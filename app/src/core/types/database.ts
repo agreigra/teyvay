@@ -2,7 +2,7 @@
 // `supabase gen types typescript` output if desired.
 
 export type UserRole = 'admin' | 'merchant' | 'client';
-export type AnnouncementStatus = 'active' | 'sold' | 'inactive';
+export type AnnouncementStatus = 'pending' | 'active' | 'sold' | 'inactive' | 'rejected';
 
 export interface Profile {
   id: string;

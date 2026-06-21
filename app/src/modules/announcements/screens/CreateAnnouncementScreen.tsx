@@ -1,3 +1,4 @@
+import { Alert } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 
@@ -19,6 +20,8 @@ export function CreateAnnouncementScreen({ navigation }: Props) {
     if (!profile) return;
     await create(profile.id, input);
     navigation.goBack();
+    // New listings start pending until an admin approves them.
+    Alert.alert(t('create.submittedTitle'), t('create.submittedBody'));
   };
 
   return (

@@ -8,6 +8,8 @@ import fr from './locales/fr.json';
 export { ANNOUNCEMENTS_NS } from './constants';
 export { AnnouncementsStack } from './navigation/AnnouncementsStack';
 export { AnnouncementCard } from './components/AnnouncementCard';
+export { StatusFilter } from './components/StatusFilter';
+export type { StatusFilterValue } from './components/StatusFilter';
 export { useAnnouncements } from './hooks/useAnnouncements';
 export type { ListScope } from './hooks/useAnnouncements';
 

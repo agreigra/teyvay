@@ -25,13 +25,20 @@
     "all": "الكل"
   },
   "status": {
+    "pending": "قيد المراجعة",
     "active": "نشط",
     "sold": "مُباع",
-    "inactive": "غير نشط"
+    "inactive": "غير نشط",
+    "rejected": "مرفوض"
   },
   "detail": {
     "contact": "التواصل عبر واتساب",
     "edit": "تعديل الإعلان",
+    "approve": "الموافقة",
+    "reject": "رفض",
+    "resubmit": "إعادة الإرسال للمراجعة",
+    "pendingNote": "هذا المنتج بانتظار موافقة الإدارة قبل نشره.",
+    "rejectedNote": "تم رفض هذا المنتج من قبل الإدارة. عدّله وأعد إرساله للمراجعة.",
     "markSold": "وضع علامة مُباع",
     "markActive": "إعادة التفعيل",
     "markInactive": "إلغاء التفعيل",
@@ -46,8 +53,10 @@
     "descriptionPlaceholder": "صف ما تبيعه",
     "priceLabel": "السعر (أوقية)",
     "pricePlaceholder": "0",
-    "submit": "نشر",
-    "submitting": "جارٍ النشر…"
+    "submit": "إرسال للمراجعة",
+    "submitting": "جارٍ الإرسال…",
+    "submittedTitle": "تم الإرسال للمراجعة",
+    "submittedBody": "تم إرسال منتجك وسيظهر بمجرد موافقة الإدارة عليه."
   },
   "edit": {
     "title": "تعديل الإعلان",

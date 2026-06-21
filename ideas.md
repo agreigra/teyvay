@@ -15,7 +15,7 @@ As admin I can see all the annoucements, I can filter them by user, I can see al
 - when the language is arabic the user icon should in the left before the langauage switcher and I need more space between them
 - I need a log specially on the login and signin pages.
 - sometime, when I try to fill the last fields of a form they are covered by the keyboard so they are not visible so it is hard to see what I am typing
+- An annoucement is not published direclty it will need admin validation
 - I want the menu with the language switcher to be visible even on login and signin pages
 - leteral menu is very large
 - I want a search bar on the home page
-- An annoucement is not published direclty it will need admin validation

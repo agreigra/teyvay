@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import {
   ActivityIndicator,
   FlatList,
@@ -15,7 +15,12 @@ import { Screen } from '../../../core/components/Screen';
 import { useIsRTL } from '../../../core/i18n';
 import { colors, radius, rtlTextStyle, spacing, typography } from '../../../core/theme';
 import type { Profile, UserRole } from '../../../core/types/database';
-import { AnnouncementCard, useAnnouncements } from '../../announcements';
+import {
+  AnnouncementCard,
+  StatusFilter,
+  StatusFilterValue,
+  useAnnouncements,
+} from '../../announcements';
 import { UserRow } from '../components/UserRow';
 import { ADMIN_NS } from '../constants';
 import { useProfiles } from '../hooks/useProfiles';
@@ -32,11 +37,20 @@ export function AdminHomeScreen() {
 
   const [tab, setTab] = useState<Tab>('listings');
   const [filterUser, setFilterUser] = useState<Profile | null>(null);
+  const [statusFilter, setStatusFilter] = useState<StatusFilterValue>('all');
   const [busyUserId, setBusyUserId] = useState<string | null>(null);
 
   const listScope = filterUser ? 'mine' : 'all';
   const listings = useAnnouncements(listScope, filterUser?.id);
   const users = useProfiles();
+
+  const visibleListings = useMemo(
+    () =>
+      statusFilter === 'all'
+        ? listings.items
+        : listings.items.filter((i) => i.status === statusFilter),
+    [statusFilter, listings.items],
+  );
 
   const changeRole = async (user: Profile, role: UserRole) => {
     setBusyUserId(user.id);
@@ -101,6 +115,8 @@ export function AdminHomeScreen() {
             </View>
           )}
 
+          <StatusFilter value={statusFilter} onChange={setStatusFilter} />
+
           {listings.loading && listings.items.length === 0 ? (
             <ActivityIndicator color={colors.primary} style={styles.center} />
           ) : listings.error ? (
@@ -112,7 +128,7 @@ export function AdminHomeScreen() {
             </View>
           ) : (
             <FlatList
-              data={listings.items}
+              data={visibleListings}
               keyExtractor={(item) => item.id}
               refreshControl={
                 <RefreshControl
@@ -133,7 +149,7 @@ export function AdminHomeScreen() {
                   }
                 />
               )}
-              contentContainerStyle={listings.items.length === 0 && styles.center}
+              contentContainerStyle={visibleListings.length === 0 && styles.center}
               ListEmptyComponent={
                 <Text style={[styles.muted, rtl && rtlTextStyle]}>{t('listings.empty')}</Text>
               }

@@ -25,13 +25,20 @@
     "all": "All"
   },
   "status": {
+    "pending": "Pending review",
     "active": "Active",
     "sold": "Sold",
-    "inactive": "Inactive"
+    "inactive": "Inactive",
+    "rejected": "Rejected"
   },
   "detail": {
     "contact": "Contact via WhatsApp",
     "edit": "Edit listing",
+    "approve": "Approve",
+    "reject": "Reject",
+    "resubmit": "Resubmit for review",
+    "pendingNote": "This product is awaiting admin validation before it goes live.",
+    "rejectedNote": "This product was rejected by an admin. Edit it and resubmit for review.",
     "markSold": "Mark as sold",
     "markActive": "Mark as active",
     "markInactive": "Deactivate",
@@ -46,8 +53,10 @@
     "descriptionPlaceholder": "Describe what you're selling",
     "priceLabel": "Price (MRU)",
     "pricePlaceholder": "0",
-    "submit": "Publish",
-    "submitting": "Publishing…"
+    "submit": "Submit for review",
+    "submitting": "Submitting…",
+    "submittedTitle": "Submitted for review",
+    "submittedBody": "Your product was submitted and will be visible once an admin approves it."
   },
   "edit": {
     "title": "Edit listing",

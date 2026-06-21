@@ -8,7 +8,14 @@ import { ANNOUNCEMENTS_NS } from '../constants';
 
 export type StatusFilterValue = AnnouncementStatus | 'all';
 
-const OPTIONS: StatusFilterValue[] = ['all', 'active', 'sold', 'inactive'];
+const OPTIONS: StatusFilterValue[] = [
+  'all',
+  'pending',
+  'active',
+  'sold',
+  'inactive',
+  'rejected',
+];
 
 type Props = {
   value: StatusFilterValue;

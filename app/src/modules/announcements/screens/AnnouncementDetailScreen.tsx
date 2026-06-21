@@ -44,6 +44,10 @@ export function AnnouncementDetailScreen({ route, navigation }: Props) {
   // "My listings" or the admin dashboard (manage=true). The public browse always
   // shows the contact view, even for merchants/admins.
   const canManage = !!manage && (isOwner || isAdmin);
+  const isPending = item?.status === 'pending';
+  const isRejected = item?.status === 'rejected';
+  // Editable while active or awaiting/declined validation (not once sold/closed).
+  const canEdit = canManage && (item?.status === 'active' || isPending || isRejected);
 
   const onContact = async () => {
     if (!item) return;
@@ -101,31 +105,66 @@ export function AnnouncementDetailScreen({ route, navigation }: Props) {
 
       {canManage ? (
         <View style={styles.actions}>
-          {item.status === 'active' && (
+          {(isPending || isRejected) && (
+            <View style={[styles.note, isRejected ? styles.noteDanger : styles.notePending]}>
+              <Text style={[styles.noteText, rtl && rtlTextStyle]}>
+                {isRejected ? t('detail.rejectedNote') : t('detail.pendingNote')}
+              </Text>
+            </View>
+          )}
+
+          {canEdit && (
             <Button
               label={t('detail.edit')}
               onPress={() => navigation.navigate('Edit', { id: item.id })}
+              variant="outline"
               disabled={busy}
             />
           )}
-          {item.status !== 'active' && (
-            <Button label={t('detail.markActive')} onPress={() => changeStatus('active')} loading={busy} />
+
+          {/* Admin validation of a not-yet-approved listing */}
+          {isAdmin && (isPending || isRejected) && (
+            <>
+              <Button label={t('detail.approve')} onPress={() => changeStatus('active')} loading={busy} />
+              {!isRejected && (
+                <Button
+                  label={t('detail.reject')}
+                  onPress={() => changeStatus('rejected')}
+                  loading={busy}
+                  variant="outline"
+                />
+              )}
+            </>
           )}
-          {item.status !== 'sold' && (
-            <Button
-              label={t('detail.markSold')}
-              onPress={() => changeStatus('sold')}
-              loading={busy}
-              variant="outline"
-            />
+
+          {/* Owner can resubmit a rejected listing for review */}
+          {isOwner && !isAdmin && isRejected && (
+            <Button label={t('detail.resubmit')} onPress={() => changeStatus('pending')} loading={busy} />
           )}
-          {item.status !== 'inactive' && (
-            <Button
-              label={t('detail.markInactive')}
-              onPress={() => changeStatus('inactive')}
-              loading={busy}
-              variant="outline"
-            />
+
+          {/* Standard transitions once a listing has been approved */}
+          {!isPending && !isRejected && (
+            <>
+              {item.status !== 'active' && (
+                <Button label={t('detail.markActive')} onPress={() => changeStatus('active')} loading={busy} />
+              )}
+              {item.status !== 'sold' && (
+                <Button
+                  label={t('detail.markSold')}
+                  onPress={() => changeStatus('sold')}
+                  loading={busy}
+                  variant="outline"
+                />
+              )}
+              {item.status !== 'inactive' && (
+                <Button
+                  label={t('detail.markInactive')}
+                  onPress={() => changeStatus('inactive')}
+                  loading={busy}
+                  variant="outline"
+                />
+              )}
+            </>
           )}
         </View>
       ) : (
@@ -155,6 +194,22 @@ const styles = StyleSheet.create({
     fontSize: typography.caption,
     color: colors.textMuted,
     fontWeight: '600',
+  },
+  note: {
+    borderRadius: radius.md,
+    padding: spacing.md,
+    marginBottom: spacing.sm,
+  },
+  notePending: {
+    backgroundColor: 'rgba(217,119,6,0.10)',
+  },
+  noteDanger: {
+    backgroundColor: 'rgba(220,38,38,0.10)',
+  },
+  noteText: {
+    fontSize: typography.body,
+    color: colors.text,
+    lineHeight: 22,
   },
   title: {
     fontSize: typography.title,

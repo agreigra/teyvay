@@ -25,13 +25,20 @@
     "all": "Toutes"
   },
   "status": {
+    "pending": "En attente",
     "active": "Active",
     "sold": "Vendue",
-    "inactive": "Inactive"
+    "inactive": "Inactive",
+    "rejected": "Rejetée"
   },
   "detail": {
     "contact": "Contacter via WhatsApp",
     "edit": "Modifier l'annonce",
+    "approve": "Approuver",
+    "reject": "Rejeter",
+    "resubmit": "Soumettre à nouveau",
+    "pendingNote": "Ce produit attend la validation de l'administration avant d'être publié.",
+    "rejectedNote": "Ce produit a été rejeté par un administrateur. Modifiez-le et soumettez-le à nouveau.",
     "markSold": "Marquer comme vendue",
     "markActive": "Réactiver",
     "markInactive": "Désactiver",
@@ -46,8 +53,10 @@
     "descriptionPlaceholder": "Décrivez ce que vous vendez",
     "priceLabel": "Prix (MRU)",
     "pricePlaceholder": "0",
-    "submit": "Publier",
-    "submitting": "Publication…"
+    "submit": "Soumettre pour validation",
+    "submitting": "Envoi…",
+    "submittedTitle": "Soumis pour validation",
+    "submittedBody": "Votre produit a été soumis et sera visible dès qu'un administrateur l'aura approuvé."
   },
   "edit": {
     "title": "Modifier l'annonce",
