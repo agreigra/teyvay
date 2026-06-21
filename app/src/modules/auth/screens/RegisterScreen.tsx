@@ -3,6 +3,7 @@ import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 
+import { Brand } from '../../../core/components/Brand';
 import { Button } from '../../../core/components/Button';
 import { Field } from '../../../core/components/Field';
 import { Screen } from '../../../core/components/Screen';
@@ -74,6 +75,10 @@ export function RegisterScreen({ navigation }: Props) {
   return (
     <Screen>
       <ScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="handled">
+        <View style={styles.brand}>
+          <Brand showTagline={false} />
+        </View>
+
         <View style={styles.header}>
           <Text style={[styles.title, rtl && rtlTextStyle]}>{t('register.title')}</Text>
           <Text style={[styles.subtitle, rtl && rtlTextStyle]}>{t('register.subtitle')}</Text>
@@ -137,6 +142,9 @@ export function RegisterScreen({ navigation }: Props) {
 }
 
 const styles = StyleSheet.create({
+  brand: {
+    marginTop: spacing.lg,
+  },
   header: {
     marginTop: spacing.lg,
     marginBottom: spacing.xl,

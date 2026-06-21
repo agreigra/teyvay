@@ -3,6 +3,7 @@ import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 
+import { Brand } from '../../../core/components/Brand';
 import { Button } from '../../../core/components/Button';
 import { Field } from '../../../core/components/Field';
 import { Screen } from '../../../core/components/Screen';
@@ -43,6 +44,10 @@ export function SignInScreen({ navigation }: Props) {
 
   return (
     <Screen>
+      <View style={styles.brand}>
+        <Brand />
+      </View>
+
       <View style={styles.header}>
         <Text style={[styles.title, rtl && rtlTextStyle]}>{t('signIn.title')}</Text>
         <Text style={[styles.subtitle, rtl && rtlTextStyle]}>{t('signIn.subtitle')}</Text>
@@ -85,6 +90,9 @@ export function SignInScreen({ navigation }: Props) {
 }
 
 const styles = StyleSheet.create({
+  brand: {
+    marginTop: spacing.xl,
+  },
   header: {
     marginTop: spacing.lg,
     marginBottom: spacing.xl,

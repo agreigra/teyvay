@@ -13,7 +13,7 @@ As admin I can see all the annoucements, I can filter them by user, I can see al
 - in the menu add a support to send user to whatsapp
 
 - when the language is arabic the user icon should in the left before the langauage switcher and I need more space between them
-- leteral menu is very large
 - I need a log specially on the login and signin pages.
 - sometime, when I try to fill the last fields of a form they are covered by the keyboard so they are not visible so it is hard to see what I am typing
+- leteral menu is very large
 - I want a search bar on the home page
