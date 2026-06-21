@@ -5,12 +5,14 @@ import { AnnouncementsStack } from '../../modules/announcements';
 import { AdminHomeScreen } from '../../modules/admin';
 import { ProfileScreen } from '../../modules/profile';
 import { AppBar } from '../components/AppBar';
+import { AboutScreen } from '../screens/AboutScreen';
 import { MenuScreen } from './MenuScreen';
 
 export type AppMenuParamList = {
   Announcements: undefined;
   Profile: undefined;
   Admin: undefined;
+  About: undefined;
   Menu: undefined;
 };
 
@@ -36,6 +38,11 @@ export function AppMenuStack() {
         name="Admin"
         component={AdminHomeScreen}
         options={{ title: t('menu.admin') }}
+      />
+      <Stack.Screen
+        name="About"
+        component={AboutScreen}
+        options={{ title: t('menu.about') }}
       />
       <Stack.Screen
         name="Menu"

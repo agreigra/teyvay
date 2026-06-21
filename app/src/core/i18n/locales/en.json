@@ -17,13 +17,21 @@
   },
   "menu": {
     "announcements": "Listings",
+    "home": "Home",
+    "addProduct": "Add product",
+    "myProducts": "My products",
     "profile": "Profile",
     "admin": "Admin",
+    "about": "About the platform",
     "signIn": "Sign in",
     "signUp": "Sign up",
     "signOut": "Sign out",
     "support": "Help & support",
     "supportMessage": "Hello, I need help with Teyvay.",
     "supportUnavailable": "Support is unavailable right now."
+  },
+  "about": {
+    "body": "Teyvay is a marketplace for Mauritania that connects sellers and buyers. Browse listings, and contact sellers directly on WhatsApp to arrange your purchase.",
+    "version": "Version"
   }
 }

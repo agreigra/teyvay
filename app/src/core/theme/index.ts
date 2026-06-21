@@ -4,6 +4,7 @@
 export const colors = {
   primary: '#0B6E4F', // sea green — nods to the sailor/marketplace theme
   primaryDark: '#084C37',
+  primarySoft: 'rgba(11,110,79,0.10)', // tint for active/selected backgrounds
   background: '#F7F8FA',
   surface: '#FFFFFF',
   text: '#1A1A1A',
