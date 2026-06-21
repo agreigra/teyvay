@@ -6,11 +6,13 @@ import { ANNOUNCEMENTS_NS } from '../constants';
 import { AnnouncementDetailScreen } from '../screens/AnnouncementDetailScreen';
 import { AnnouncementListScreen } from '../screens/AnnouncementListScreen';
 import { CreateAnnouncementScreen } from '../screens/CreateAnnouncementScreen';
+import { EditAnnouncementScreen } from '../screens/EditAnnouncementScreen';
 
 export type AnnouncementsStackParamList = {
   List: undefined;
   Detail: { id: string };
   Create: undefined;
+  Edit: { id: string };
 };
 
 const Stack = createNativeStackNavigator<AnnouncementsStackParamList>();
@@ -31,6 +33,11 @@ export function AnnouncementsStack() {
         name="Create"
         component={CreateAnnouncementScreen}
         options={{ title: t('create.title') }}
+      />
+      <Stack.Screen
+        name="Edit"
+        component={EditAnnouncementScreen}
+        options={{ title: t('edit.title') }}
       />
     </Stack.Navigator>
   );

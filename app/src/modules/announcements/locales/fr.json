@@ -4,7 +4,11 @@
     "myTitle": "Mes annonces",
     "empty": "Aucune annonce pour le moment",
     "emptyMine": "Vous n'avez pas encore publié d'annonce",
+    "emptyFiltered": "Aucune annonce ne correspond à ce filtre",
     "create": "Nouvelle annonce"
+  },
+  "filter": {
+    "all": "Toutes"
   },
   "status": {
     "active": "Active",
@@ -13,6 +17,7 @@
   },
   "detail": {
     "contact": "Contacter via WhatsApp",
+    "edit": "Modifier l'annonce",
     "markSold": "Marquer comme vendue",
     "markActive": "Réactiver",
     "markInactive": "Désactiver",
@@ -29,6 +34,11 @@
     "pricePlaceholder": "0",
     "submit": "Publier",
     "submitting": "Publication…"
+  },
+  "edit": {
+    "title": "Modifier l'annonce",
+    "submit": "Enregistrer",
+    "submitting": "Enregistrement…"
   },
   "errors": {
     "titleRequired": "Veuillez saisir un titre",

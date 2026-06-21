@@ -4,7 +4,11 @@
     "myTitle": "My listings",
     "empty": "No listings yet",
     "emptyMine": "You haven't posted any listings yet",
+    "emptyFiltered": "No listings match this filter",
     "create": "New listing"
+  },
+  "filter": {
+    "all": "All"
   },
   "status": {
     "active": "Active",
@@ -13,6 +17,7 @@
   },
   "detail": {
     "contact": "Contact via WhatsApp",
+    "edit": "Edit listing",
     "markSold": "Mark as sold",
     "markActive": "Mark as active",
     "markInactive": "Deactivate",
@@ -29,6 +34,11 @@
     "pricePlaceholder": "0",
     "submit": "Publish",
     "submitting": "Publishing…"
+  },
+  "edit": {
+    "title": "Edit listing",
+    "submit": "Save changes",
+    "submitting": "Saving…"
   },
   "errors": {
     "titleRequired": "Please enter a title",

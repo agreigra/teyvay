@@ -70,3 +70,19 @@ export async function setStatus(
   const { error } = await supabase.from(TABLE).update({ status }).eq('id', id);
   if (error) throw error;
 }
+
+// Edit a listing's content (title/description/price). Status is changed
+// separately via setStatus.
+export async function update(
+  id: string,
+  input: NewAnnouncement,
+): Promise<Announcement> {
+  const { data, error } = await supabase
+    .from(TABLE)
+    .update(input)
+    .eq('id', id)
+    .select(COLUMNS)
+    .single();
+  if (error) throw error;
+  return data as Announcement;
+}

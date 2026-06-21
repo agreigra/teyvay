@@ -1,6 +1,7 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { ActivityIndicator, Alert, StyleSheet, Text, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
+import { useFocusEffect } from '@react-navigation/native';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 
 import { Button } from '../../../core/components/Button';
@@ -28,13 +29,19 @@ export function AnnouncementDetailScreen({ route, navigation }: Props) {
   const [loading, setLoading] = useState(true);
   const [busy, setBusy] = useState(false);
 
-  useEffect(() => {
-    getById(id)
-      .then(setItem)
-      .finally(() => setLoading(false));
-  }, [id]);
+  // Refetch on focus so edits made on the Edit screen are reflected on return.
+  useFocusEffect(
+    useCallback(() => {
+      getById(id)
+        .then(setItem)
+        .finally(() => setLoading(false));
+    }, [id]),
+  );
 
   const isOwner = !!item && item.created_by === profile?.id;
+  const isAdmin = profile?.role === 'admin';
+  // Owner or admin can manage status; editing is limited to active listings.
+  const canManage = isOwner || isAdmin;
 
   const onContact = async () => {
     if (!item) return;
@@ -90,8 +97,15 @@ export function AnnouncementDetailScreen({ route, navigation }: Props) {
 
       <View style={styles.spacer} />
 
-      {isOwner ? (
+      {canManage ? (
         <View style={styles.actions}>
+          {item.status === 'active' && (
+            <Button
+              label={t('detail.edit')}
+              onPress={() => navigation.navigate('Edit', { id: item.id })}
+              disabled={busy}
+            />
+          )}
           {item.status !== 'active' && (
             <Button label={t('detail.markActive')} onPress={() => changeStatus('active')} loading={busy} />
           )}

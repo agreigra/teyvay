@@ -4,7 +4,11 @@
     "myTitle": "إعلاناتي",
     "empty": "لا توجد إعلانات بعد",
     "emptyMine": "لم تنشر أي إعلان بعد",
+    "emptyFiltered": "لا توجد إعلانات تطابق هذا المرشّح",
     "create": "إعلان جديد"
+  },
+  "filter": {
+    "all": "الكل"
   },
   "status": {
     "active": "نشط",
@@ -13,6 +17,7 @@
   },
   "detail": {
     "contact": "التواصل عبر واتساب",
+    "edit": "تعديل الإعلان",
     "markSold": "وضع علامة مُباع",
     "markActive": "إعادة التفعيل",
     "markInactive": "إلغاء التفعيل",
@@ -29,6 +34,11 @@
     "pricePlaceholder": "0",
     "submit": "نشر",
     "submitting": "جارٍ النشر…"
+  },
+  "edit": {
+    "title": "تعديل الإعلان",
+    "submit": "حفظ التغييرات",
+    "submitting": "جارٍ الحفظ…"
   },
   "errors": {
     "titleRequired": "يرجى إدخال عنوان",
