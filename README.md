@@ -26,6 +26,10 @@ The original spec ([prompt.md](prompt.md)) is solid but leaves gaps that must be
 | 8   | Images not mentioned.                                                                 | Out of scope for MVP (listings are text + price). Noted as a future enhancement (Supabase Storage).                                                                                                                        |
 | 9   | Seeding an admin via pure SQL is awkward (auth.users is managed).                     | `seed.sql` seeds `app_settings` + sample announcements; admin promotion is a documented one-liner UPDATE after the admin signs in once.                                                                                    |
 | 10  | Should browsing require login? (Spec §9 said "only authenticated users access data".) | **No — guests browse.** Unauthenticated visitors can view **active** listings, open details, and Contact via WhatsApp. Login is required only to **post/manage** listings (merchant), or for admin. This overrides spec §9 for the public read path. |
+| 11  | Registration only had phone/password; richer profile wanted.                          | Collect **first name, last name, age** at signup (+ phone, password with show/hide). Passed as signup metadata → `handle_new_user()` writes them into `profiles`. **Age must be ≥ 18** (validated at registration). |
+| 12  | Account deletion behaviour.                                                            | **Soft delete:** set `profiles.deleted_at`, deactivate the user's listings, sign out. Soft-deleted rows are excluded from all reads. On next login the user is **offered reactivation** (clears `deleted_at`). `auth.users` is not removed. |
+| 13  | How much admin user management for v1?                                                 | **Minimal:** admin can list all users, filter listings by user, change a user's role, and soft-delete/ban a user. Full moderation tooling deferred. |
+| 14  | App-wide navigation shape.                                                             | A **drawer (hamburger) menu** is the shell: Announcements, My listings (merchant), Profile, Admin (admin), and Sign in/Sign up (guest). **Language** moves into a dropdown in the menu. |
 
 ---
 
@@ -54,8 +58,9 @@ teyvay/
 │  │     │  ├─ services/         # auth.service.ts
 │  │     │  ├─ locales/{ar,fr,en}.json
 │  │     │  └─ index.ts          # public API: routes, exported hooks
-│  │     ├─ announcements/       # list, detail, create (merchant)
-│  │     ├─ admin/               # admin dashboard + moderation
+│  │     ├─ announcements/       # list, detail, create, edit, archive (merchant)
+│  │     ├─ admin/               # admin dashboard + user/listing management
+│  │     ├─ profile/             # edit info, soft-delete account
 │  │     └─ settings/            # language select, app_settings (whatsapp no.)
 │  ├─ App.tsx
 │  ├─ app.json / app.config.ts
@@ -93,8 +98,11 @@ Migrations mirror the modules — each module contributes its own migration so t
 - **0001_core_init.sql** _(core)_ — `role` enum (`admin`,`merchant`,`client`), `announcement_status` enum (`active`,`sold`,`inactive`); `profiles(id uuid PK→auth.users, phone, role, display_name, created_at)`; `handle_new_user()` trigger (default role `client`); `current_user_role()` / `is_admin()` `SECURITY DEFINER` helpers.
 - **0002_settings.sql** _(settings module)_ — `app_settings(key text PK, value text)` for the admin WhatsApp number.
 - **0003_announcements.sql** _(announcements module)_ — `announcements(id uuid PK, title, description, price numeric(12,2), status, created_by→profiles, created_at, updated_at)`; indexes on `status` and `created_by`.
-- **0004_rls_policies.sql** — enable RLS on all tables + policies (below). Kept as one file so the full security surface is reviewable in one place.
+- **0005_profiles_ext.sql** _(profile module)_ — add `first_name`, `last_name`, `age int`, `deleted_at timestamptz` to `profiles`; extend `handle_new_user()` to read `first_name/last_name/age` from signup metadata.
+- **0006_rls_policies.sql** — enable RLS on all tables + policies (below), incl. public/anon read of active listings + whatsapp number, soft-delete exclusion, admin writes, merchant own-rows. Kept as one file so the full security surface is reviewable in one place.
 - **seed.sql** — sample announcements + `app_settings` row for the WhatsApp number.
+
+> Migration numbers are placeholders — the Supabase CLI prefixes files with a timestamp; ordering is what matters. `0004` is intentionally skipped (reserved earlier); RLS now lands in `0006`.
 
 > Adding a new module later = add `app/src/modules/<name>/` + a new `00NN_<name>.sql` migration (+ its RLS). Nothing existing changes.
 
@@ -154,11 +162,14 @@ Build one module at a time. After each step the app **compiles and runs** — yo
 | **3** | ✅ done | **auth**          | _(uses 0001)_        | Phone+password auth (OTP only for first-time verify + password recovery), `useAuth`, onboarding role pick (merchant/client) | Register→OTP confirm→password login; forgot→OTP→new password; role stored on profile |
 | **4** | ✅ done | **announcements** | `0003_announcements` | List, Detail, Create (merchant), `announcements.service`, WhatsApp deep-link on Detail                                      | Merchant creates a listing; client browses active ones; Contact opens WhatsApp       |
 | **4b**| ✅ done | **guest browse**  | _(uses 0003)_        | Navigation gate change: open to public browse without login; "Sign in" CTA; guest list/detail/contact                      | Logged-out user sees active listings, opens detail, contacts via WhatsApp            |
-| **5** | ⬜ todo | **admin**         | _(uses 0003)_        | Admin dashboard: view all, activate/deactivate/mark sold, moderate                                                          | Admin manages any listing                                                            |
-| **6** | ⬜ todo | _RLS hardening_   | `0004_rls_policies`  | — (enable + verify policies for every table, incl. **public/anon** read of active listings + whatsapp number)               | Guest reads active only; each role limited to its matrix rows; `db reset` clean      |
-| **7** | ⬜ todo | _Polish_          | —                    | loading/error/empty states, finalize setup guide + `.env.example`                                                           | MVP demo-ready end-to-end                                                            |
+| **4c**| ✅ done | **nav shell**     | —                    | Drawer (hamburger) menu: Announcements, Profile, Admin, Sign in/Sign up (role/session-aware); language as a dropdown in the menu | Menu opens; entries shown per role/session; language switch from menu |
+| **5** | ⬜ todo | **admin**         | _(uses 0003)_        | Admin dashboard: all listings + filter by user; manage listings (activate/deactivate/sold); **minimal** user mgmt (list users, change role, soft-delete/ban) | Admin manages any listing and users                                                  |
+| **6** | ⬜ todo | **profile**       | `0005_profiles_ext`  | Add `first_name,last_name,age,deleted_at` to profiles; Profile screen (edit info, **soft delete** w/ reactivation); registration fields + **age ≥ 18** + show/hide password | User edits info; soft-deletes (data hidden, signed out); re-login offers reactivation |
+| **7** | ⬜ todo | **listings mgmt** | _(uses 0003)_        | Merchant: filter own listings by status; **edit** (active only); **archive** (→ `inactive`)                                  | Merchant filters, edits an active listing, archives one                              |
+| **8** | ⬜ todo | _RLS hardening_   | `0006_rls_policies`  | Enable + verify policies for every table: **public/anon** read of active listings + whatsapp number; soft-deleted rows excluded; admin writes; merchant own-rows | Guest reads active only; soft-deleted hidden; each role limited to its matrix; `db reset` clean |
+| **9** | ⬜ todo | _Polish_          | —                    | loading/error/empty states, finalize setup guide + `.env.example`                                                           | MVP demo-ready end-to-end                                                            |
 
-> RLS policies (step 6) are written incrementally as each table lands, but consolidated/verified in `0004` so the whole security surface is auditable at once. For real deployments, enable RLS per-table in the same migration that creates the table.
+> RLS policies (step 8) are written incrementally as each table lands, but consolidated/verified in one migration so the whole security surface is auditable at once. For real deployments, enable RLS per-table in the same migration that creates the table.
 
 ---
 

@@ -4,8 +4,9 @@ import { useTranslation } from 'react-i18next';
 
 import { Button } from '../../../core/components/Button';
 import { Screen } from '../../../core/components/Screen';
+import { useIsRTL } from '../../../core/i18n';
 import type { UserRole } from '../../../core/types/database';
-import { colors, spacing, typography } from '../../../core/theme';
+import { colors, rtlTextStyle, spacing, typography } from '../../../core/theme';
 import { AUTH_NS } from '../constants';
 import { useAuth } from '../hooks/useAuth';
 
@@ -13,6 +14,7 @@ import { useAuth } from '../hooks/useAuth';
 // admin is never self-assignable here — it's granted via SQL only.
 export function RoleSelectScreen() {
   const { t } = useTranslation(AUTH_NS);
+  const rtl = useIsRTL();
   const { selectRole } = useAuth();
   const [saving, setSaving] = useState<UserRole | null>(null);
 
@@ -29,8 +31,8 @@ export function RoleSelectScreen() {
   return (
     <Screen>
       <View style={styles.header}>
-        <Text style={styles.title}>{t('role.title')}</Text>
-        <Text style={styles.subtitle}>{t('role.subtitle')}</Text>
+        <Text style={[styles.title, rtl && rtlTextStyle]}>{t('role.title')}</Text>
+        <Text style={[styles.subtitle, rtl && rtlTextStyle]}>{t('role.subtitle')}</Text>
       </View>
 
       <View style={styles.options}>

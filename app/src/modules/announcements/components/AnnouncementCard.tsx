@@ -1,7 +1,8 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 
-import { colors, radius, spacing, typography } from '../../../core/theme';
+import { useIsRTL } from '../../../core/i18n';
+import { colors, radius, rtlTextStyle, spacing, typography } from '../../../core/theme';
 import { formatPrice } from '../../../core/utils/format';
 import type { Announcement } from '../../../core/types/database';
 import { ANNOUNCEMENTS_NS } from '../constants';
@@ -21,14 +22,15 @@ type Props = {
 
 export function AnnouncementCard({ item, onPress, showStatus = false }: Props) {
   const { t } = useTranslation(ANNOUNCEMENTS_NS);
+  const rtl = useIsRTL();
 
   return (
     <Pressable
       onPress={onPress}
       style={({ pressed }) => [styles.card, pressed && styles.pressed]}
     >
-      <View style={styles.row}>
-        <Text style={styles.title} numberOfLines={1}>
+      <View style={[styles.row, rtl && styles.rowRtl]}>
+        <Text style={[styles.title, rtl && rtlTextStyle]} numberOfLines={1}>
           {item.title}
         </Text>
         {showStatus && (
@@ -37,9 +39,9 @@ export function AnnouncementCard({ item, onPress, showStatus = false }: Props) {
           </Text>
         )}
       </View>
-      <Text style={styles.price}>{formatPrice(item.price)}</Text>
+      <Text style={[styles.price, rtl && rtlTextStyle]}>{formatPrice(item.price)}</Text>
       {!!item.description && (
-        <Text style={styles.description} numberOfLines={2}>
+        <Text style={[styles.description, rtl && rtlTextStyle]} numberOfLines={2}>
           {item.description}
         </Text>
       )}
@@ -64,6 +66,9 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     gap: spacing.sm,
+  },
+  rowRtl: {
+    flexDirection: 'row-reverse',
   },
   title: {
     flex: 1,

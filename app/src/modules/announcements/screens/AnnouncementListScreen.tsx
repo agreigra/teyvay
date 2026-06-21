@@ -1,12 +1,12 @@
+import { useLayoutEffect } from 'react';
 import { ActivityIndicator, FlatList, Pressable, StyleSheet, Text, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 
 import { Button } from '../../../core/components/Button';
-import { LanguageSwitcher } from '../../../core/components/LanguageSwitcher';
 import { Screen } from '../../../core/components/Screen';
 import { colors, spacing, typography } from '../../../core/theme';
-import { AUTH_NS, useAuth } from '../../auth';
+import { useAuth } from '../../auth';
 import { AnnouncementCard } from '../components/AnnouncementCard';
 import { ANNOUNCEMENTS_NS } from '../constants';
 import { useAnnouncements } from '../hooks/useAnnouncements';
@@ -16,34 +16,22 @@ type Props = NativeStackScreenProps<AnnouncementsStackParamList, 'List'>;
 
 export function AnnouncementListScreen({ navigation }: Props) {
   const { t } = useTranslation(ANNOUNCEMENTS_NS);
-  const { session, profile, signOut, openAuth } = useAuth();
+  const { profile } = useAuth();
   const role = profile?.role;
   const isMerchant = role === 'merchant';
-  const isGuest = !session;
 
   const scope = isMerchant ? 'mine' : role === 'admin' ? 'all' : 'active';
   const { items, loading, error, reload } = useAnnouncements(scope, profile?.id);
 
+  // Set the shared AppBar title for this screen.
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      title: isMerchant ? t('list.myTitle') : t('list.browseTitle'),
+    });
+  }, [navigation, isMerchant, t]);
+
   return (
     <Screen>
-      <View style={styles.header}>
-        <View style={styles.headerRow}>
-          <Text style={styles.title}>
-            {isMerchant ? t('list.myTitle') : t('list.browseTitle')}
-          </Text>
-          {isGuest ? (
-            <Pressable onPress={openAuth} hitSlop={8}>
-              <Text style={styles.signOut}>{t('signIn.submit', { ns: AUTH_NS })}</Text>
-            </Pressable>
-          ) : (
-            <Pressable onPress={signOut} hitSlop={8}>
-              <Text style={styles.signOut}>{t('signOut', { ns: AUTH_NS })}</Text>
-            </Pressable>
-          )}
-        </View>
-        <LanguageSwitcher />
-      </View>
-
       {isMerchant && (
         <Button
           label={t('list.create')}
@@ -86,26 +74,8 @@ export function AnnouncementListScreen({ navigation }: Props) {
 }
 
 const styles = StyleSheet.create({
-  header: {
-    marginBottom: spacing.md,
-  },
-  headerRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: spacing.md,
-  },
-  title: {
-    fontSize: typography.title,
-    fontWeight: '700',
-    color: colors.text,
-  },
-  signOut: {
-    color: colors.primary,
-    fontSize: typography.body,
-    fontWeight: '600',
-  },
   createBtn: {
+    marginTop: spacing.sm,
     marginBottom: spacing.md,
   },
   center: {

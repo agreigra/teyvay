@@ -14,5 +14,13 @@
     "ar": "العربية",
     "fr": "Français",
     "en": "English"
+  },
+  "menu": {
+    "announcements": "الإعلانات",
+    "profile": "الملف الشخصي",
+    "admin": "الإدارة",
+    "signIn": "تسجيل الدخول",
+    "signUp": "إنشاء حساب",
+    "signOut": "تسجيل الخروج"
   }
 }

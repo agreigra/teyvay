@@ -14,5 +14,13 @@
     "ar": "العربية",
     "fr": "Français",
     "en": "English"
+  },
+  "menu": {
+    "announcements": "Listings",
+    "profile": "Profile",
+    "admin": "Admin",
+    "signIn": "Sign in",
+    "signUp": "Sign up",
+    "signOut": "Sign out"
   }
 }

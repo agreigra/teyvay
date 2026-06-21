@@ -32,9 +32,10 @@ type AuthContextValue = {
   beginPasswordReset: () => void;
   completePasswordReset: () => void;
   // Guests browse without a session; openAuth() reveals the sign-in flow on
-  // demand, closeAuth() returns them to public browsing.
+  // demand (optionally starting at Register), closeAuth() returns to browsing.
   authPrompt: boolean;
-  openAuth: () => void;
+  authInitialRoute: 'SignIn' | 'Register';
+  openAuth: (initial?: 'SignIn' | 'Register') => void;
   closeAuth: () => void;
   selectRole: (role: UserRole) => Promise<void>;
   signOut: () => Promise<void>;
@@ -49,6 +50,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [needsOnboarding, setNeedsOnboarding] = useState(false);
   const [passwordResetPending, setPasswordResetPending] = useState(false);
   const [authPrompt, setAuthPrompt] = useState(false);
+  const [authInitialRoute, setAuthInitialRoute] = useState<'SignIn' | 'Register'>(
+    'SignIn',
+  );
 
   // Load profile + onboarding flag for a signed-in user.
   const loadUser = useCallback(async (userId: string) => {
@@ -106,7 +110,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     () => setPasswordResetPending(false),
     [],
   );
-  const openAuth = useCallback(() => setAuthPrompt(true), []);
+  const openAuth = useCallback((initial: 'SignIn' | 'Register' = 'SignIn') => {
+    setAuthInitialRoute(initial);
+    setAuthPrompt(true);
+  }, []);
   const closeAuth = useCallback(() => setAuthPrompt(false), []);
 
   const value = useMemo<AuthContextValue>(
@@ -119,6 +126,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       beginPasswordReset,
       completePasswordReset,
       authPrompt,
+      authInitialRoute,
       openAuth,
       closeAuth,
       selectRole,
@@ -133,6 +141,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       beginPasswordReset,
       completePasswordReset,
       authPrompt,
+      authInitialRoute,
       openAuth,
       closeAuth,
       selectRole,

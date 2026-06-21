@@ -5,7 +5,8 @@ import { useTranslation } from 'react-i18next';
 import { Button } from '../../../core/components/Button';
 import { Field } from '../../../core/components/Field';
 import { Screen } from '../../../core/components/Screen';
-import { colors, spacing, typography } from '../../../core/theme';
+import { useIsRTL } from '../../../core/i18n';
+import { colors, rtlTextStyle, spacing, typography } from '../../../core/theme';
 import { AUTH_NS } from '../constants';
 import { useAuth } from '../hooks/useAuth';
 import { updatePassword } from '../services/auth.service';
@@ -15,6 +16,7 @@ import { MIN_PASSWORD_LENGTH } from '../utils';
 // still needs to choose a new password.
 export function SetNewPasswordScreen() {
   const { t } = useTranslation(AUTH_NS);
+  const rtl = useIsRTL();
   const { completePasswordReset } = useAuth();
   const [password, setPassword] = useState('');
   const [confirm, setConfirm] = useState('');
@@ -45,8 +47,8 @@ export function SetNewPasswordScreen() {
   return (
     <Screen>
       <View style={styles.header}>
-        <Text style={styles.title}>{t('setPassword.title')}</Text>
-        <Text style={styles.subtitle}>{t('setPassword.subtitle')}</Text>
+        <Text style={[styles.title, rtl && rtlTextStyle]}>{t('setPassword.title')}</Text>
+        <Text style={[styles.subtitle, rtl && rtlTextStyle]}>{t('setPassword.subtitle')}</Text>
       </View>
 
       <Field

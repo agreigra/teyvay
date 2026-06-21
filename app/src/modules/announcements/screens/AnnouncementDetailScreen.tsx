@@ -5,7 +5,8 @@ import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 
 import { Button } from '../../../core/components/Button';
 import { Screen } from '../../../core/components/Screen';
-import { colors, radius, spacing, typography } from '../../../core/theme';
+import { useIsRTL } from '../../../core/i18n';
+import { colors, radius, rtlTextStyle, spacing, typography } from '../../../core/theme';
 import { formatPrice } from '../../../core/utils/format';
 import { openWhatsapp } from '../../../core/utils/whatsapp';
 import type { Announcement, AnnouncementStatus } from '../../../core/types/database';
@@ -21,6 +22,7 @@ export function AnnouncementDetailScreen({ route, navigation }: Props) {
   const { id } = route.params;
   const { t } = useTranslation(ANNOUNCEMENTS_NS);
   const { profile } = useAuth();
+  const rtl = useIsRTL();
 
   const [item, setItem] = useState<Announcement | null>(null);
   const [loading, setLoading] = useState(true);
@@ -80,9 +82,11 @@ export function AnnouncementDetailScreen({ route, navigation }: Props) {
         <Text style={styles.statusText}>{t(`status.${item.status}`)}</Text>
       </View>
 
-      <Text style={styles.title}>{item.title}</Text>
-      <Text style={styles.price}>{formatPrice(item.price)}</Text>
-      {!!item.description && <Text style={styles.description}>{item.description}</Text>}
+      <Text style={[styles.title, rtl && rtlTextStyle]}>{item.title}</Text>
+      <Text style={[styles.price, rtl && rtlTextStyle]}>{formatPrice(item.price)}</Text>
+      {!!item.description && (
+        <Text style={[styles.description, rtl && rtlTextStyle]}>{item.description}</Text>
+      )}
 
       <View style={styles.spacer} />
 

@@ -170,4 +170,9 @@ These resolve ambiguities in the spec above. See README.md for full rationale.
 - Phone OTP: requires an SMS provider (Twilio/MessageBird) in Supabase Auth; default country code +222.
 - Auth model: phone + password. OTP (SMS) is used ONLY for first-time registration confirmation and for password recovery ("forgot password"). Normal returning logins use the password — no OTP. (Local dev uses a test OTP number to avoid sending real SMS.)
 - Guest browsing (overrides §9 "only authenticated users can access data"): unauthenticated visitors CAN view active announcements, open details, and Contact via WhatsApp. Login is required only to post/manage listings (merchant) or for admin. RLS grants the `anon` role read access to active announcements and to the admin WhatsApp number; all writes and all other tables remain auth-only.
+- Registration captures first name, last name, age (≥ 18, validated) + phone + password (with show/hide). Fields flow via signup metadata into `profiles`.
+- Account deletion is a soft delete (`profiles.deleted_at`): hide the user's data, deactivate their listings, sign out; offer reactivation on next login. `auth.users` is not removed.
+- Admin v1 user management is minimal: list users, filter listings by user, change a user's role, soft-delete/ban a user.
+- Navigation shell is a drawer (hamburger) menu (Announcements, My listings, Profile, Admin, Sign in/Sign up per role/session); language selection lives in a dropdown in the menu.
+- Merchant listing management: filter own listings by status; edit only while `active`; "archive" maps to the `inactive` status.
 - Images: out of scope for MVP; listings are text + price. Future enhancement via Supabase Storage.

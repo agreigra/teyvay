@@ -6,7 +6,8 @@ import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Button } from '../../../core/components/Button';
 import { Field } from '../../../core/components/Field';
 import { Screen } from '../../../core/components/Screen';
-import { colors, spacing, typography } from '../../../core/theme';
+import { useIsRTL } from '../../../core/i18n';
+import { colors, rtlTextStyle, spacing, typography } from '../../../core/theme';
 import { useAuth } from '../../auth';
 import { ANNOUNCEMENTS_NS } from '../constants';
 import type { AnnouncementsStackParamList } from '../navigation/AnnouncementsStack';
@@ -17,6 +18,7 @@ type Props = NativeStackScreenProps<AnnouncementsStackParamList, 'Create'>;
 export function CreateAnnouncementScreen({ navigation }: Props) {
   const { t } = useTranslation(ANNOUNCEMENTS_NS);
   const { profile } = useAuth();
+  const rtl = useIsRTL();
 
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
@@ -52,7 +54,7 @@ export function CreateAnnouncementScreen({ navigation }: Props) {
 
   return (
     <Screen>
-      <Text style={styles.title}>{t('create.title')}</Text>
+      <Text style={[styles.title, rtl && rtlTextStyle]}>{t('create.title')}</Text>
 
       <Field
         label={t('create.titleLabel')}

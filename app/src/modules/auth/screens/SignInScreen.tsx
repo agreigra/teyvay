@@ -6,7 +6,8 @@ import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Button } from '../../../core/components/Button';
 import { Field } from '../../../core/components/Field';
 import { Screen } from '../../../core/components/Screen';
-import { colors, spacing, typography } from '../../../core/theme';
+import { useIsRTL } from '../../../core/i18n';
+import { colors, rtlTextStyle, spacing, typography } from '../../../core/theme';
 import { AUTH_NS, DEFAULT_COUNTRY_CODE } from '../constants';
 import { useAuth } from '../hooks/useAuth';
 import type { AuthStackParamList } from '../navigation/AuthStack';
@@ -18,6 +19,7 @@ type Props = NativeStackScreenProps<AuthStackParamList, 'SignIn'>;
 export function SignInScreen({ navigation }: Props) {
   const { t } = useTranslation(AUTH_NS);
   const { closeAuth } = useAuth();
+  const rtl = useIsRTL();
   const [phone, setPhone] = useState(DEFAULT_COUNTRY_CODE);
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
@@ -42,8 +44,8 @@ export function SignInScreen({ navigation }: Props) {
   return (
     <Screen>
       <View style={styles.header}>
-        <Text style={styles.title}>{t('signIn.title')}</Text>
-        <Text style={styles.subtitle}>{t('signIn.subtitle')}</Text>
+        <Text style={[styles.title, rtl && rtlTextStyle]}>{t('signIn.title')}</Text>
+        <Text style={[styles.subtitle, rtl && rtlTextStyle]}>{t('signIn.subtitle')}</Text>
       </View>
 
       <Field

@@ -1,18 +1,18 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Localization from 'expo-localization';
 import i18n from 'i18next';
-import { initReactI18next } from 'react-i18next';
+import { initReactI18next, useTranslation } from 'react-i18next';
 
 import {
   AppLanguage,
   DEFAULT_LANGUAGE,
   LANGUAGE_STORAGE_KEY,
+  isRtlLanguage,
   isSupportedLanguage,
 } from './config';
 import ar from './locales/ar.json';
 import en from './locales/en.json';
 import fr from './locales/fr.json';
-import { applyLayoutDirection, reloadForDirectionChange } from './rtl';
 
 // Core resources live under the default 'core' namespace. Feature modules add
 // their own namespaces at runtime via i18n.addResourceBundle(...).
@@ -44,10 +44,16 @@ export async function initI18n(): Promise<typeof i18n> {
     interpolation: { escapeValue: false },
   });
 
-  // Align native layout direction on first load.
-  applyLayoutDirection(lng);
-
   return i18n;
+}
+
+// Reactive RTL flag for the current language. Re-renders consumers on change.
+// We drive layout direction in JS (via the `direction` style) rather than
+// I18nManager.forceRTL, which requires a native restart and is unreliable in
+// Expo Go.
+export function useIsRTL(): boolean {
+  const { i18n: instance } = useTranslation();
+  return isRtlLanguage(instance.language);
 }
 
 // Has the user explicitly chosen a language? (false on very first launch).
@@ -68,14 +74,11 @@ export function registerModuleLocales(
   });
 }
 
-// Change language app-wide: persist, switch i18next, and flip RTL/LTR if needed.
+// Change language app-wide: persist + switch i18next. RTL/LTR layout follows
+// reactively via useIsRTL() + the root direction style — no reload needed.
 export async function changeAppLanguage(lang: AppLanguage): Promise<void> {
   await AsyncStorage.setItem(LANGUAGE_STORAGE_KEY, lang);
   await i18n.changeLanguage(lang);
-  const directionChanged = applyLayoutDirection(lang);
-  if (directionChanged) {
-    await reloadForDirectionChange();
-  }
 }
 
 export default i18n;

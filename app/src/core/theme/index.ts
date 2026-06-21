@@ -34,5 +34,9 @@ export const typography = {
   caption: 13,
 };
 
+// Spread onto a Text's style when the UI is RTL so it aligns + flows correctly.
+export const rtlTextStyle = { textAlign: 'right', writingDirection: 'rtl' } as const;
+export const ltrTextStyle = { textAlign: 'left', writingDirection: 'ltr' } as const;
+
 export const theme = { colors, spacing, radius, typography };
 export type Theme = typeof theme;

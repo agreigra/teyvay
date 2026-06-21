@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { ActivityIndicator, View } from 'react-native';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { StatusBar } from 'expo-status-bar';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { I18nextProvider } from 'react-i18next';
@@ -7,8 +8,10 @@ import { I18nextProvider } from 'react-i18next';
 import i18n, { hasSelectedLanguage, initI18n } from './src/core/i18n';
 import { RootNavigator } from './src/core/navigation/RootNavigator';
 import { colors } from './src/core/theme';
+import { registerAdminLocales } from './src/modules/admin';
 import { registerAnnouncementsLocales } from './src/modules/announcements';
 import { AuthProvider, registerAuthLocales } from './src/modules/auth';
+import { registerProfileLocales } from './src/modules/profile';
 import { LanguageSelectScreen, registerSettingsLocales } from './src/modules/settings';
 
 export default function App() {
@@ -21,6 +24,8 @@ export default function App() {
       registerSettingsLocales();
       registerAuthLocales();
       registerAnnouncementsLocales();
+      registerProfileLocales();
+      registerAdminLocales();
       setLanguageSelected(await hasSelectedLanguage());
     })().finally(() => setReady(true));
   }, []);
@@ -44,12 +49,14 @@ export default function App() {
   }
 
   return (
-    <SafeAreaProvider>
-      <I18nextProvider i18n={i18n}>
-        {content}
-        <StatusBar style="auto" />
-      </I18nextProvider>
-    </SafeAreaProvider>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <SafeAreaProvider>
+        <I18nextProvider i18n={i18n}>
+          {content}
+          <StatusBar style="auto" />
+        </I18nextProvider>
+      </SafeAreaProvider>
+    </GestureHandlerRootView>
   );
 }
 

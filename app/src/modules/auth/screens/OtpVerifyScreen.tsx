@@ -6,7 +6,8 @@ import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Button } from '../../../core/components/Button';
 import { Field } from '../../../core/components/Field';
 import { Screen } from '../../../core/components/Screen';
-import { colors, spacing, typography } from '../../../core/theme';
+import { useIsRTL } from '../../../core/i18n';
+import { colors, rtlTextStyle, spacing, typography } from '../../../core/theme';
 import { AUTH_NS } from '../constants';
 import { useAuth } from '../hooks/useAuth';
 import type { AuthStackParamList } from '../navigation/AuthStack';
@@ -17,6 +18,7 @@ type Props = NativeStackScreenProps<AuthStackParamList, 'OtpVerify'>;
 export function OtpVerifyScreen({ route }: Props) {
   const { phone, mode } = route.params;
   const { t } = useTranslation(AUTH_NS);
+  const rtl = useIsRTL();
   const { beginPasswordReset } = useAuth();
   const [code, setCode] = useState('');
   const [error, setError] = useState<string | null>(null);
@@ -54,8 +56,8 @@ export function OtpVerifyScreen({ route }: Props) {
   return (
     <Screen>
       <View style={styles.header}>
-        <Text style={styles.title}>{t('otp.title')}</Text>
-        <Text style={styles.subtitle}>{t('otp.subtitle', { phone })}</Text>
+        <Text style={[styles.title, rtl && rtlTextStyle]}>{t('otp.title')}</Text>
+        <Text style={[styles.subtitle, rtl && rtlTextStyle]}>{t('otp.subtitle', { phone })}</Text>
       </View>
 
       <Field

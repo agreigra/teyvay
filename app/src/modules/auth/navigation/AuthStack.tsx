@@ -1,6 +1,7 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import { colors } from '../../../core/theme';
+import { useAuth } from '../hooks/useAuth';
 import { ForgotPasswordScreen } from '../screens/ForgotPasswordScreen';
 import { OtpVerifyScreen } from '../screens/OtpVerifyScreen';
 import { RegisterScreen } from '../screens/RegisterScreen';
@@ -20,8 +21,10 @@ const Stack = createNativeStackNavigator<AuthStackParamList>();
 // Unauthenticated flow: password sign-in by default; OTP is used only for
 // first-time registration confirmation and password recovery.
 export function AuthStack() {
+  const { authInitialRoute } = useAuth();
   return (
     <Stack.Navigator
+      initialRouteName={authInitialRoute}
       screenOptions={{
         headerStyle: { backgroundColor: colors.background },
         headerShadowVisible: false,

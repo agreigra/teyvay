@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-import { colors } from '../../../core/theme';
+import { AppBar } from '../../../core/components/AppBar';
 import { ANNOUNCEMENTS_NS } from '../constants';
 import { AnnouncementDetailScreen } from '../screens/AnnouncementDetailScreen';
 import { AnnouncementListScreen } from '../screens/AnnouncementListScreen';
@@ -15,21 +15,13 @@ export type AnnouncementsStackParamList = {
 
 const Stack = createNativeStackNavigator<AnnouncementsStackParamList>();
 
-// Main app stack (role-aware list -> detail -> create).
+// Listings stack. Shares the AppBar header (List shows the hamburger; Detail /
+// Create show a back arrow). List title is set dynamically by the screen.
 export function AnnouncementsStack() {
   const { t } = useTranslation(ANNOUNCEMENTS_NS);
   return (
-    <Stack.Navigator
-      screenOptions={{
-        headerStyle: { backgroundColor: colors.primary },
-        headerTintColor: colors.surface,
-      }}
-    >
-      <Stack.Screen
-        name="List"
-        component={AnnouncementListScreen}
-        options={{ headerShown: false }}
-      />
+    <Stack.Navigator screenOptions={{ header: (props) => <AppBar {...props} /> }}>
+      <Stack.Screen name="List" component={AnnouncementListScreen} />
       <Stack.Screen
         name="Detail"
         component={AnnouncementDetailScreen}

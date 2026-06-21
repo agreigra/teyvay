@@ -1,6 +1,7 @@
 import { StyleSheet, Text, TextInput, TextInputProps, View } from 'react-native';
 
-import { colors, radius, spacing, typography } from '../theme';
+import { useIsRTL } from '../i18n';
+import { colors, radius, rtlTextStyle, spacing, typography } from '../theme';
 
 type Props = TextInputProps & {
   label: string;
@@ -8,15 +9,16 @@ type Props = TextInputProps & {
 };
 
 export function Field({ label, error, style, ...inputProps }: Props) {
+  const rtl = useIsRTL();
   return (
     <View style={styles.wrapper}>
-      <Text style={styles.label}>{label}</Text>
+      <Text style={[styles.label, rtl && rtlTextStyle]}>{label}</Text>
       <TextInput
-        style={[styles.input, !!error && styles.inputError, style]}
+        style={[styles.input, rtl && rtlTextStyle, !!error && styles.inputError, style]}
         placeholderTextColor={colors.textMuted}
         {...inputProps}
       />
-      {!!error && <Text style={styles.error}>{error}</Text>}
+      {!!error && <Text style={[styles.error, rtl && rtlTextStyle]}>{error}</Text>}
     </View>
   );
 }

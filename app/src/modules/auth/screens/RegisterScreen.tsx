@@ -6,7 +6,8 @@ import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Button } from '../../../core/components/Button';
 import { Field } from '../../../core/components/Field';
 import { Screen } from '../../../core/components/Screen';
-import { colors, spacing, typography } from '../../../core/theme';
+import { useIsRTL } from '../../../core/i18n';
+import { colors, rtlTextStyle, spacing, typography } from '../../../core/theme';
 import { AUTH_NS, DEFAULT_COUNTRY_CODE } from '../constants';
 import type { AuthStackParamList } from '../navigation/AuthStack';
 import { signUpWithPassword } from '../services/auth.service';
@@ -16,6 +17,7 @@ type Props = NativeStackScreenProps<AuthStackParamList, 'Register'>;
 
 export function RegisterScreen({ navigation }: Props) {
   const { t } = useTranslation(AUTH_NS);
+  const rtl = useIsRTL();
   const [phone, setPhone] = useState(DEFAULT_COUNTRY_CODE);
   const [password, setPassword] = useState('');
   const [confirm, setConfirm] = useState('');
@@ -56,8 +58,8 @@ export function RegisterScreen({ navigation }: Props) {
   return (
     <Screen>
       <View style={styles.header}>
-        <Text style={styles.title}>{t('register.title')}</Text>
-        <Text style={styles.subtitle}>{t('register.subtitle')}</Text>
+        <Text style={[styles.title, rtl && rtlTextStyle]}>{t('register.title')}</Text>
+        <Text style={[styles.subtitle, rtl && rtlTextStyle]}>{t('register.subtitle')}</Text>
       </View>
 
       <Field
