@@ -1,0 +1,18 @@
+{
+  "app": {
+    "name": "تيڤاي",
+    "tagline": "سوق موريتانيا"
+  },
+  "common": {
+    "language": "اللغة",
+    "loading": "جارٍ التحميل…",
+    "retry": "إعادة المحاولة",
+    "cancel": "إلغاء",
+    "save": "حفظ"
+  },
+  "languages": {
+    "ar": "العربية",
+    "fr": "Français",
+    "en": "English"
+  }
+}

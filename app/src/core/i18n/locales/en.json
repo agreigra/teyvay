@@ -1,0 +1,18 @@
+{
+  "app": {
+    "name": "Teyvay",
+    "tagline": "Mauritania marketplace"
+  },
+  "common": {
+    "language": "Language",
+    "loading": "Loading…",
+    "retry": "Retry",
+    "cancel": "Cancel",
+    "save": "Save"
+  },
+  "languages": {
+    "ar": "العربية",
+    "fr": "Français",
+    "en": "English"
+  }
+}

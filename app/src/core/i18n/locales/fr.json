@@ -1,0 +1,18 @@
+{
+  "app": {
+    "name": "Teyvay",
+    "tagline": "Marché de Mauritanie"
+  },
+  "common": {
+    "language": "Langue",
+    "loading": "Chargement…",
+    "retry": "Réessayer",
+    "cancel": "Annuler",
+    "save": "Enregistrer"
+  },
+  "languages": {
+    "ar": "العربية",
+    "fr": "Français",
+    "en": "English"
+  }
+}
