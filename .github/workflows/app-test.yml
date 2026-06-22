@@ -1,0 +1,46 @@
+name: App unit tests
+
+# Runs the Expo app's Jest suite on any PR or push that touches app code.
+# Keeps the test gate independent of the Supabase migration workflows.
+
+on:
+  push:
+    branches: [develop, main]
+    paths:
+      - "app/**"
+      - ".github/workflows/app-test.yml"
+  pull_request:
+    branches: [develop, main]
+    paths:
+      - "app/**"
+      - ".github/workflows/app-test.yml"
+
+concurrency:
+  group: app-test-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: Jest
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: app
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: app/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run tests
+        # Env vars are stubbed in jest.setup.ts, so no Supabase secrets needed.
+        run: npm test -- --ci
