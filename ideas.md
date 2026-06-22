@@ -31,6 +31,7 @@ As admin I can see all the annoucements, I can filter them by user, I can see al
 - If i am on profile page and I disconnect, I stay on profile page with phone number et role cleared but the rest stays it should redirect to login or home page
 - phone number in profile page is fully displayed with country code which is already selected in the field
 - onboarding to explain to the user how the app works, and how to create an account when he enter for the first time
+- the name in arabic is written with two ways I want it to be written in one way every where
 
 //need to be done
 
@@ -47,5 +48,3 @@ new button to delete user completly
 add a notification module
 
 unit tests
-
-the name in arabic is written with two ways I want it to be written in one way every where

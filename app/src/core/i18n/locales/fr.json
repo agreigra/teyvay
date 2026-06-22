@@ -73,7 +73,7 @@
     "rule4": "L'administration peut supprimer tout contenu non conforme sans préavis.",
     "privacyTitle": "Identité du vendeur protégée",
     "privacyBody": "Toutes les données personnelles (téléphone, WhatsApp, nom) sont totalement masquées aux utilisateurs. Seule l'administration peut les consulter.",
-    "footer": "Ti Fay / Teyvay · 2026",
+    "footer": "Teyvay · 2026",
     "version": "Version"
   },
   "support": {
@@ -97,6 +97,6 @@
     "faq3A": "Généralement sous 24 heures. Vous pouvez suivre l'état de votre produit depuis la page « Mes produits ».",
     "faq4Q": "Pourquoi mon produit a-t-il été refusé ?",
     "faq4A": "Le produit contient peut-être des coordonnées ou enfreint les règles de la plateforme. Vérifiez le motif du refus sur la page « Mes produits ».",
-    "footer": "Ti Fay / Teyvay · 2026"
+    "footer": "Teyvay · 2026"
   }
 }
