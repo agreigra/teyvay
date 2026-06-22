@@ -69,7 +69,7 @@ export function AppBar({ navigation, options, back }: NativeStackHeaderProps) {
     >
       <Pressable
         hitSlop={8}
-        onPress={() => (back ? navigation.goBack() : has('Menu') && navigation.navigate('Menu' as never))}
+        onPress={() => (back ? navigation.goBack() : navigation.navigate('Menu' as never))}
         style={styles.squareBtn}
       >
         <Feather name={back ? backIcon : 'menu'} size={20} color={colors.surface} />
@@ -128,17 +128,15 @@ export function AppBar({ navigation, options, back }: NativeStackHeaderProps) {
                     </Text>
                   )}
                 </View>
-                {has('Profile') && (
-                  <Pressable
-                    style={styles.row}
-                    onPress={() => {
-                      setOpen(null);
-                      navigation.navigate('Profile' as never);
-                    }}
-                  >
-                    <Text style={[styles.rowText, rtl && rtlTextStyle]}>{t('menu.profile')}</Text>
-                  </Pressable>
-                )}
+                <Pressable
+                  style={styles.row}
+                  onPress={() => {
+                    setOpen(null);
+                    navigation.navigate('Profile' as never);
+                  }}
+                >
+                  <Text style={[styles.rowText, rtl && rtlTextStyle]}>{t('menu.profile')}</Text>
+                </Pressable>
                 <Pressable
                   style={styles.row}
                   onPress={() => {
