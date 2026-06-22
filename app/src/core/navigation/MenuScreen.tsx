@@ -90,7 +90,13 @@ export function MenuScreen({ navigation }: Props) {
       ],
     } as never);
 
+  // In the main shell, open the full support screen; from the auth stack
+  // (which has no such route) fall back to opening WhatsApp directly.
   const contactSupport = async () => {
+    if (inMain) {
+      resetTo('Support');
+      return;
+    }
     const number = await getAdminWhatsappNumber();
     if (!number) {
       Alert.alert(t('app.name'), t('menu.supportUnavailable'));
@@ -136,7 +142,13 @@ export function MenuScreen({ navigation }: Props) {
       active: activeName === 'About',
     });
   }
-  rows.push({ key: 'support', label: t('menu.support'), icon: 'headphones', onPress: contactSupport });
+  rows.push({
+    key: 'support',
+    label: t('menu.support'),
+    icon: 'headphones',
+    onPress: contactSupport,
+    active: inMain && activeName === 'Support',
+  });
   if (session) {
     rows.push({ key: 'signout', label: t('menu.signOut'), icon: 'log-out', onPress: signOut, danger: true });
   }

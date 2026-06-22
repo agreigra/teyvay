@@ -29,3 +29,5 @@ phone selector country code selector
 user should be able to change his password from his profile
 and when he forget his password he should be able to reset it
 birthdate instead of age
+limit password changes
+admin can change user password

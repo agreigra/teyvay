@@ -54,5 +54,28 @@
     "privacyBody": "All personal data (phone, WhatsApp, name) is completely hidden from users. Only admins can view it.",
     "footer": "Ti Fay / Teyvay · 2026",
     "version": "Version"
+  },
+  "support": {
+    "heroTitle": "Contact support",
+    "heroSubtitle": "All support messages go directly to the admin only.",
+    "formTitle": "Contact the admin",
+    "subjectLabel": "Subject",
+    "subjectPlaceholder": "Your message subject…",
+    "messageLabel": "Message",
+    "messagePlaceholder": "Write your message here…",
+    "send": "Send via WhatsApp",
+    "reportTitle": "Report a problem",
+    "reportButton": "Report a problem",
+    "reportMessage": "Hello, I'd like to report a problem on Teyvay.",
+    "faqTitle": "Frequently asked questions",
+    "faq1Q": "How do I post a product?",
+    "faq1A": "Tap “Add product” and fill in the form. The product is reviewed by the admin before it goes live.",
+    "faq2Q": "Can I contact the seller directly?",
+    "faq2A": "No. All communication goes through the admin only, to keep everyone private and safe.",
+    "faq3Q": "How long does the review take?",
+    "faq3A": "Usually within 24 hours. You can track your product's status from the “My products” page.",
+    "faq4Q": "Why was my product rejected?",
+    "faq4A": "The product may contain contact info or break the platform rules. Check the rejection reason on the “My products” page.",
+    "footer": "Ti Fay / Teyvay · 2026"
   }
 }

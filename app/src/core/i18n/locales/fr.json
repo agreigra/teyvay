@@ -54,5 +54,28 @@
     "privacyBody": "Toutes les données personnelles (téléphone, WhatsApp, nom) sont totalement masquées aux utilisateurs. Seule l'administration peut les consulter.",
     "footer": "Ti Fay / Teyvay · 2026",
     "version": "Version"
+  },
+  "support": {
+    "heroTitle": "Contacter le support",
+    "heroSubtitle": "Tous les messages d'aide arrivent directement à l'administration.",
+    "formTitle": "Contacter l'administration",
+    "subjectLabel": "Sujet",
+    "subjectPlaceholder": "Sujet de votre message…",
+    "messageLabel": "Message",
+    "messagePlaceholder": "Écrivez votre message ici…",
+    "send": "Envoyer via WhatsApp",
+    "reportTitle": "Signaler un problème",
+    "reportButton": "Signaler un problème",
+    "reportMessage": "Bonjour, je souhaite signaler un problème sur Teyvay.",
+    "faqTitle": "Questions fréquentes",
+    "faq1Q": "Comment publier un produit ?",
+    "faq1A": "Appuyez sur « Ajouter un produit » et remplissez le formulaire. Le produit sera vérifié par l'administration avant sa mise en ligne.",
+    "faq2Q": "Puis-je contacter le vendeur directement ?",
+    "faq2A": "Non. Toute communication passe uniquement par l'administration pour garantir la confidentialité et la sécurité de tous.",
+    "faq3Q": "Combien de temps prend la vérification ?",
+    "faq3A": "Généralement sous 24 heures. Vous pouvez suivre l'état de votre produit depuis la page « Mes produits ».",
+    "faq4Q": "Pourquoi mon produit a-t-il été refusé ?",
+    "faq4A": "Le produit contient peut-être des coordonnées ou enfreint les règles de la plateforme. Vérifiez le motif du refus sur la page « Mes produits ».",
+    "footer": "Ti Fay / Teyvay · 2026"
   }
 }
