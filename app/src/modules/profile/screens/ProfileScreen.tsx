@@ -13,16 +13,20 @@ import { useTranslation } from 'react-i18next';
 import { Feather } from '@expo/vector-icons';
 
 import { Button } from '../../../core/components/Button';
+import { DateField } from '../../../core/components/DateField';
 import { Field } from '../../../core/components/Field';
 import { Screen } from '../../../core/components/Screen';
 import { countryFromE164, flagEmoji } from '../../../core/data/countries';
 import { useIsRTL } from '../../../core/i18n';
 import { colors, radius, rtlTextStyle, spacing, typography } from '../../../core/theme';
+import { ageFromBirthdate, parseISODate, toISODate } from '../../../core/utils/date';
 import {
   AUTH_NS,
+  MIN_AGE,
   MIN_PASSWORD_LENGTH,
   WrongPasswordError,
   changePassword,
+  maxBirthdate,
   useAuth,
 } from '../../auth';
 import { PROFILE_NS } from '../constants';
@@ -35,8 +39,6 @@ if (
   UIManager.setLayoutAnimationEnabledExperimental(true);
 }
 
-const MIN_AGE = 18;
-
 // Editable profile: personal info + soft-delete (deactivate) action.
 export function ProfileScreen() {
   const { t } = useTranslation(PROFILE_NS);
@@ -45,7 +47,9 @@ export function ProfileScreen() {
 
   const [firstName, setFirstName] = useState(profile?.first_name ?? '');
   const [lastName, setLastName] = useState(profile?.last_name ?? '');
-  const [age, setAge] = useState(profile?.age != null ? String(profile.age) : '');
+  const [birthdate, setBirthdate] = useState<Date | null>(
+    parseISODate(profile?.birthdate),
+  );
   const [error, setError] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
   const [savedAt, setSavedAt] = useState(false);
@@ -116,8 +120,7 @@ export function ProfileScreen() {
       setError(t('errors.nameRequired'));
       return;
     }
-    const ageNum = Number(age);
-    if (!Number.isInteger(ageNum) || ageNum < MIN_AGE) {
+    if (!birthdate || ageFromBirthdate(birthdate) < MIN_AGE) {
       setError(t('errors.ageTooYoung', { min: MIN_AGE }));
       return;
     }
@@ -128,7 +131,7 @@ export function ProfileScreen() {
       await updateProfile(profile.id, {
         first_name: firstName.trim(),
         last_name: lastName.trim(),
-        age: ageNum,
+        birthdate: toISODate(birthdate),
       });
       await refreshProfile();
       setSavedAt(true);
@@ -176,15 +179,15 @@ export function ProfileScreen() {
             setSavedAt(false);
           }}
         />
-        <Field
-          label={t('fields.age')}
-          value={age}
-          onChangeText={(v) => {
-            setAge(v);
+        <DateField
+          label={t('fields.birthdate')}
+          placeholder={t('fields.birthdatePlaceholder')}
+          value={birthdate}
+          onChange={(d) => {
+            setBirthdate(d);
             setSavedAt(false);
           }}
-          keyboardType="number-pad"
-          maxLength={3}
+          maximumDate={maxBirthdate()}
           error={error}
         />
 

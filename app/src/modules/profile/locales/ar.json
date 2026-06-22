@@ -6,7 +6,8 @@
   "fields": {
     "firstName": "الاسم الأول",
     "lastName": "اسم العائلة",
-    "age": "العمر"
+    "birthdate": "تاريخ الميلاد",
+    "birthdatePlaceholder": "اختر تاريخ ميلادك"
   },
   "save": "حفظ التغييرات",
   "saving": "جارٍ الحفظ…",

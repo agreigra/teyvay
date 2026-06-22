@@ -11,6 +11,8 @@ export interface Profile {
   display_name: string | null;
   first_name: string | null;
   last_name: string | null;
+  // ISO YYYY-MM-DD; source of truth for age. `age` is derived for convenience.
+  birthdate: string | null;
   age: number | null;
   // Non-null = soft-deleted (account deactivated).
   deleted_at: string | null;
@@ -21,7 +23,7 @@ export interface Profile {
 export interface ProfileUpdate {
   first_name: string;
   last_name: string;
-  age: number;
+  birthdate: string;
 }
 
 export interface Announcement {

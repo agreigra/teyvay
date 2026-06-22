@@ -5,15 +5,23 @@ import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 
 import { Brand } from '../../../core/components/Brand';
 import { Button } from '../../../core/components/Button';
+import { DateField } from '../../../core/components/DateField';
 import { Field } from '../../../core/components/Field';
 import { PhoneField } from '../../../core/components/PhoneField';
 import { Screen } from '../../../core/components/Screen';
 import { useIsRTL } from '../../../core/i18n';
 import { colors, rtlTextStyle, spacing, typography } from '../../../core/theme';
+import { ageFromBirthdate, toISODate } from '../../../core/utils/date';
 import { AUTH_NS, DEFAULT_COUNTRY_CODE } from '../constants';
 import type { AuthStackParamList } from '../navigation/AuthStack';
 import { signUpWithPassword } from '../services/auth.service';
-import { MIN_AGE, MIN_PASSWORD_LENGTH, isValidPhone, normalizePhone } from '../utils';
+import {
+  MIN_AGE,
+  MIN_PASSWORD_LENGTH,
+  isValidPhone,
+  maxBirthdate,
+  normalizePhone,
+} from '../utils';
 
 type Props = NativeStackScreenProps<AuthStackParamList, 'Register'>;
 
@@ -22,7 +30,7 @@ export function RegisterScreen({ navigation }: Props) {
   const rtl = useIsRTL();
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
-  const [age, setAge] = useState('');
+  const [birthdate, setBirthdate] = useState<Date | null>(null);
   const [phone, setPhone] = useState(DEFAULT_COUNTRY_CODE);
   const [password, setPassword] = useState('');
   const [confirm, setConfirm] = useState('');
@@ -34,8 +42,7 @@ export function RegisterScreen({ navigation }: Props) {
       setError(t('errors.nameRequired'));
       return;
     }
-    const ageNum = Number(age);
-    if (!Number.isInteger(ageNum) || ageNum < MIN_AGE) {
+    if (!birthdate || ageFromBirthdate(birthdate) < MIN_AGE) {
       setError(t('errors.ageTooYoung', { min: MIN_AGE }));
       return;
     }
@@ -58,7 +65,7 @@ export function RegisterScreen({ navigation }: Props) {
       await signUpWithPassword(normalized, password, {
         first_name: firstName.trim(),
         last_name: lastName.trim(),
-        age: ageNum,
+        birthdate: toISODate(birthdate),
       });
       navigation.navigate('OtpVerify', { phone: normalized, mode: 'register' });
     } catch (e) {
@@ -96,12 +103,12 @@ export function RegisterScreen({ navigation }: Props) {
           onChangeText={setLastName}
           autoComplete="name-family"
         />
-        <Field
-          label={t('register.ageLabel')}
-          value={age}
-          onChangeText={setAge}
-          keyboardType="number-pad"
-          maxLength={3}
+        <DateField
+          label={t('register.birthdateLabel')}
+          placeholder={t('register.birthdatePlaceholder')}
+          value={birthdate}
+          onChange={setBirthdate}
+          maximumDate={maxBirthdate()}
         />
         <PhoneField
           label={t('signIn.phoneLabel')}

@@ -25,18 +25,26 @@ As admin I can see all the annoucements, I can filter them by user, I can see al
 - review the product form to be multilanguage
 - phone selector country code selector
 - user should be able to change his password from his profile
--
+- birthdate with date selector field instead of age
 
 //need to be done
 
-birthdate with date selector field instead of age
 limit password changes when user forget it 2 time in a month otherwise contact admin.
 
 admin can change user password if needed
-I want a support whatsapp number to be seperated from saler number and they can be changed by admin, I think about a db table of metadata for admin
+
+I want a support whatsapp number to be seperated from saler number and they can be changed by admin,
 
 new button to delete user completly
 
-on home page, a propos de la plateforme & aide et support sont tres long comme label
+on home page, a propos de la plateforme & aide et support sont tres long comme label same in english
+
+when I disconnect, I stay on profile page with phone number et role cleared but the rest stays it should redirect to login or home page
+
+onboarding to explain to the user how the app works, and how to create an account
+
+a user can change his role from client to merchant is his profil.
+
+add email in signin form and show it on profil page
 
 add a notification module

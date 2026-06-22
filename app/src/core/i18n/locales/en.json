@@ -19,6 +19,9 @@
     "selectCountry": "Select country",
     "searchPlaceholder": "Search country or code…"
   },
+  "date": {
+    "done": "Done"
+  },
   "menu": {
     "announcements": "Listings",
     "home": "Home",

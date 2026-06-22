@@ -6,7 +6,8 @@
   "fields": {
     "firstName": "Prénom",
     "lastName": "Nom",
-    "age": "Âge"
+    "birthdate": "Date de naissance",
+    "birthdatePlaceholder": "Sélectionnez votre date de naissance"
   },
   "save": "Enregistrer",
   "saving": "Enregistrement…",

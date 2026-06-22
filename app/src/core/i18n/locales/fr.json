@@ -19,6 +19,9 @@
     "selectCountry": "Choisir un pays",
     "searchPlaceholder": "Rechercher un pays ou un indicatif…"
   },
+  "date": {
+    "done": "Terminé"
+  },
   "menu": {
     "announcements": "Annonces",
     "profile": "Profil",

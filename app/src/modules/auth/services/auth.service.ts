@@ -10,7 +10,8 @@ import type { Profile, UserRole } from '../../../core/types/database';
 export type SignUpMeta = {
   first_name: string;
   last_name: string;
-  age: number;
+  // ISO YYYY-MM-DD; the DB trigger derives age from it.
+  birthdate: string;
 };
 
 // Create an account. With phone confirmations enabled, no session is returned

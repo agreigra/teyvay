@@ -19,6 +19,9 @@
     "selectCountry": "اختر الدولة",
     "searchPlaceholder": "ابحث عن دولة أو رمز…"
   },
+  "date": {
+    "done": "تم"
+  },
   "menu": {
     "announcements": "الإعلانات",
     "profile": "الملف الشخصي",
