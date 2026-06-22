@@ -7,12 +7,12 @@ functions) need zero mocking, and we add infrastructure only as we climb.
 
 ## Tooling
 
-| Concern               | Choice                                                                 |
-| --------------------- | ---------------------------------------------------------------------- |
-| Runner / preset       | `jest-expo` (official Expo preset, version-matched to SDK 54)          |
-| Component / hook tests| `@testing-library/react-native` v13+ (bundles jest-native matchers)    |
-| Types                 | `@types/jest`                                                          |
-| Transform             | Babel (via `jest-expo`) — no `ts-jest` needed                          |
+| Concern                | Choice                                                              |
+| ---------------------- | ------------------------------------------------------------------- |
+| Runner / preset        | `jest-expo` (official Expo preset, version-matched to SDK 54)       |
+| Component / hook tests | `@testing-library/react-native` v13+ (bundles jest-native matchers) |
+| Types                  | `@types/jest`                                                       |
+| Transform              | Babel (via `jest-expo`) — no `ts-jest` needed                       |
 
 > Per `app/AGENTS.md`, confirm the exact `jest-expo` version against the SDK 54
 > docs (https://docs.expo.dev/versions/v56.0.0/) before installing.
@@ -24,7 +24,7 @@ Dev deps to add: `jest`, `jest-expo`, `@testing-library/react-native`,
 
 1. **`src/core/supabase/env.ts` throws at import time** when
    `EXPO_PUBLIC_SUPABASE_*` are unset. Any test that transitively imports the
-   Supabase client crashes. → Set dummy env vars in a Jest setup file *and* mock
+   Supabase client crashes. → Set dummy env vars in a Jest setup file _and_ mock
    the client module in service tests.
 2. **Supabase client is a chainable builder** (`.from().select().eq().order()`).
    Service tests need a small chainable mock, not real network calls.
@@ -37,12 +37,14 @@ Dev deps to add: `jest`, `jest-expo`, `@testing-library/react-native`,
 ## Phased rollout (by ROI)
 
 ### Phase 0 — Infrastructure (~½ day)
+
 Install deps; add `jest.config.js` (`preset: 'jest-expo'`, `setupFilesAfterEnv`),
 `jest.setup.ts` (dummy env vars + global mocks), and a `__mocks__/` dir. Land one
 trivial passing test to prove the harness, then add CI: a new `app-test.yml`
 workflow that runs `jest` on PRs touching `app/**`.
 
 ### Phase 1 — Pure functions (highest value, no mocking)
+
 - **`src/core/utils/date.ts`** — `toISODate` (the UTC off-by-one is the point),
   `parseISODate` (valid / empty / garbage), `ageFromBirthdate` (birthday-today
   and not-yet-this-year boundaries).
@@ -56,22 +58,26 @@ workflow that runs `jest` on PRs touching `app/**`.
   encodes message).
 
 ### Phase 2 — i18n key parity (cheap, high signal)
+
 Data-driven test asserting `en.json` / `fr.json` / `ar.json` have identical key
 sets — for both `core/i18n/locales` and each module's `locales/`. Catches missing
 translations before they ship.
 
 ### Phase 3 — Services (mocked Supabase)
+
 Build one reusable chainable Supabase mock, then test each service's two paths —
 success returns mapped data, and `error` is thrown:
 `announcements.service`, `auth.service`, `profile.service`, `admin.service`,
 `settings.service`. Assert correct table/columns/filters and error propagation.
 
 ### Phase 4 — Hooks (RNTL `renderHook` + mocked services)
+
 - `useAnnouncements` — scope routing (`mine` without `userId` → `[]`),
   error → `error: true`, loading lifecycle.
 - `useAuth`, `useProfiles`.
 
 ### Phase 5 — Component smoke tests (optional, lower ROI)
+
 Render + interaction for shared components (`Button`, `Field`, `PhoneField`,
 `AnnouncementCard`). Defer unless UI regressions become painful.
 
