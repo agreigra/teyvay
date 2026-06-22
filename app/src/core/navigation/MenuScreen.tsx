@@ -15,7 +15,7 @@ import { Feather } from '@expo/vector-icons';
 
 import { AUTH_NS } from '../../modules/auth/constants';
 import { useAuth } from '../../modules/auth/hooks/useAuth';
-import { getAdminWhatsappNumber } from '../../modules/settings';
+import { getSupportWhatsappNumber } from '../../modules/settings';
 import { useIsRTL } from '../i18n';
 import { colors, radius, rtlTextStyle, spacing, typography } from '../theme';
 import { openWhatsapp } from '../utils/whatsapp';
@@ -97,7 +97,7 @@ export function MenuScreen({ navigation }: Props) {
       resetTo('Support');
       return;
     }
-    const number = await getAdminWhatsappNumber();
+    const number = await getSupportWhatsappNumber();
     if (!number) {
       Alert.alert(t('app.name'), t('menu.supportUnavailable'));
       return;

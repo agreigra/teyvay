@@ -2,7 +2,21 @@
   "title": "Admin",
   "tabs": {
     "listings": "Annonces",
-    "users": "Utilisateurs"
+    "users": "Utilisateurs",
+    "settings": "Réglages"
+  },
+  "settings": {
+    "title": "Numéros WhatsApp",
+    "subtitle": "Ces numéros sont utilisés dans toute l'application. Les changements s'appliquent immédiatement.",
+    "ordersLabel": "Numéro des commandes",
+    "ordersHint": "Utilisé lorsqu'un acheteur vous contacte au sujet d'une annonce.",
+    "supportLabel": "Numéro du support",
+    "supportHint": "Utilisé pour les demandes d'aide et les signalements.",
+    "save": "Enregistrer les numéros",
+    "saving": "Enregistrement…",
+    "saved": "Numéros enregistrés.",
+    "invalid": "Saisissez des numéros valides (ex. +22230000000).",
+    "saveFailed": "Échec de l'enregistrement. Veuillez réessayer."
   },
   "listings": {
     "empty": "Aucune annonce pour le moment.",

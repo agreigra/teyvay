@@ -10,6 +10,8 @@ export { LanguageSelectScreen } from './screens/LanguageSelectScreen';
 export {
   getAdminWhatsappNumber,
   setAdminWhatsappNumber,
+  getSupportWhatsappNumber,
+  setSupportWhatsappNumber,
 } from './services/settings.service';
 
 // Register this module's translations. Call after initI18n().

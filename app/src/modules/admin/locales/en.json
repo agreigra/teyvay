@@ -2,7 +2,21 @@
   "title": "Admin",
   "tabs": {
     "listings": "Listings",
-    "users": "Users"
+    "users": "Users",
+    "settings": "Settings"
+  },
+  "settings": {
+    "title": "WhatsApp numbers",
+    "subtitle": "These numbers are used across the app. Changes apply immediately.",
+    "ordersLabel": "Orders number",
+    "ordersHint": "Used when a buyer contacts you about a listing.",
+    "supportLabel": "Support number",
+    "supportHint": "Used for help requests and problem reports.",
+    "save": "Save numbers",
+    "saving": "Saving…",
+    "saved": "Numbers saved.",
+    "invalid": "Enter valid phone numbers (e.g. +22230000000).",
+    "saveFailed": "Couldn't save. Please try again."
   },
   "listings": {
     "empty": "No listings yet.",

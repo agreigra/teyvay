@@ -21,13 +21,14 @@ import {
   StatusFilterValue,
   useAnnouncements,
 } from '../../announcements';
+import { AdminSettings } from '../components/AdminSettings';
 import { UserRow } from '../components/UserRow';
 import { ADMIN_NS } from '../constants';
 import { useProfiles } from '../hooks/useProfiles';
 import { setUserDeleted, setUserRole } from '../services/admin.service';
 import { useAuth } from '../../auth';
 
-type Tab = 'listings' | 'users';
+type Tab = 'listings' | 'users' | 'settings';
 
 export function AdminHomeScreen() {
   const { t } = useTranslation(ADMIN_NS);
@@ -86,7 +87,7 @@ export function AdminHomeScreen() {
   return (
     <Screen underHeader>
       <View style={[styles.tabs, rtl && styles.rowRtl]}>
-        {(['listings', 'users'] as Tab[]).map((key) => {
+        {(['listings', 'users', 'settings'] as Tab[]).map((key) => {
           const active = key === tab;
           return (
             <Pressable
@@ -157,42 +158,46 @@ export function AdminHomeScreen() {
             />
           )}
         </>
-      ) : users.loading && users.items.length === 0 ? (
-        <ActivityIndicator color={colors.primary} style={styles.center} />
-      ) : users.error ? (
-        <View style={styles.center}>
-          <Text style={[styles.muted, rtl && rtlTextStyle]}>{t('errors.loadFailed')}</Text>
-          <Pressable onPress={users.reload} hitSlop={8}>
-            <Text style={styles.retry}>{t('common.retry', { ns: 'core' })}</Text>
-          </Pressable>
-        </View>
+      ) : tab === 'users' ? (
+        users.loading && users.items.length === 0 ? (
+          <ActivityIndicator color={colors.primary} style={styles.center} />
+        ) : users.error ? (
+          <View style={styles.center}>
+            <Text style={[styles.muted, rtl && rtlTextStyle]}>{t('errors.loadFailed')}</Text>
+            <Pressable onPress={users.reload} hitSlop={8}>
+              <Text style={styles.retry}>{t('common.retry', { ns: 'core' })}</Text>
+            </Pressable>
+          </View>
+        ) : (
+          <FlatList
+            data={users.items}
+            keyExtractor={(item) => item.id}
+            refreshControl={
+              <RefreshControl
+                refreshing={users.loading}
+                onRefresh={users.reload}
+                tintColor={colors.primary}
+              />
+            }
+            renderItem={({ item }) => (
+              <UserRow
+                item={item}
+                busy={busyUserId === item.id}
+                isSelf={item.id === me?.id}
+                onChangeRole={(role) => changeRole(item, role)}
+                onToggleBan={(deleted) => toggleBan(item, deleted)}
+                onViewListings={() => viewUserListings(item)}
+              />
+            )}
+            contentContainerStyle={users.items.length === 0 && styles.center}
+            ListEmptyComponent={
+              <Text style={[styles.muted, rtl && rtlTextStyle]}>{t('users.empty')}</Text>
+            }
+            showsVerticalScrollIndicator={false}
+          />
+        )
       ) : (
-        <FlatList
-          data={users.items}
-          keyExtractor={(item) => item.id}
-          refreshControl={
-            <RefreshControl
-              refreshing={users.loading}
-              onRefresh={users.reload}
-              tintColor={colors.primary}
-            />
-          }
-          renderItem={({ item }) => (
-            <UserRow
-              item={item}
-              busy={busyUserId === item.id}
-              isSelf={item.id === me?.id}
-              onChangeRole={(role) => changeRole(item, role)}
-              onToggleBan={(deleted) => toggleBan(item, deleted)}
-              onViewListings={() => viewUserListings(item)}
-            />
-          )}
-          contentContainerStyle={users.items.length === 0 && styles.center}
-          ListEmptyComponent={
-            <Text style={[styles.muted, rtl && rtlTextStyle]}>{t('users.empty')}</Text>
-          }
-          showsVerticalScrollIndicator={false}
-        />
+        <AdminSettings />
       )}
     </Screen>
   );

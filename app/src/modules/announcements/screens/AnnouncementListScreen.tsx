@@ -15,7 +15,7 @@ import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 
 import { Screen } from '../../../core/components/Screen';
 import { useIsRTL } from '../../../core/i18n';
-import { getAdminWhatsappNumber } from '../../settings';
+import { getSupportWhatsappNumber } from '../../settings';
 import { colors, rtlTextStyle, spacing, typography } from '../../../core/theme';
 import { openWhatsapp } from '../../../core/utils/whatsapp';
 import { useAuth } from '../../auth';
@@ -57,7 +57,7 @@ export function AnnouncementListScreen({ navigation }: Props) {
     undefined;
 
   const openSupport = async () => {
-    const number = await getAdminWhatsappNumber();
+    const number = await getSupportWhatsappNumber();
     if (!number) {
       Alert.alert(t('app.name', { ns: 'core' }), t('menu.supportUnavailable', { ns: 'core' }));
       return;

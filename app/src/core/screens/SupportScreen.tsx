@@ -14,7 +14,7 @@ import { useTranslation } from 'react-i18next';
 import { Feather } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 
-import { getAdminWhatsappNumber } from '../../modules/settings';
+import { getSupportWhatsappNumber } from '../../modules/settings';
 import { Screen } from '../components/Screen';
 import { useIsRTL } from '../i18n';
 import { colors, radius, rtlTextStyle, spacing, typography } from '../theme';
@@ -48,7 +48,7 @@ export function SupportScreen() {
   };
 
   const sendWhatsapp = async (body: string) => {
-    const number = await getAdminWhatsappNumber();
+    const number = await getSupportWhatsappNumber();
     if (!number) {
       Alert.alert(t('app.name'), t('menu.supportUnavailable'));
       return;
