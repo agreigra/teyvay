@@ -3,6 +3,17 @@
   "phone": "Phone",
   "phoneNote": "Your verified account number — it can't be changed.",
   "role": "Role",
+  "roleUpgrade": {
+    "hint": "Want to sell on Teyvay? Become a merchant to post your own listings.",
+    "button": "Become a merchant",
+    "working": "Updating…",
+    "confirmTitle": "Become a merchant",
+    "confirmMessage": "You'll be able to create and manage your own listings. Continue?",
+    "cancel": "Cancel",
+    "confirm": "Become a merchant",
+    "done": "You're now a merchant.",
+    "failed": "Couldn't update your role. Please try again."
+  },
   "fields": {
     "firstName": "First name",
     "lastName": "Last name",

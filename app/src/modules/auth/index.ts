@@ -10,7 +10,7 @@ export { AuthProvider, useAuth } from './hooks/useAuth';
 export { AuthStack } from './navigation/AuthStack';
 export { RoleSelectScreen } from './screens/RoleSelectScreen';
 export { SetNewPasswordScreen } from './screens/SetNewPasswordScreen';
-export { changePassword, WrongPasswordError } from './services/auth.service';
+export { changePassword, updateRole, WrongPasswordError } from './services/auth.service';
 export {
   MIN_AGE,
   MIN_PASSWORD_LENGTH,

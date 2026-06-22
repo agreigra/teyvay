@@ -12,7 +12,7 @@ on:
       - "supabase/config.toml"
       - ".github/workflows/deploy-develop.yml"
 
-# Never run two deploys to the same project at once. Do NOT cancel in progress
+# Never run two deploys to the same project at the same time. Do NOT cancel in progress
 # — a half-applied migration push must be allowed to finish.
 concurrency:
   group: deploy-development
