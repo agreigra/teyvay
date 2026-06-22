@@ -76,7 +76,7 @@ export function ProfileScreen() {
   };
 
   return (
-    <Screen scroll>
+    <Screen scroll underHeader>
       <Field
           label={t('fields.firstName')}
           value={firstName}

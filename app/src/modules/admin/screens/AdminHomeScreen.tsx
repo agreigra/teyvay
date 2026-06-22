@@ -84,7 +84,7 @@ export function AdminHomeScreen() {
   const filterLabel = filterUser?.display_name || filterUser?.phone || '';
 
   return (
-    <Screen>
+    <Screen underHeader>
       <View style={[styles.tabs, rtl && styles.rowRtl]}>
         {(['listings', 'users'] as Tab[]).map((key) => {
           const active = key === tab;

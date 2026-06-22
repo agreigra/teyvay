@@ -20,3 +20,4 @@ As admin I can see all the annoucements, I can filter them by user, I can see al
 - leteral menu is very large
 - I want a search bar on the home page
 - big spacing between the header and the page content when I scroll it gets hidden before reaching the header bottom
+- redesign language switcher icon and user icon

@@ -12,7 +12,7 @@ export function AboutScreen() {
   const rtl = useIsRTL();
 
   return (
-    <Screen scroll>
+    <Screen scroll underHeader>
       <View style={styles.brand}>
         <Brand />
       </View>

@@ -32,7 +32,7 @@ export function EditAnnouncementScreen({ route, navigation }: Props) {
 
   if (loading) {
     return (
-      <Screen>
+      <Screen underHeader>
         <ActivityIndicator color={colors.primary} style={{ flex: 1 }} />
       </Screen>
     );
@@ -40,14 +40,14 @@ export function EditAnnouncementScreen({ route, navigation }: Props) {
 
   if (!item) {
     return (
-      <Screen>
+      <Screen underHeader>
         <Text style={{ color: colors.textMuted }}>{t('errors.loadFailed')}</Text>
       </Screen>
     );
   }
 
   return (
-    <Screen scroll>
+    <Screen scroll underHeader>
       <AnnouncementForm
         heading={t('edit.title')}
         icon="edit-2"

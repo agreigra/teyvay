@@ -65,7 +65,7 @@ export function MyListingsScreen({ navigation }: Props) {
   );
 
   return (
-    <Screen>
+    <Screen underHeader>
       {loading && items.length === 0 ? (
         <ActivityIndicator color={colors.primary} style={styles.center} />
       ) : error ? (

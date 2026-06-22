@@ -75,7 +75,7 @@ export function AnnouncementDetailScreen({ route, navigation }: Props) {
 
   if (loading) {
     return (
-      <Screen>
+      <Screen underHeader>
         <ActivityIndicator color={colors.primary} style={styles.center} />
       </Screen>
     );
@@ -83,14 +83,14 @@ export function AnnouncementDetailScreen({ route, navigation }: Props) {
 
   if (!item) {
     return (
-      <Screen>
+      <Screen underHeader>
         <Text style={styles.muted}>{t('errors.loadFailed')}</Text>
       </Screen>
     );
   }
 
   return (
-    <Screen>
+    <Screen underHeader>
       <View style={styles.statusPill}>
         <Text style={styles.statusText}>{t(`status.${item.status}`)}</Text>
       </View>

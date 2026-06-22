@@ -25,7 +25,7 @@ export function CreateAnnouncementScreen({ navigation }: Props) {
   };
 
   return (
-    <Screen scroll>
+    <Screen scroll underHeader>
       <AnnouncementForm
         heading={t('create.title')}
         icon="plus-square"
