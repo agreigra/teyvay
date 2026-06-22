@@ -95,5 +95,11 @@ export function RootNavigator() {
     content = <MainNavigator />;
   }
 
-  return <NavigationContainer>{content}</NavigationContainer>;
+  // Key the container by the signed-in identity so the whole navigation tree is
+  // rebuilt (with no restored route state) on login, logout, or account switch.
+  // Without this, signing out while on Profile would re-render the same route
+  // tree and strand you on an empty Profile instead of returning home.
+  const navKey = session ? `user-${session.user.id}` : 'guest';
+
+  return <NavigationContainer key={navKey}>{content}</NavigationContainer>;
 }
