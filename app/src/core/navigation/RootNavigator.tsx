@@ -9,6 +9,7 @@ import {
   useAuth,
 } from '../../modules/auth';
 import { ReactivateAccountScreen } from '../../modules/profile';
+import { IntroScreen } from '../screens/IntroScreen';
 import { colors } from '../theme';
 import { AppMenuStack } from './AppMenuStack';
 
@@ -76,9 +77,13 @@ export function RootNavigator() {
     accountDeleted,
     passwordResetPending,
     authPrompt,
+    introSeen,
   } = useAuth();
 
   if (initializing) return <Splash />;
+
+  // First launch: show the walkthrough before anything else.
+  if (!introSeen) return <IntroScreen />;
 
   // Logged out: browse publicly by default; show the auth flow only when the
   // guest asks to sign in.

@@ -22,6 +22,20 @@
   "date": {
     "done": "Done"
   },
+  "intro": {
+    "skip": "Skip",
+    "next": "Next",
+    "createAccount": "Create account",
+    "browse": "Browse as guest",
+    "slide1Title": "Welcome to Teyvay",
+    "slide1Body": "A safe, anonymous marketplace for Mauritania. Buy and sell without sharing your identity.",
+    "slide2Title": "Browse freely",
+    "slide2Body": "Explore listings any time — no account needed just to look around.",
+    "slide3Title": "Sell your products",
+    "slide3Body": "Create an account to post a listing. An admin reviews each one before it goes live.",
+    "slide4Title": "Deals stay safe",
+    "slide4Body": "All contact goes through the admin, so your phone number stays private. Create your account to get started."
+  },
   "menu": {
     "announcements": "Listings",
     "home": "Home",

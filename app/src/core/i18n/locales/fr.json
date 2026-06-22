@@ -22,6 +22,20 @@
   "date": {
     "done": "Terminé"
   },
+  "intro": {
+    "skip": "Passer",
+    "next": "Suivant",
+    "createAccount": "Créer un compte",
+    "browse": "Continuer en invité",
+    "slide1Title": "Bienvenue sur Teyvay",
+    "slide1Body": "Une place de marché sûre et anonyme pour la Mauritanie. Achetez et vendez sans partager votre identité.",
+    "slide2Title": "Parcourez librement",
+    "slide2Body": "Explorez les annonces à tout moment — aucun compte requis pour regarder.",
+    "slide3Title": "Vendez vos produits",
+    "slide3Body": "Créez un compte pour publier une annonce. Un administrateur vérifie chacune avant sa mise en ligne.",
+    "slide4Title": "Des échanges sécurisés",
+    "slide4Body": "Tout contact passe par l'administration, votre numéro reste privé. Créez votre compte pour commencer."
+  },
   "menu": {
     "announcements": "Annonces",
     "profile": "Profil",

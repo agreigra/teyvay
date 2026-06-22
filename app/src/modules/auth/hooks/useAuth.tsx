@@ -19,6 +19,8 @@ import {
 } from '../services/auth.service';
 
 const onboardedKey = (userId: string) => `teyvay.onboarded.${userId}`;
+// First-launch intro walkthrough (device-wide, not per-user).
+const INTRO_SEEN_KEY = 'teyvay.introSeen';
 
 type AuthContextValue = {
   initializing: boolean;
@@ -31,6 +33,9 @@ type AuthContextValue = {
   accountDeleted: boolean;
   // Re-fetch the current user's profile (after editing or reactivating).
   refreshProfile: () => Promise<void>;
+  // First-launch walkthrough: false until the user finishes/skips the intro.
+  introSeen: boolean;
+  completeIntro: () => Promise<void>;
   // True while in the forgot-password flow: a recovery OTP has (or will) create
   // a session, but the user must set a new password before entering the app.
   passwordResetPending: boolean;
@@ -59,6 +64,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [authInitialRoute, setAuthInitialRoute] = useState<'SignIn' | 'Register'>(
     'SignIn',
   );
+  const [introSeen, setIntroSeen] = useState(false);
 
   // Load profile + onboarding flag for a signed-in user.
   const loadUser = useCallback(async (userId: string) => {
@@ -79,8 +85,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     let active = true;
 
-    supabase.auth.getSession().then(async ({ data }) => {
+    Promise.all([
+      supabase.auth.getSession(),
+      AsyncStorage.getItem(INTRO_SEEN_KEY),
+    ]).then(async ([{ data }, intro]) => {
       if (!active) return;
+      setIntroSeen(intro === '1');
       setSession(data.session);
       if (data.session?.user) {
         await loadUser(data.session.user.id);
@@ -118,6 +128,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     [session, loadUser],
   );
 
+  const completeIntro = useCallback(async () => {
+    await AsyncStorage.setItem(INTRO_SEEN_KEY, '1');
+    setIntroSeen(true);
+  }, []);
+
   const beginPasswordReset = useCallback(() => setPasswordResetPending(true), []);
   const completePasswordReset = useCallback(
     () => setPasswordResetPending(false),
@@ -137,6 +152,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       needsOnboarding,
       accountDeleted,
       refreshProfile,
+      introSeen,
+      completeIntro,
       passwordResetPending,
       beginPasswordReset,
       completePasswordReset,
@@ -154,6 +171,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       needsOnboarding,
       accountDeleted,
       refreshProfile,
+      introSeen,
+      completeIntro,
       passwordResetPending,
       beginPasswordReset,
       completePasswordReset,
