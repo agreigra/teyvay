@@ -3,6 +3,17 @@
   "phone": "Téléphone",
   "phoneNote": "Votre numéro de compte vérifié — il ne peut pas être modifié.",
   "role": "Rôle",
+  "roleUpgrade": {
+    "hint": "Vous souhaitez vendre sur Teyvay ? Devenez marchand pour publier vos propres annonces.",
+    "button": "Devenir marchand",
+    "working": "Mise à jour…",
+    "confirmTitle": "Devenir marchand",
+    "confirmMessage": "Vous pourrez créer et gérer vos propres annonces. Continuer ?",
+    "cancel": "Annuler",
+    "confirm": "Devenir marchand",
+    "done": "Vous êtes désormais marchand.",
+    "failed": "Impossible de mettre à jour votre rôle. Veuillez réessayer."
+  },
   "fields": {
     "firstName": "Prénom",
     "lastName": "Nom",

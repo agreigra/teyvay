@@ -28,6 +28,7 @@ import {
   changePassword,
   isValidEmail,
   maxBirthdate,
+  updateRole,
   useAuth,
 } from '../../auth';
 import { PROFILE_NS } from '../constants';
@@ -56,6 +57,7 @@ export function ProfileScreen() {
   const [saving, setSaving] = useState(false);
   const [savedAt, setSavedAt] = useState(false);
   const [deleting, setDeleting] = useState(false);
+  const [roleChanging, setRoleChanging] = useState(false);
 
   // --- Change password ---
   const [pwOpen, setPwOpen] = useState(false);
@@ -170,6 +172,29 @@ export function ProfileScreen() {
     }
   };
 
+  // Self-upgrade client -> merchant. Allowed by RLS (only 'admin' is blocked);
+  // the menu/listing screens read profile.role reactively, so the merchant
+  // features appear as soon as the refreshed profile lands.
+  const confirmBecomeMerchant = () => {
+    Alert.alert(t('roleUpgrade.confirmTitle'), t('roleUpgrade.confirmMessage'), [
+      { text: t('roleUpgrade.cancel'), style: 'cancel' },
+      { text: t('roleUpgrade.confirm'), onPress: runBecomeMerchant },
+    ]);
+  };
+
+  const runBecomeMerchant = async () => {
+    if (!profile) return;
+    setRoleChanging(true);
+    try {
+      await updateRole(profile.id, 'merchant');
+      await refreshProfile();
+    } catch {
+      Alert.alert(t('roleUpgrade.confirmTitle'), t('roleUpgrade.failed'));
+    } finally {
+      setRoleChanging(false);
+    }
+  };
+
   return (
     <Screen scroll underHeader>
       <Field
@@ -233,6 +258,24 @@ export function ProfileScreen() {
           <Text style={[styles.roValue, rtl && rtlTextStyle]}>
             {profile ? t(`roleName.${profile.role}`, { ns: AUTH_NS }) : '—'}
           </Text>
+
+          {/* Clients can self-upgrade to merchant to start selling. Merchants
+              and admins keep the read-only role (admin is never self-assignable). */}
+          {profile?.role === 'client' && (
+            <>
+              <Text style={[styles.roleHint, rtl && rtlTextStyle]}>
+                {t('roleUpgrade.hint')}
+              </Text>
+              <Button
+                label={roleChanging ? t('roleUpgrade.working') : t('roleUpgrade.button')}
+                onPress={confirmBecomeMerchant}
+                loading={roleChanging}
+                disabled={saving || deleting || roleChanging}
+                variant="outline"
+                style={styles.roleBtn}
+              />
+            </>
+          )}
         </View>
 
         {savedAt && <Text style={[styles.saved, rtl && rtlTextStyle]}>{t('saved')}</Text>}
@@ -370,6 +413,14 @@ const styles = StyleSheet.create({
     height: 1,
     backgroundColor: colors.border,
     marginVertical: spacing.md,
+  },
+  roleHint: {
+    fontSize: typography.caption,
+    color: colors.textMuted,
+    marginTop: spacing.sm,
+  },
+  roleBtn: {
+    marginTop: spacing.sm,
   },
   saved: {
     color: colors.success,
