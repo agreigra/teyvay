@@ -75,6 +75,24 @@ export async function updatePassword(newPassword: string): Promise<void> {
   if (error) throw error;
 }
 
+// Thrown by changePassword when the supplied current password is wrong.
+export class WrongPasswordError extends Error {}
+
+// Change password from the profile: re-authenticate with the current password
+// first (Supabase's updateUser doesn't verify it), then set the new one.
+export async function changePassword(
+  phone: string,
+  currentPassword: string,
+  newPassword: string,
+): Promise<void> {
+  const { error: signInError } = await supabase.auth.signInWithPassword({
+    phone,
+    password: currentPassword,
+  });
+  if (signInError) throw new WrongPasswordError();
+  await updatePassword(newPassword);
+}
+
 // --- Session / profile --------------------------------------------------------
 
 export async function signOut(): Promise<void> {

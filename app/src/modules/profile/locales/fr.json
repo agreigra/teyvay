@@ -11,6 +11,16 @@
   "save": "Enregistrer",
   "saving": "Enregistrement…",
   "saved": "Modifications enregistrées.",
+  "password": {
+    "title": "Modifier le mot de passe",
+    "open": "Modifier mon mot de passe",
+    "current": "Mot de passe actuel",
+    "new": "Nouveau mot de passe",
+    "confirm": "Confirmer le nouveau mot de passe",
+    "submit": "Mettre à jour le mot de passe",
+    "submitting": "Mise à jour…",
+    "changed": "Mot de passe mis à jour."
+  },
   "delete": {
     "button": "Désactiver mon compte",
     "title": "Désactiver le compte",
@@ -29,6 +39,10 @@
     "nameRequired": "Veuillez saisir votre prénom et votre nom",
     "ageTooYoung": "Vous devez avoir au moins {{min}} ans",
     "saveFailed": "Impossible d'enregistrer les modifications. Veuillez réessayer.",
-    "deleteFailed": "Impossible de désactiver votre compte. Veuillez réessayer."
+    "deleteFailed": "Impossible de désactiver votre compte. Veuillez réessayer.",
+    "passwordTooShort": "Le mot de passe doit comporter au moins {{min}} caractères",
+    "passwordsDontMatch": "Les mots de passe ne correspondent pas",
+    "wrongPassword": "Votre mot de passe actuel est incorrect.",
+    "passwordFailed": "Impossible de mettre à jour votre mot de passe. Veuillez réessayer."
   }
 }

@@ -11,6 +11,16 @@
   "save": "Save changes",
   "saving": "Saving…",
   "saved": "Changes saved.",
+  "password": {
+    "title": "Change password",
+    "open": "Change my password",
+    "current": "Current password",
+    "new": "New password",
+    "confirm": "Confirm new password",
+    "submit": "Update password",
+    "submitting": "Updating…",
+    "changed": "Password updated."
+  },
   "delete": {
     "button": "Deactivate my account",
     "title": "Deactivate account",
@@ -29,6 +39,10 @@
     "nameRequired": "Please enter your first and last name",
     "ageTooYoung": "You must be at least {{min}} years old",
     "saveFailed": "Couldn't save your changes. Please try again.",
-    "deleteFailed": "Couldn't deactivate your account. Please try again."
+    "deleteFailed": "Couldn't deactivate your account. Please try again.",
+    "passwordTooShort": "Password must be at least {{min}} characters",
+    "passwordsDontMatch": "Passwords don't match",
+    "wrongPassword": "Your current password is incorrect.",
+    "passwordFailed": "Couldn't update your password. Please try again."
   }
 }

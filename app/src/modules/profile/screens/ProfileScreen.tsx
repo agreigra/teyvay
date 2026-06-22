@@ -1,5 +1,14 @@
 import { useState } from 'react';
-import { Alert, StyleSheet, Text, View } from 'react-native';
+import {
+  Alert,
+  LayoutAnimation,
+  Platform,
+  Pressable,
+  StyleSheet,
+  Text,
+  UIManager,
+  View,
+} from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { Feather } from '@expo/vector-icons';
 
@@ -9,9 +18,22 @@ import { Screen } from '../../../core/components/Screen';
 import { countryFromE164, flagEmoji } from '../../../core/data/countries';
 import { useIsRTL } from '../../../core/i18n';
 import { colors, radius, rtlTextStyle, spacing, typography } from '../../../core/theme';
-import { AUTH_NS, useAuth } from '../../auth';
+import {
+  AUTH_NS,
+  MIN_PASSWORD_LENGTH,
+  WrongPasswordError,
+  changePassword,
+  useAuth,
+} from '../../auth';
 import { PROFILE_NS } from '../constants';
 import { softDeleteProfile, updateProfile } from '../services/profile.service';
+
+if (
+  Platform.OS === 'android' &&
+  UIManager.setLayoutAnimationEnabledExperimental
+) {
+  UIManager.setLayoutAnimationEnabledExperimental(true);
+}
 
 const MIN_AGE = 18;
 
@@ -28,6 +50,58 @@ export function ProfileScreen() {
   const [saving, setSaving] = useState(false);
   const [savedAt, setSavedAt] = useState(false);
   const [deleting, setDeleting] = useState(false);
+
+  // --- Change password ---
+  const [pwOpen, setPwOpen] = useState(false);
+  const [currentPw, setCurrentPw] = useState('');
+  const [newPw, setNewPw] = useState('');
+  const [confirmPw, setConfirmPw] = useState('');
+  const [pwError, setPwError] = useState<string | null>(null);
+  const [pwSaving, setPwSaving] = useState(false);
+  const [pwChanged, setPwChanged] = useState(false);
+
+  const togglePw = () => {
+    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+    setPwOpen((v) => !v);
+    setPwError(null);
+    setPwChanged(false);
+  };
+
+  const onChangePassword = async () => {
+    if (!profile?.phone) return;
+    if (!currentPw) {
+      setPwError(t('errors.wrongPassword'));
+      return;
+    }
+    if (newPw.length < MIN_PASSWORD_LENGTH) {
+      setPwError(t('errors.passwordTooShort', { min: MIN_PASSWORD_LENGTH }));
+      return;
+    }
+    if (newPw !== confirmPw) {
+      setPwError(t('errors.passwordsDontMatch'));
+      return;
+    }
+    setPwError(null);
+    setPwSaving(true);
+    setPwChanged(false);
+    try {
+      await changePassword(profile.phone, currentPw, newPw);
+      setCurrentPw('');
+      setNewPw('');
+      setConfirmPw('');
+      setPwChanged(true);
+      LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+      setPwOpen(false);
+    } catch (e) {
+      setPwError(
+        e instanceof WrongPasswordError
+          ? t('errors.wrongPassword')
+          : t('errors.passwordFailed'),
+      );
+    } finally {
+      setPwSaving(false);
+    }
+  };
 
   // Split the stored E.164 phone into country + national parts for display.
   const phone = profile?.phone ?? '';
@@ -146,6 +220,65 @@ export function ProfileScreen() {
           disabled={deleting}
         />
 
+        {/* Change password */}
+        <View style={styles.pwCard}>
+          <Pressable
+            style={[styles.pwHeader, rtl && styles.rowRev]}
+            onPress={togglePw}
+          >
+            <View style={[styles.pwHeaderLeft, rtl && styles.rowRev]}>
+              <Feather name="lock" size={18} color={colors.primary} />
+              <Text style={[styles.pwTitle, rtl && rtlTextStyle]}>
+                {t('password.title')}
+              </Text>
+            </View>
+            <Feather
+              name={pwOpen ? 'chevron-up' : 'chevron-down'}
+              size={20}
+              color={colors.textMuted}
+            />
+          </Pressable>
+
+          {pwChanged && !pwOpen && (
+            <Text style={[styles.pwChanged, rtl && rtlTextStyle]}>
+              {t('password.changed')}
+            </Text>
+          )}
+
+          {pwOpen && (
+            <View style={styles.pwBody}>
+              <Field
+                label={t('password.current')}
+                value={currentPw}
+                onChangeText={setCurrentPw}
+                toggleSecure
+                autoComplete="current-password"
+              />
+              <Field
+                label={t('password.new')}
+                value={newPw}
+                onChangeText={setNewPw}
+                toggleSecure
+                autoComplete="new-password"
+              />
+              <Field
+                label={t('password.confirm')}
+                value={confirmPw}
+                onChangeText={setConfirmPw}
+                toggleSecure
+                autoComplete="new-password"
+                error={pwError}
+              />
+              <Button
+                label={pwSaving ? t('password.submitting') : t('password.submit')}
+                onPress={onChangePassword}
+                loading={pwSaving}
+                disabled={saving || deleting}
+              />
+            </View>
+          )}
+        </View>
+
         <Button
           label={t('delete.button')}
           onPress={confirmDelete}
@@ -222,5 +355,41 @@ const styles = StyleSheet.create({
   deleteBtn: {
     marginTop: spacing.md,
     borderColor: colors.danger,
+  },
+  rowRev: {
+    flexDirection: 'row-reverse',
+  },
+  pwCard: {
+    backgroundColor: colors.surface,
+    borderRadius: radius.md,
+    borderWidth: 1,
+    borderColor: colors.border,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.sm,
+    marginTop: spacing.lg,
+  },
+  pwHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingVertical: spacing.sm,
+  },
+  pwHeaderLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: spacing.sm,
+  },
+  pwTitle: {
+    fontSize: typography.body,
+    fontWeight: '700',
+    color: colors.text,
+  },
+  pwBody: {
+    marginTop: spacing.sm,
+  },
+  pwChanged: {
+    color: colors.success,
+    fontSize: typography.caption,
+    paddingBottom: spacing.sm,
   },
 });
