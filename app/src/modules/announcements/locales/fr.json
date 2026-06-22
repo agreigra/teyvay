@@ -6,9 +6,27 @@
     "emptyMine": "Vous n'avez pas encore publié d'annonce",
     "emptyFiltered": "Aucune annonce ne correspond à ce filtre",
     "emptySearch": "Aucun produit ne correspond à votre recherche",
-    "countLabel": "{{count}} produits",
+    "countLabel": "{{n}} produits",
     "footer": "Teyvay · {{year}}",
+    "editNote": "Toute modification d'un produit approuvé le renvoie dans la file de validation jusqu'à l'approbation d'un administrateur.",
     "create": "Nouvelle annonce"
+  },
+  "form": {
+    "sectionMain": "En arabe",
+    "sectionFr": "En français (optionnel)",
+    "sectionEn": "En anglais (optionnel)",
+    "sectionPricing": "Quantité et prix",
+    "nameLabel": "Nom du produit",
+    "namePlaceholder": "Saisissez le nom du produit",
+    "descLabel": "Description",
+    "descPlaceholder": "Saisissez la description du produit",
+    "titleFrLabel": "Titre en français",
+    "descFrLabel": "Description en français",
+    "titleEnLabel": "Titre en anglais",
+    "descEnLabel": "Description en anglais",
+    "priceLabel": "Prix (MRU)",
+    "quantityLabel": "Quantité",
+    "quantityPlaceholder": "ex. 100"
   },
   "home": {
     "welcome": "Bienvenue",
@@ -42,6 +60,7 @@
     "markSold": "Marquer comme vendue",
     "markActive": "Réactiver",
     "markInactive": "Désactiver",
+    "quantity": "Quantité : {{n}}",
     "postedBy": "Annonce",
     "interest": "Bonjour, je suis intéressé par votre annonce « {{title}} » (réf : {{id}})."
   },
@@ -60,13 +79,16 @@
     "submittedBody": "Votre produit a été soumis et sera visible dès qu'un administrateur l'aura approuvé."
   },
   "edit": {
-    "title": "Modifier l'annonce",
+    "title": "Modifier le produit",
     "submit": "Enregistrer",
-    "submitting": "Enregistrement…"
+    "submitting": "Enregistrement…",
+    "requeuedTitle": "Envoyé pour validation",
+    "requeuedBody": "Vos modifications ont été enregistrées. Le produit sera de nouveau visible après l'approbation d'un administrateur."
   },
   "errors": {
-    "titleRequired": "Veuillez saisir un titre",
+    "titleRequired": "Veuillez saisir un nom de produit",
     "invalidPrice": "Veuillez saisir un prix valide",
+    "invalidQuantity": "Veuillez saisir une quantité valide",
     "loadFailed": "Impossible de charger les annonces",
     "saveFailed": "Échec de l'enregistrement. Veuillez réessayer.",
     "noWhatsapp": "Le numéro de contact n'est pas encore configuré"

@@ -28,16 +28,27 @@ export interface Announcement {
   id: string;
   title: string;
   description: string | null;
+  // Optional translations of the title/description (primary content is Arabic).
+  title_fr: string | null;
+  description_fr: string | null;
+  title_en: string | null;
+  description_en: string | null;
   price: number;
+  quantity: number | null;
   status: AnnouncementStatus;
   created_by: string;
   created_at: string;
   updated_at: string;
 }
 
-// Fields a merchant supplies when creating a listing.
+// Fields a merchant supplies when creating/editing a listing.
 export interface NewAnnouncement {
   title: string;
   description: string;
+  title_fr: string | null;
+  description_fr: string | null;
+  title_en: string | null;
+  description_en: string | null;
   price: number;
+  quantity: number | null;
 }

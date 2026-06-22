@@ -12,9 +12,10 @@ import { useTranslation } from 'react-i18next';
 import { Feather } from '@expo/vector-icons';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 
+import { Button } from '../../../core/components/Button';
 import { Screen } from '../../../core/components/Screen';
 import { useIsRTL } from '../../../core/i18n';
-import { colors, radius, spacing, typography } from '../../../core/theme';
+import { colors, radius, rtlTextStyle, spacing, typography } from '../../../core/theme';
 import { useAuth } from '../../auth';
 import { AnnouncementCard } from '../components/AnnouncementCard';
 import { GradientHeader } from '../components/GradientHeader';
@@ -49,7 +50,7 @@ export function MyListingsScreen({ navigation }: Props) {
       <GradientHeader
         icon="package"
         title={t('list.myTitle')}
-        subtitle={t('list.countLabel', { count: items.length })}
+        subtitle={t('list.countLabel', { n: items.length })}
       >
         <Pressable
           style={[styles.addBtn, rtl && styles.rowRev]}
@@ -60,8 +61,30 @@ export function MyListingsScreen({ navigation }: Props) {
         </Pressable>
       </GradientHeader>
 
+      <View style={[styles.banner, rtl && styles.rowRev]}>
+        <Feather name="refresh-cw" size={16} color={colors.textMuted} />
+        <Text style={[styles.bannerText, rtl && rtlTextStyle]}>{t('list.editNote')}</Text>
+      </View>
+
       <StatusFilter value={statusFilter} onChange={setStatusFilter} />
     </>
+  );
+
+  const empty = (
+    <View style={styles.emptyBox}>
+      <Feather name="package" size={40} color={colors.textMuted} />
+      <Text style={[styles.emptyTitle, rtl && rtlTextStyle]}>
+        {statusFilter === 'all' ? t('list.emptyMine') : t('list.emptyFiltered')}
+      </Text>
+      {statusFilter === 'all' && (
+        <Button
+          label={t('list.create')}
+          icon="plus"
+          onPress={() => navigation.navigate('Create')}
+          style={styles.emptyBtn}
+        />
+      )}
+    </View>
   );
 
   return (
@@ -90,11 +113,7 @@ export function MyListingsScreen({ navigation }: Props) {
               onPress={() => navigation.navigate('Detail', { id: item.id, manage: true })}
             />
           )}
-          ListEmptyComponent={
-            <Text style={[styles.muted, styles.empty]}>
-              {statusFilter === 'all' ? t('list.emptyMine') : t('list.emptyFiltered')}
-            </Text>
-          }
+          ListEmptyComponent={empty}
           showsVerticalScrollIndicator={false}
           contentContainerStyle={styles.listContent}
         />
@@ -125,14 +144,42 @@ const styles = StyleSheet.create({
     fontWeight: '800',
     fontSize: typography.body,
   },
+  banner: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: spacing.sm,
+    backgroundColor: colors.surface,
+    borderWidth: 1,
+    borderColor: colors.border,
+    borderRadius: radius.md,
+    padding: spacing.md,
+    marginBottom: spacing.md,
+  },
+  bannerText: {
+    flex: 1,
+    fontSize: typography.caption,
+    color: colors.textMuted,
+    lineHeight: 19,
+  },
+  emptyBox: {
+    alignItems: 'center',
+    paddingTop: spacing.xl,
+    gap: spacing.sm,
+  },
+  emptyTitle: {
+    fontSize: typography.body,
+    fontWeight: '600',
+    color: colors.text,
+    textAlign: 'center',
+  },
+  emptyBtn: {
+    marginTop: spacing.sm,
+    paddingHorizontal: spacing.xl,
+  },
   center: {
     flexGrow: 1,
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  empty: {
-    textAlign: 'center',
-    marginTop: spacing.xl,
   },
   muted: {
     color: colors.textMuted,

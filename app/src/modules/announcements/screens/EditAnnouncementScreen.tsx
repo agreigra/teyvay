@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { ActivityIndicator, Text } from 'react-native';
+import { ActivityIndicator, Alert, Text } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 
@@ -9,7 +9,7 @@ import type { Announcement, NewAnnouncement } from '../../../core/types/database
 import { AnnouncementForm } from '../components/AnnouncementForm';
 import { ANNOUNCEMENTS_NS } from '../constants';
 import type { AnnouncementsStackParamList } from '../navigation/AnnouncementsStack';
-import { getById, update } from '../services/announcements.service';
+import { getById, setStatus, update } from '../services/announcements.service';
 
 type Props = NativeStackScreenProps<AnnouncementsStackParamList, 'Edit'>;
 
@@ -27,7 +27,11 @@ export function EditAnnouncementScreen({ route, navigation }: Props) {
 
   const onSubmit = async (input: NewAnnouncement) => {
     await update(id, input);
+    // Editing an approved listing sends it back to the review queue.
+    const requeued = item?.status === 'active';
+    if (requeued) await setStatus(id, 'pending');
     navigation.goBack();
+    if (requeued) Alert.alert(t('edit.requeuedTitle'), t('edit.requeuedBody'));
   };
 
   if (loading) {
@@ -53,7 +57,16 @@ export function EditAnnouncementScreen({ route, navigation }: Props) {
         icon="edit-2"
         submitLabel={t('edit.submit')}
         submittingLabel={t('edit.submitting')}
-        initial={{ title: item.title, description: item.description ?? '', price: item.price }}
+        initial={{
+          title: item.title,
+          description: item.description ?? '',
+          title_fr: item.title_fr,
+          description_fr: item.description_fr,
+          title_en: item.title_en,
+          description_en: item.description_en,
+          price: item.price,
+          quantity: item.quantity,
+        }}
         onSubmit={onSubmit}
       />
     </Screen>

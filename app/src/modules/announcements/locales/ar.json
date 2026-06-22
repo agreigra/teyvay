@@ -6,9 +6,27 @@
     "emptyMine": "لم تنشر أي إعلان بعد",
     "emptyFiltered": "لا توجد إعلانات تطابق هذا المرشّح",
     "emptySearch": "لا توجد منتجات تطابق بحثك",
-    "countLabel": "{{count}} منتجات",
+    "countLabel": "{{n}} منتجات",
     "footer": "تيڤاي · {{year}}",
+    "editNote": "أي تعديل على منتج مقبول سيعيده إلى قائمة انتظار المراجعة حتى يوافق عليه المشرف.",
     "create": "إعلان جديد"
+  },
+  "form": {
+    "sectionMain": "بالعربية",
+    "sectionFr": "بالفرنسية (اختياري)",
+    "sectionEn": "بالإنجليزية (اختياري)",
+    "sectionPricing": "الكمية والسعر",
+    "nameLabel": "اسم المنتج",
+    "namePlaceholder": "أدخل اسم المنتج",
+    "descLabel": "الوصف",
+    "descPlaceholder": "أدخل وصف المنتج",
+    "titleFrLabel": "العنوان بالفرنسية",
+    "descFrLabel": "الوصف بالفرنسية",
+    "titleEnLabel": "العنوان بالإنجليزية",
+    "descEnLabel": "الوصف بالإنجليزية",
+    "priceLabel": "السعر (أوقية)",
+    "quantityLabel": "الكمية",
+    "quantityPlaceholder": "مثال: 100"
   },
   "home": {
     "welcome": "مرحبًا",
@@ -42,6 +60,7 @@
     "markSold": "وضع علامة مُباع",
     "markActive": "إعادة التفعيل",
     "markInactive": "إلغاء التفعيل",
+    "quantity": "الكمية: {{n}}",
     "postedBy": "إعلان",
     "interest": "مرحبًا، أنا مهتم بإعلانك «{{title}}» (المرجع: {{id}})."
   },
@@ -60,13 +79,16 @@
     "submittedBody": "تم إرسال منتجك وسيظهر بمجرد موافقة الإدارة عليه."
   },
   "edit": {
-    "title": "تعديل الإعلان",
+    "title": "تعديل المنتج",
     "submit": "حفظ التغييرات",
-    "submitting": "جارٍ الحفظ…"
+    "submitting": "جارٍ الحفظ…",
+    "requeuedTitle": "أُرسل للمراجعة",
+    "requeuedBody": "تم حفظ تغييراتك. سيظهر المنتج مجددًا بمجرد موافقة الإدارة عليه."
   },
   "errors": {
-    "titleRequired": "يرجى إدخال عنوان",
+    "titleRequired": "يرجى إدخال اسم المنتج",
     "invalidPrice": "يرجى إدخال سعر صالح",
+    "invalidQuantity": "يرجى إدخال كمية صالحة",
     "loadFailed": "تعذّر تحميل الإعلانات",
     "saveFailed": "تعذّر الحفظ. يرجى المحاولة مرة أخرى.",
     "noWhatsapp": "لم يتم إعداد رقم التواصل بعد"

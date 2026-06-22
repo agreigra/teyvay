@@ -16,12 +16,13 @@ import { getAdminWhatsappNumber } from '../../settings';
 import { ANNOUNCEMENTS_NS } from '../constants';
 import type { AnnouncementsStackParamList } from '../navigation/AnnouncementsStack';
 import { getById, setStatus } from '../services/announcements.service';
+import { localizedDescription, localizedTitle } from '../utils';
 
 type Props = NativeStackScreenProps<AnnouncementsStackParamList, 'Detail'>;
 
 export function AnnouncementDetailScreen({ route, navigation }: Props) {
   const { id, manage } = route.params;
-  const { t } = useTranslation(ANNOUNCEMENTS_NS);
+  const { t, i18n } = useTranslation(ANNOUNCEMENTS_NS);
   const { profile } = useAuth();
   const rtl = useIsRTL();
 
@@ -95,10 +96,19 @@ export function AnnouncementDetailScreen({ route, navigation }: Props) {
         <Text style={styles.statusText}>{t(`status.${item.status}`)}</Text>
       </View>
 
-      <Text style={[styles.title, rtl && rtlTextStyle]}>{item.title}</Text>
-      <Text style={[styles.price, rtl && rtlTextStyle]}>{formatPrice(item.price)}</Text>
-      {!!item.description && (
-        <Text style={[styles.description, rtl && rtlTextStyle]}>{item.description}</Text>
+      <Text style={[styles.title, rtl && rtlTextStyle]}>
+        {localizedTitle(item, i18n.language)}
+      </Text>
+      <View style={[styles.priceRow, rtl && styles.rowRev]}>
+        <Text style={[styles.price, rtl && rtlTextStyle]}>{formatPrice(item.price)}</Text>
+        {item.quantity != null && (
+          <Text style={styles.quantity}>{t('detail.quantity', { n: item.quantity })}</Text>
+        )}
+      </View>
+      {!!localizedDescription(item, i18n.language) && (
+        <Text style={[styles.description, rtl && rtlTextStyle]}>
+          {localizedDescription(item, i18n.language)}
+        </Text>
       )}
 
       <View style={styles.spacer} />
@@ -216,11 +226,24 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     color: colors.text,
   },
+  priceRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginTop: spacing.sm,
+  },
+  rowRev: {
+    flexDirection: 'row-reverse',
+  },
   price: {
     fontSize: typography.subtitle,
     fontWeight: '700',
     color: colors.primary,
-    marginTop: spacing.sm,
+  },
+  quantity: {
+    fontSize: typography.body,
+    fontWeight: '600',
+    color: colors.textMuted,
   },
   description: {
     fontSize: typography.body,

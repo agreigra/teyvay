@@ -6,9 +6,27 @@
     "emptyMine": "You haven't posted any listings yet",
     "emptyFiltered": "No listings match this filter",
     "emptySearch": "No products match your search",
-    "countLabel": "{{count}} products",
+    "countLabel": "{{n}} products",
     "footer": "Teyvay · {{year}}",
+    "editNote": "Any edit to an approved product sends it back to the review queue until an admin approves it.",
     "create": "New listing"
+  },
+  "form": {
+    "sectionMain": "In Arabic",
+    "sectionFr": "In French (optional)",
+    "sectionEn": "In English (optional)",
+    "sectionPricing": "Quantity & price",
+    "nameLabel": "Product name",
+    "namePlaceholder": "Enter the product name",
+    "descLabel": "Description",
+    "descPlaceholder": "Enter the product description",
+    "titleFrLabel": "Title in French",
+    "descFrLabel": "Description in French",
+    "titleEnLabel": "Title in English",
+    "descEnLabel": "Description in English",
+    "priceLabel": "Price (MRU)",
+    "quantityLabel": "Quantity",
+    "quantityPlaceholder": "e.g. 100"
   },
   "home": {
     "welcome": "Welcome",
@@ -42,6 +60,7 @@
     "markSold": "Mark as sold",
     "markActive": "Mark as active",
     "markInactive": "Deactivate",
+    "quantity": "Quantity: {{n}}",
     "postedBy": "Listing",
     "interest": "Hello, I'm interested in your listing \"{{title}}\" (ref: {{id}})."
   },
@@ -60,13 +79,16 @@
     "submittedBody": "Your product was submitted and will be visible once an admin approves it."
   },
   "edit": {
-    "title": "Edit listing",
+    "title": "Edit product",
     "submit": "Save changes",
-    "submitting": "Saving…"
+    "submitting": "Saving…",
+    "requeuedTitle": "Sent for review",
+    "requeuedBody": "Your changes were saved. The product will be visible again once an admin approves it."
   },
   "errors": {
-    "titleRequired": "Please enter a title",
+    "titleRequired": "Please enter a product name",
     "invalidPrice": "Please enter a valid price",
+    "invalidQuantity": "Please enter a valid quantity",
     "loadFailed": "Couldn't load listings",
     "saveFailed": "Couldn't save. Please try again.",
     "noWhatsapp": "Contact number is not configured yet"

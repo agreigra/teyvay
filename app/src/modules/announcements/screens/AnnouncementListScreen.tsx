@@ -77,7 +77,7 @@ export function AnnouncementListScreen({ navigation }: Props) {
 
       <View style={[styles.sectionRow, rtl && styles.rowRev]}>
         <Text style={[styles.count, rtl && rtlTextStyle]}>
-          {t('list.countLabel', { count: visibleItems.length })}
+          {t('list.countLabel', { n: visibleItems.length })}
         </Text>
         <View style={[styles.links, rtl && styles.rowRev]}>
           <Pressable

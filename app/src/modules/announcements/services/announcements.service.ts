@@ -6,7 +6,8 @@ import type {
 } from '../../../core/types/database';
 
 const TABLE = 'announcements';
-const COLUMNS = 'id,title,description,price,status,created_by,created_at,updated_at';
+const COLUMNS =
+  'id,title,description,title_fr,description_fr,title_en,description_en,price,quantity,status,created_by,created_at,updated_at';
 
 // Active listings, newest first (client / browse view).
 export async function listActive(): Promise<Announcement[]> {

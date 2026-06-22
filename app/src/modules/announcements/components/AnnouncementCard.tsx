@@ -7,6 +7,7 @@ import { colors, radius, rtlTextStyle, spacing, typography } from '../../../core
 import { CURRENCY, formatAmount, refCode } from '../../../core/utils/format';
 import type { Announcement } from '../../../core/types/database';
 import { ANNOUNCEMENTS_NS } from '../constants';
+import { localizedDescription, localizedTitle } from '../utils';
 
 type FeatherName = keyof typeof Feather.glyphMap;
 
@@ -26,9 +27,11 @@ type Props = {
 };
 
 export function AnnouncementCard({ item, onPress, showStatus = false }: Props) {
-  const { t } = useTranslation(ANNOUNCEMENTS_NS);
+  const { t, i18n } = useTranslation(ANNOUNCEMENTS_NS);
   const rtl = useIsRTL();
   const status = statusMeta[item.status];
+  const title = localizedTitle(item, i18n.language);
+  const description = localizedDescription(item, i18n.language);
 
   return (
     <Pressable
@@ -48,17 +51,25 @@ export function AnnouncementCard({ item, onPress, showStatus = false }: Props) {
       </View>
 
       <Text style={[styles.title, rtl && rtlTextStyle]} numberOfLines={1}>
-        {item.title}
+        {title}
       </Text>
-      {!!item.description && (
+      {!!description && (
         <Text style={[styles.description, rtl && rtlTextStyle]} numberOfLines={2}>
-          {item.description}
+          {description}
         </Text>
       )}
 
       <View style={[styles.priceRow, rtl && styles.rowRev]}>
-        <Text style={styles.price}>{formatAmount(item.price)}</Text>
-        <Text style={styles.currency}>{CURRENCY}</Text>
+        <View style={[styles.priceGroup, rtl && styles.rowRev]}>
+          <Text style={styles.price}>{formatAmount(item.price)}</Text>
+          <Text style={styles.currency}>{CURRENCY}</Text>
+        </View>
+        {item.quantity != null && (
+          <View style={[styles.qty, rtl && styles.rowRev]}>
+            <Feather name="box" size={13} color={colors.textMuted} />
+            <Text style={styles.qtyText}>{formatAmount(item.quantity)}</Text>
+          </View>
+        )}
       </View>
     </Pressable>
   );
@@ -115,9 +126,14 @@ const styles = StyleSheet.create({
   },
   priceRow: {
     flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginTop: spacing.md,
+  },
+  priceGroup: {
+    flexDirection: 'row',
     alignItems: 'baseline',
     gap: spacing.xs,
-    marginTop: spacing.md,
   },
   price: {
     fontSize: typography.title,
@@ -125,6 +141,16 @@ const styles = StyleSheet.create({
     color: colors.primary,
   },
   currency: {
+    fontSize: typography.caption,
+    fontWeight: '700',
+    color: colors.textMuted,
+  },
+  qty: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: spacing.xs,
+  },
+  qtyText: {
     fontSize: typography.caption,
     fontWeight: '700',
     color: colors.textMuted,
