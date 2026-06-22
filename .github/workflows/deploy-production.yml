@@ -24,37 +24,19 @@ permissions:
 
 jobs:
   validate:
-    name: Re-validate on fresh Postgres
+    name: Re-validate on a fresh local Supabase DB
     runs-on: ubuntu-latest
-    services:
-      postgres:
-        image: postgres:17-alpine
-        env:
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: postgres
-          POSTGRES_DB: postgres
-        ports:
-          - 5432:5432
-        options: >-
-          --health-cmd "pg_isready -U postgres"
-          --health-interval 5s
-          --health-timeout 5s
-          --health-retries 10
     steps:
       - uses: actions/checkout@v4
-      - name: Apply migrations to a fresh database
-        # psql (not the Supabase CLI): `supabase migration up --db-url` forces
-        # TLS, which the throwaway service container can't speak. psql honors
-        # sslmode=disable and fails on the first bad statement.
-        env:
-          DB_URL: postgresql://postgres:postgres@localhost:5432/postgres?sslmode=disable
-        run: |
-          shopt -s nullglob
-          for f in supabase/migrations/*.sql; do
-            echo "── Applying $f"
-            psql "$DB_URL" -v ON_ERROR_STOP=1 -f "$f"
-          done
-          echo "All migrations applied cleanly."
+      - uses: supabase/setup-cli@v1
+        with:
+          version: latest
+      - name: Start local Supabase Postgres
+        # CLI's image has the auth/storage schemas the migrations depend on.
+        run: supabase db start
+      - name: Apply all migrations from scratch
+        # Re-applies every migration in order; non-zero exit if any fails.
+        run: supabase db reset --no-seed
 
   deploy:
     name: Push migrations to Production project
