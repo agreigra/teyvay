@@ -1,0 +1,79 @@
+name: Validate migrations
+
+# Runs on every PR that touches the database. Proves the migrations apply
+# cleanly to a *fresh* Postgres and pass lint — without touching any hosted
+# Supabase project. This is the gate before code is allowed into develop.
+
+on:
+  pull_request:
+    branches: [develop, main]
+    paths:
+      - "supabase/migrations/**"
+      - "supabase/config.toml"
+      - ".github/workflows/migrations-validate.yml"
+
+# Cancel superseded runs on the same PR to save minutes.
+concurrency:
+  group: validate-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    name: Apply migrations to throwaway Postgres
+    runs-on: ubuntu-latest
+
+    # Ephemeral database — must match the hosted projects' major version.
+    services:
+      postgres:
+        image: postgres:17-alpine
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+
+    env:
+      DB_URL: postgresql://postgres:postgres@localhost:5432/postgres
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Supabase CLI
+        uses: supabase/setup-cli@v1
+        with:
+          version: latest
+
+      - name: Show pending migrations
+        run: ls -1 supabase/migrations
+
+      - name: Apply migrations to a fresh database
+        # If any migration fails to apply (bad SQL, wrong order, missing
+        # dependency) this step exits non-zero and the PR check fails.
+        run: supabase migration up --db-url "$DB_URL"
+
+      - name: Lint database schema
+        # Catches dangerous/invalid schema constructs. Fails on warnings and up.
+        run: supabase db lint --db-url "$DB_URL" --level warning
+
+      - name: Detect drift between migrations and live schema
+        # The repo's migrations are the single source of truth. After applying
+        # them, `db diff` must report no difference — otherwise something was
+        # changed outside of a migration file.
+        run: |
+          DIFF=$(supabase db diff --db-url "$DB_URL")
+          if [ -n "$DIFF" ]; then
+            echo "::error::Schema drift detected — migrations are not the source of truth"
+            echo "$DIFF"
+            exit 1
+          fi
+          echo "No drift. Migrations are authoritative."
