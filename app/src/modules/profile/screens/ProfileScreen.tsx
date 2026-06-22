@@ -107,8 +107,10 @@ export function ProfileScreen() {
     }
   };
 
-  // Split the stored E.164 phone into country + national parts for display.
-  const phone = profile?.phone ?? '';
+  // Split the stored phone into country + national parts for display. Supabase
+  // stores it without the leading '+', so re-add it for the prefix match.
+  const rawPhone = profile?.phone ?? '';
+  const phone = rawPhone && !rawPhone.startsWith('+') ? `+${rawPhone}` : rawPhone;
   const phoneCountry = countryFromE164(phone);
   const phoneNational = phone.startsWith(phoneCountry.dial)
     ? phone.slice(phoneCountry.dial.length)

@@ -29,10 +29,9 @@ As admin I can see all the annoucements, I can filter them by user, I can see al
 - on home page, a propos de la plateforme & aide et support sont tres long comme label same in english
 - I want a support whatsapp number to be seperated from saler number and they can be changed by admin,
 - If i am on profile page and I disconnect, I stay on profile page with phone number et role cleared but the rest stays it should redirect to login or home page
+- phone number in profile page is fully displayed with country code which is already selected in the field
 
 //need to be done
-
-phone number in profile page is fully displayed with country code which is already selected in the field
 
 onboarding to explain to the user how the app works, and how to create an account
 
