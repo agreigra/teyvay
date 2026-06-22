@@ -7,11 +7,11 @@ behind a manual gate (Production). Nobody edits a hosted database by hand.
 
 ## 1. Environments
 
-| Environment | Supabase project        | Who deploys                         | Trigger                          |
-| ----------- | ----------------------- | ----------------------------------- | -------------------------------- |
-| Local       | `supabase start` (local)| Each developer                      | Manual (`supabase migration up`) |
-| Development | Hosted (integration)    | CI, automatically                   | Merge/push to `develop`          |
-| Production  | Hosted (real users)     | CI, **after manual approval**       | Push to `main` + reviewer approval |
+| Environment | Supabase project         | Who deploys                   | Trigger                            |
+| ----------- | ------------------------ | ----------------------------- | ---------------------------------- |
+| Local       | `supabase start` (local) | Each developer                | Manual (`supabase migration up`)   |
+| Development | Hosted (integration)     | CI, automatically             | Merge/push to `develop`            |
+| Production  | Hosted (real users)      | CI, **after manual approval** | Push to `main` + reviewer approval |
 
 ## 2. Repository structure
 
@@ -34,12 +34,14 @@ behind a manual gate (Production). Nobody edits a hosted database by hand.
 Create two environments under **Settings → Environments**:
 
 ### `development`
+
 - No required reviewers (deploys automatically).
 - Optional: restrict deployment branch to `develop`.
 - Secrets: `SUPABASE_ACCESS_TOKEN`, `SUPABASE_DB_PASSWORD`, `SUPABASE_PROJECT_ID`
   (all scoped to the **Development** project).
 
 ### `production`
+
 - **Required reviewers: 1–2 trusted people.** This is the manual approval gate.
 - **Deployment branches: `main` only.**
 - Optional **wait timer** (e.g. 5 min) to allow a last-second cancel.
@@ -53,11 +55,11 @@ obtain Production credentials.
 
 Set these **per environment** (same names, different values):
 
-| Secret                   | What it is                                                                 | Where to get it |
-| ------------------------ | -------------------------------------------------------------------------- | --------------- |
-| `SUPABASE_ACCESS_TOKEN`  | Personal/Service access token the CLI authenticates with (`supabase link`) | Dashboard → Account → Access Tokens |
-| `SUPABASE_DB_PASSWORD`   | Database password used by `supabase db push`                               | Project → Settings → Database |
-| `SUPABASE_PROJECT_ID`    | The project ref (e.g. `abcdwxyz...`) of that environment's project         | Project → Settings → General (Reference ID) |
+| Secret                  | What it is                                                                 | Where to get it                             |
+| ----------------------- | -------------------------------------------------------------------------- | ------------------------------------------- |
+| `SUPABASE_ACCESS_TOKEN` | Personal/Service access token the CLI authenticates with (`supabase link`) | Dashboard → Account → Access Tokens         |
+| `SUPABASE_DB_PASSWORD`  | Database password used by `supabase db push`                               | Project → Settings → Database               |
+| `SUPABASE_PROJECT_ID`   | The project ref (e.g. `abcdwxyz...`) of that environment's project         | Project → Settings → General (Reference ID) |
 
 > The local `config.toml` `project_id = "teyvay"` is only a local alias — the
 > hosted **project ref** is what `supabase link --project-ref` needs.
@@ -68,6 +70,7 @@ deploys don't break when a person leaves.
 ## 5. Development deployment workflow
 
 `deploy-develop.yml` — on push to `develop`:
+
 1. `validate` job: spins a fresh `postgres:17` and runs `supabase migration up`
    to prove the migrations apply cleanly.
 2. `deploy` job (needs `validate`, bound to `development` env):
@@ -77,6 +80,7 @@ deploys don't break when a person leaves.
 ## 6. Production deployment workflow
 
 `deploy-production.yml` — on push to `main`:
+
 1. Same `validate` job on a throwaway DB.
 2. `deploy` job is bound to the `production` environment → GitHub **pauses the
    run and requests reviewer approval**. Nothing touches Production until a
@@ -89,6 +93,7 @@ a problem, without an empty commit.
 ## 7. Migration validation workflow
 
 `migrations-validate.yml` runs on every PR into `develop`/`main`:
+
 - Applies all migrations to a **fresh, ephemeral** Postgres 17 (no hosted
   project touched).
 - `supabase db lint --level warning` — fails on risky/invalid schema.
@@ -100,12 +105,14 @@ Make this check **required** in branch protection (section 8).
 ## 8. Branch protection rules (recommended)
 
 **`develop`**
+
 - Require PR before merge (≥1 approval).
 - Require status check: `Validate migrations / validate`.
 - Require branches up to date before merge.
 - Dismiss stale approvals on new commits.
 
 **`main`**
+
 - Require PR before merge (PRs come from `develop`).
 - Require status check: `Validate migrations / validate`.
 - Require linear history; restrict who can push.
