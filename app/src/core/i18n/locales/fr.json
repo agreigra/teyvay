@@ -15,6 +15,10 @@
     "fr": "Français",
     "en": "English"
   },
+  "phone": {
+    "selectCountry": "Choisir un pays",
+    "searchPlaceholder": "Rechercher un pays ou un indicatif…"
+  },
   "menu": {
     "announcements": "Annonces",
     "profile": "Profil",

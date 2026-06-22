@@ -3,7 +3,7 @@
     "title": "Connexion",
     "subtitle": "Saisissez votre numéro de téléphone et votre mot de passe",
     "phoneLabel": "Numéro de téléphone",
-    "phonePlaceholder": "+222 XX XX XX XX",
+    "phonePlaceholder": "XX XX XX XX",
     "passwordLabel": "Mot de passe",
     "submit": "Se connecter",
     "submitting": "Connexion…",

@@ -23,11 +23,15 @@ As admin I can see all the annoucements, I can filter them by user, I can see al
 - redesign language switcher icon and user icon
   when I am on home page list is not clickable
 - review the product form to be multilanguage
+- phone selector country code selector
+  //need to be done
 
-//need to be done
-phone selector country code selector
 user should be able to change his password from his profile
-and when he forget his password he should be able to reset it
-birthdate instead of age
-limit password changes
-admin can change user password
+birthdate with date selector field instead of age
+limit password changes 2 time in a month
+admin can change user password if needed
+I want a support whatsapp number to be seperated from saler number and they can be changed by admin, I think about a db table of metadata for admin
+
+delete user completly
+
+add a notification module

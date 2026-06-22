@@ -1,10 +1,12 @@
 import { useState } from 'react';
 import { Alert, StyleSheet, Text, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
+import { Feather } from '@expo/vector-icons';
 
 import { Button } from '../../../core/components/Button';
 import { Field } from '../../../core/components/Field';
 import { Screen } from '../../../core/components/Screen';
+import { countryFromE164, flagEmoji } from '../../../core/data/countries';
 import { useIsRTL } from '../../../core/i18n';
 import { colors, radius, rtlTextStyle, spacing, typography } from '../../../core/theme';
 import { AUTH_NS, useAuth } from '../../auth';
@@ -26,6 +28,13 @@ export function ProfileScreen() {
   const [saving, setSaving] = useState(false);
   const [savedAt, setSavedAt] = useState(false);
   const [deleting, setDeleting] = useState(false);
+
+  // Split the stored E.164 phone into country + national parts for display.
+  const phone = profile?.phone ?? '';
+  const phoneCountry = countryFromE164(phone);
+  const phoneNational = phone.startsWith(phoneCountry.dial)
+    ? phone.slice(phoneCountry.dial.length)
+    : phone;
 
   const onSave = async () => {
     if (!profile) return;
@@ -107,7 +116,20 @@ export function ProfileScreen() {
 
         <View style={styles.readonly}>
           <Text style={[styles.roLabel, rtl && rtlTextStyle]}>{t('phone')}</Text>
-          <Text style={[styles.roValue, rtl && rtlTextStyle]}>{profile?.phone ?? '—'}</Text>
+          {phone ? (
+            <>
+              {/* Always LTR: flag + code on the left, number on the right. */}
+              <View style={styles.phoneDisplay}>
+                <Text style={styles.phoneFlag}>{flagEmoji(phoneCountry.iso)}</Text>
+                <Text style={styles.phoneDial}>{phoneCountry.dial}</Text>
+                <Text style={styles.phoneNational}>{phoneNational}</Text>
+                <Feather name="check-circle" size={18} color={colors.success} />
+              </View>
+              <Text style={[styles.phoneNote, rtl && rtlTextStyle]}>{t('phoneNote')}</Text>
+            </>
+          ) : (
+            <Text style={[styles.roValue, rtl && rtlTextStyle]}>—</Text>
+          )}
           <View style={styles.divider} />
           <Text style={[styles.roLabel, rtl && rtlTextStyle]}>{t('role')}</Text>
           <Text style={[styles.roValue, rtl && rtlTextStyle]}>
@@ -153,6 +175,38 @@ const styles = StyleSheet.create({
     fontSize: typography.subtitle,
     fontWeight: '600',
     color: colors.text,
+    marginTop: spacing.xs,
+  },
+  phoneDisplay: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: spacing.sm,
+    backgroundColor: colors.background,
+    borderWidth: 1,
+    borderColor: colors.border,
+    borderRadius: radius.md,
+    paddingVertical: spacing.sm,
+    paddingHorizontal: spacing.md,
+    marginTop: spacing.xs,
+  },
+  phoneFlag: {
+    fontSize: 20,
+  },
+  phoneDial: {
+    fontSize: typography.body,
+    fontWeight: '700',
+    color: colors.text,
+  },
+  phoneNational: {
+    flex: 1,
+    fontSize: typography.body,
+    fontWeight: '600',
+    color: colors.text,
+    letterSpacing: 1,
+  },
+  phoneNote: {
+    fontSize: typography.caption,
+    color: colors.textMuted,
     marginTop: spacing.xs,
   },
   divider: {

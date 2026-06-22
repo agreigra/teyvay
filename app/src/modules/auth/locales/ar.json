@@ -3,7 +3,7 @@
     "title": "تسجيل الدخول",
     "subtitle": "أدخل رقم هاتفك وكلمة المرور",
     "phoneLabel": "رقم الهاتف",
-    "phonePlaceholder": "+222 XX XX XX XX",
+    "phonePlaceholder": "XX XX XX XX",
     "passwordLabel": "كلمة المرور",
     "submit": "تسجيل الدخول",
     "submitting": "جارٍ تسجيل الدخول…",

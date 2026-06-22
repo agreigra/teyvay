@@ -1,6 +1,7 @@
 {
   "title": "Profile",
   "phone": "Phone",
+  "phoneNote": "Your verified account number — it can't be changed.",
   "role": "Role",
   "fields": {
     "firstName": "First name",

@@ -6,6 +6,7 @@ import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Brand } from '../../../core/components/Brand';
 import { Button } from '../../../core/components/Button';
 import { Field } from '../../../core/components/Field';
+import { PhoneField } from '../../../core/components/PhoneField';
 import { Screen } from '../../../core/components/Screen';
 import { useIsRTL } from '../../../core/i18n';
 import { colors, rtlTextStyle, spacing, typography } from '../../../core/theme';
@@ -102,13 +103,11 @@ export function RegisterScreen({ navigation }: Props) {
           keyboardType="number-pad"
           maxLength={3}
         />
-        <Field
+        <PhoneField
           label={t('signIn.phoneLabel')}
           placeholder={t('signIn.phonePlaceholder')}
           value={phone}
           onChangeText={setPhone}
-          keyboardType="phone-pad"
-          autoComplete="tel"
         />
         <Field
           label={t('register.passwordLabel')}

@@ -3,7 +3,7 @@
     "title": "Sign in",
     "subtitle": "Enter your phone number and password",
     "phoneLabel": "Phone number",
-    "phonePlaceholder": "+222 XX XX XX XX",
+    "phonePlaceholder": "XX XX XX XX",
     "passwordLabel": "Password",
     "submit": "Sign in",
     "submitting": "Signing in…",
