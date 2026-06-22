@@ -42,7 +42,9 @@ jobs:
           --health-retries 10
 
     env:
-      DB_URL: postgresql://postgres:postgres@localhost:5432/postgres
+      # sslmode=disable: the throwaway service container has no TLS, and recent
+      # Supabase CLI versions require SSL by default when given a --db-url.
+      DB_URL: postgresql://postgres:postgres@localhost:5432/postgres?sslmode=disable
 
     steps:
       - name: Checkout
