@@ -73,7 +73,7 @@ export function RegisterScreen({ navigation }: Props) {
   };
 
   return (
-    <Screen scroll>
+    <Screen scroll underHeader>
       <View style={styles.brand}>
         <Brand showTagline={false} />
       </View>

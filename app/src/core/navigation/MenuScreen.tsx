@@ -12,16 +12,18 @@ import {
 import { useTranslation } from 'react-i18next';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Feather } from '@expo/vector-icons';
-import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 
-import { AUTH_NS, useAuth } from '../../modules/auth';
+import { AUTH_NS } from '../../modules/auth/constants';
+import { useAuth } from '../../modules/auth/hooks/useAuth';
 import { getAdminWhatsappNumber } from '../../modules/settings';
 import { useIsRTL } from '../i18n';
 import { colors, radius, rtlTextStyle, spacing, typography } from '../theme';
 import { openWhatsapp } from '../utils/whatsapp';
 import type { AppMenuParamList } from './AppMenuStack';
 
-type Props = NativeStackScreenProps<AppMenuParamList, 'Menu'>;
+// The menu is mounted in both the main shell and the auth stack, which expose
+// different route sets, so navigation is typed loosely here.
+type Props = { navigation: any };
 
 type FeatherName = keyof typeof Feather.glyphMap;
 
@@ -40,7 +42,7 @@ type Row = {
 // (no Reanimated), so it runs everywhere including Expo Go.
 export function MenuScreen({ navigation }: Props) {
   const { t } = useTranslation();
-  const { session, profile, signOut, openAuth } = useAuth();
+  const { session, profile, signOut, openAuth, closeAuth } = useAuth();
   const insets = useSafeAreaInsets();
   const rtl = useIsRTL();
 
@@ -59,9 +61,26 @@ export function MenuScreen({ navigation }: Props) {
   // The section sitting just under the Menu modal is the active one.
   const navState = navigation.getState();
   const activeName = navState.routes[navState.index - 1]?.name;
+  // The main shell exposes the section routes; the auth stack does not.
+  const inMain = (navState.routeNames as string[]).includes('Announcements');
 
   const resetTo = (name: keyof AppMenuParamList) =>
     navigation.reset({ index: 0, routes: [{ name }] });
+
+  // From the auth stack, "Home" means: leave the auth flow and browse.
+  const goHome = () => {
+    if (inMain) resetTo('Announcements');
+    else {
+      close();
+      closeAuth();
+    }
+  };
+
+  const goAuth = (route: 'SignIn' | 'Register') => {
+    close();
+    if ((navState.routeNames as string[]).includes(route)) navigation.navigate(route);
+    else openAuth(route);
+  };
 
   const openAnnouncements = (screen: 'Create' | 'MyList') =>
     navigation.reset({
@@ -89,17 +108,17 @@ export function MenuScreen({ navigation }: Props) {
       key: 'home',
       label: t('menu.home'),
       icon: 'home',
-      onPress: () => resetTo('Announcements'),
-      active: activeName === 'Announcements',
+      onPress: goHome,
+      active: inMain && activeName === 'Announcements',
     },
   ];
-  if (isMerchant) {
+  if (inMain && isMerchant) {
     rows.push(
       { key: 'add', label: t('menu.addProduct'), icon: 'plus-square', onPress: () => openAnnouncements('Create') },
       { key: 'mine', label: t('menu.myProducts'), icon: 'package', onPress: () => openAnnouncements('MyList') },
     );
   }
-  if (isAdmin) {
+  if (inMain && isAdmin) {
     rows.push({
       key: 'admin',
       label: t('menu.admin'),
@@ -108,13 +127,15 @@ export function MenuScreen({ navigation }: Props) {
       active: activeName === 'Admin',
     });
   }
-  rows.push({
-    key: 'about',
-    label: t('menu.about'),
-    icon: 'info',
-    onPress: () => resetTo('About'),
-    active: activeName === 'About',
-  });
+  if (inMain) {
+    rows.push({
+      key: 'about',
+      label: t('menu.about'),
+      icon: 'info',
+      onPress: () => resetTo('About'),
+      active: activeName === 'About',
+    });
+  }
   rows.push({ key: 'support', label: t('menu.support'), icon: 'headphones', onPress: contactSupport });
   if (session) {
     rows.push({ key: 'signout', label: t('menu.signOut'), icon: 'log-out', onPress: signOut, danger: true });
@@ -177,19 +198,13 @@ export function MenuScreen({ navigation }: Props) {
           <View style={[styles.authRow, rtl && styles.rowRev]}>
             <Pressable
               style={[styles.authBtn, styles.authPrimary]}
-              onPress={() => {
-                close();
-                openAuth('SignIn');
-              }}
+              onPress={() => goAuth('SignIn')}
             >
               <Text style={styles.authPrimaryText}>{t('menu.signIn')}</Text>
             </Pressable>
             <Pressable
               style={[styles.authBtn, styles.authOutline]}
-              onPress={() => {
-                close();
-                openAuth('Register');
-              }}
+              onPress={() => goAuth('Register')}
             >
               <Text style={styles.authOutlineText}>{t('menu.signUp')}</Text>
             </Pressable>

@@ -43,7 +43,7 @@ export function SignInScreen({ navigation }: Props) {
   };
 
   return (
-    <Screen scroll>
+    <Screen scroll underHeader>
       <View style={styles.brand}>
         <Brand />
       </View>
