@@ -29,11 +29,11 @@
     "myProducts": "My products",
     "profile": "Profile",
     "admin": "Admin",
-    "about": "About the platform",
+    "about": "About",
     "signIn": "Sign in",
     "signUp": "Sign up",
     "signOut": "Sign out",
-    "support": "Help & support",
+    "support": "Support",
     "supportMessage": "Hello, I need help with Teyvay.",
     "supportUnavailable": "Support is unavailable right now."
   },

@@ -32,8 +32,8 @@
     "signIn": "Connexion",
     "signUp": "Inscription",
     "signOut": "Se déconnecter",
-    "about": "À propos de la plateforme",
-    "support": "Aide et assistance",
+    "about": "À propos",
+    "support": "Aide",
     "supportMessage": "Bonjour, j'ai besoin d'aide avec Teyvay.",
     "supportUnavailable": "L'assistance n'est pas disponible pour le moment."
   },
