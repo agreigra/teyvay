@@ -41,12 +41,19 @@ jobs:
           --health-retries 10
     steps:
       - uses: actions/checkout@v4
-      - uses: supabase/setup-cli@v1
-        with:
-          version: latest
       - name: Apply migrations to a fresh database
-        # sslmode=disable: the service container has no TLS; the CLI requires SSL by default.
-        run: supabase migration up --db-url "postgresql://postgres:postgres@localhost:5432/postgres?sslmode=disable"
+        # psql (not the Supabase CLI): `supabase migration up --db-url` forces
+        # TLS, which the throwaway service container can't speak. psql honors
+        # sslmode=disable and fails on the first bad statement.
+        env:
+          DB_URL: postgresql://postgres:postgres@localhost:5432/postgres?sslmode=disable
+        run: |
+          shopt -s nullglob
+          for f in supabase/migrations/*.sql; do
+            echo "── Applying $f"
+            psql "$DB_URL" -v ON_ERROR_STOP=1 -f "$f"
+          done
+          echo "All migrations applied cleanly."
 
   deploy:
     name: Push migrations to Development project
