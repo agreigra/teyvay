@@ -32,12 +32,11 @@ As admin I can see all the annoucements, I can filter them by user, I can see al
 - phone number in profile page is fully displayed with country code which is already selected in the field
 - onboarding to explain to the user how the app works, and how to create an account when he enter for the first time
 - the name in arabic is written with two ways I want it to be written in one way every where
+- add optional email in signin form and show it on profil page
 
 //need to be done
 
 a user can change his role from client to merchant in his profil.
-
-add optional email in signin form and show it on profil page
 
 limit password changes when user forget it 2 time in a month otherwise contact admin.
 

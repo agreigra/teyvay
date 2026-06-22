@@ -12,6 +12,8 @@ export type SignUpMeta = {
   last_name: string;
   // ISO YYYY-MM-DD; the DB trigger derives age from it.
   birthdate: string;
+  // Optional contact email (stored on the profile, not the auth identity).
+  email?: string;
 };
 
 // Create an account. With phone confirmations enabled, no session is returned

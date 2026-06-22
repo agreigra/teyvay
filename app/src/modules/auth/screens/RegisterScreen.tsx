@@ -18,6 +18,7 @@ import { signUpWithPassword } from '../services/auth.service';
 import {
   MIN_AGE,
   MIN_PASSWORD_LENGTH,
+  isValidEmail,
   isValidPhone,
   maxBirthdate,
   normalizePhone,
@@ -31,6 +32,7 @@ export function RegisterScreen({ navigation }: Props) {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [birthdate, setBirthdate] = useState<Date | null>(null);
+  const [email, setEmail] = useState('');
   const [phone, setPhone] = useState(DEFAULT_COUNTRY_CODE);
   const [password, setPassword] = useState('');
   const [confirm, setConfirm] = useState('');
@@ -44,6 +46,10 @@ export function RegisterScreen({ navigation }: Props) {
     }
     if (!birthdate || ageFromBirthdate(birthdate) < MIN_AGE) {
       setError(t('errors.ageTooYoung', { min: MIN_AGE }));
+      return;
+    }
+    if (email.trim() && !isValidEmail(email)) {
+      setError(t('errors.invalidEmail'));
       return;
     }
     if (!isValidPhone(phone)) {
@@ -66,6 +72,7 @@ export function RegisterScreen({ navigation }: Props) {
         first_name: firstName.trim(),
         last_name: lastName.trim(),
         birthdate: toISODate(birthdate),
+        email: email.trim() || undefined,
       });
       navigation.navigate('OtpVerify', { phone: normalized, mode: 'register' });
     } catch (e) {
@@ -109,6 +116,15 @@ export function RegisterScreen({ navigation }: Props) {
           value={birthdate}
           onChange={setBirthdate}
           maximumDate={maxBirthdate()}
+        />
+        <Field
+          label={t('register.emailLabel')}
+          placeholder={t('register.emailPlaceholder')}
+          value={email}
+          onChangeText={setEmail}
+          keyboardType="email-address"
+          autoCapitalize="none"
+          autoComplete="email"
         />
         <PhoneField
           label={t('signIn.phoneLabel')}

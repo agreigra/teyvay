@@ -7,7 +7,9 @@
     "firstName": "الاسم الأول",
     "lastName": "اسم العائلة",
     "birthdate": "تاريخ الميلاد",
-    "birthdatePlaceholder": "اختر تاريخ ميلادك"
+    "birthdatePlaceholder": "اختر تاريخ ميلادك",
+    "email": "البريد الإلكتروني (اختياري)",
+    "emailPlaceholder": "you@example.com"
   },
   "save": "حفظ التغييرات",
   "saving": "جارٍ الحفظ…",
@@ -43,6 +45,7 @@
     "deleteFailed": "تعذّر إلغاء تنشيط حسابك. يرجى المحاولة مرة أخرى.",
     "passwordTooShort": "يجب أن تتكون كلمة المرور من {{min}} أحرف على الأقل",
     "passwordsDontMatch": "كلمتا المرور غير متطابقتين",
+    "invalidEmail": "يرجى إدخال بريد إلكتروني صالح",
     "wrongPassword": "كلمة المرور الحالية غير صحيحة.",
     "passwordFailed": "تعذّر تحديث كلمة المرور. يرجى المحاولة مرة أخرى."
   }

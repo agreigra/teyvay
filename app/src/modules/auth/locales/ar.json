@@ -18,6 +18,8 @@
     "lastNameLabel": "اسم العائلة",
     "birthdateLabel": "تاريخ الميلاد",
     "birthdatePlaceholder": "اختر تاريخ ميلادك",
+    "emailLabel": "البريد الإلكتروني (اختياري)",
+    "emailPlaceholder": "you@example.com",
     "passwordLabel": "كلمة المرور",
     "confirmLabel": "تأكيد كلمة المرور",
     "submit": "متابعة",
@@ -61,6 +63,7 @@
   "signOut": "تسجيل الخروج",
   "errors": {
     "invalidPhone": "يرجى إدخال رقم هاتف صالح",
+    "invalidEmail": "يرجى إدخال بريد إلكتروني صالح",
     "nameRequired": "يرجى إدخال اسمك الأول واسم العائلة",
     "ageTooYoung": "يجب أن يكون عمرك {{min}} عامًا على الأقل",
     "invalidCode": "الرمز غير صالح أو منتهي الصلاحية",

@@ -26,6 +26,7 @@ import {
   MIN_PASSWORD_LENGTH,
   WrongPasswordError,
   changePassword,
+  isValidEmail,
   maxBirthdate,
   useAuth,
 } from '../../auth';
@@ -50,6 +51,7 @@ export function ProfileScreen() {
   const [birthdate, setBirthdate] = useState<Date | null>(
     parseISODate(profile?.birthdate),
   );
+  const [email, setEmail] = useState(profile?.email ?? '');
   const [error, setError] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
   const [savedAt, setSavedAt] = useState(false);
@@ -126,6 +128,10 @@ export function ProfileScreen() {
       setError(t('errors.ageTooYoung', { min: MIN_AGE }));
       return;
     }
+    if (email.trim() && !isValidEmail(email)) {
+      setError(t('errors.invalidEmail'));
+      return;
+    }
     setError(null);
     setSaving(true);
     setSavedAt(false);
@@ -134,6 +140,7 @@ export function ProfileScreen() {
         first_name: firstName.trim(),
         last_name: lastName.trim(),
         birthdate: toISODate(birthdate),
+        email: email.trim() || null,
       });
       await refreshProfile();
       setSavedAt(true);
@@ -190,6 +197,18 @@ export function ProfileScreen() {
             setSavedAt(false);
           }}
           maximumDate={maxBirthdate()}
+        />
+        <Field
+          label={t('fields.email')}
+          placeholder={t('fields.emailPlaceholder')}
+          value={email}
+          onChangeText={(v) => {
+            setEmail(v);
+            setSavedAt(false);
+          }}
+          keyboardType="email-address"
+          autoCapitalize="none"
+          autoComplete="email"
           error={error}
         />
 

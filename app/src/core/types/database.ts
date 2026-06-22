@@ -11,6 +11,8 @@ export interface Profile {
   display_name: string | null;
   first_name: string | null;
   last_name: string | null;
+  // Optional contact email (not the auth identifier).
+  email: string | null;
   // ISO YYYY-MM-DD; source of truth for age. `age` is derived for convenience.
   birthdate: string | null;
   age: number | null;
@@ -24,6 +26,8 @@ export interface ProfileUpdate {
   first_name: string;
   last_name: string;
   birthdate: string;
+  // Optional; empty becomes null.
+  email: string | null;
 }
 
 export interface Announcement {

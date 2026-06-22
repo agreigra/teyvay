@@ -21,6 +21,7 @@ export async function updateProfile(
       last_name: input.last_name.trim(),
       birthdate: input.birthdate,
       age: parsed ? ageFromBirthdate(parsed) : null,
+      email: input.email,
       display_name,
     })
     .eq('id', userId);

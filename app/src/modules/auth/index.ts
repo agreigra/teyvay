@@ -11,7 +11,13 @@ export { AuthStack } from './navigation/AuthStack';
 export { RoleSelectScreen } from './screens/RoleSelectScreen';
 export { SetNewPasswordScreen } from './screens/SetNewPasswordScreen';
 export { changePassword, WrongPasswordError } from './services/auth.service';
-export { MIN_AGE, MIN_PASSWORD_LENGTH, isValidPhone, maxBirthdate } from './utils';
+export {
+  MIN_AGE,
+  MIN_PASSWORD_LENGTH,
+  isValidEmail,
+  isValidPhone,
+  maxBirthdate,
+} from './utils';
 
 // Register this module's translations. Call after initI18n().
 export function registerAuthLocales(): void {

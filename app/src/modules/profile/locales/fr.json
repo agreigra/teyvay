@@ -7,7 +7,9 @@
     "firstName": "Prénom",
     "lastName": "Nom",
     "birthdate": "Date de naissance",
-    "birthdatePlaceholder": "Sélectionnez votre date de naissance"
+    "birthdatePlaceholder": "Sélectionnez votre date de naissance",
+    "email": "E-mail (facultatif)",
+    "emailPlaceholder": "vous@exemple.com"
   },
   "save": "Enregistrer",
   "saving": "Enregistrement…",
@@ -43,6 +45,7 @@
     "deleteFailed": "Impossible de désactiver votre compte. Veuillez réessayer.",
     "passwordTooShort": "Le mot de passe doit comporter au moins {{min}} caractères",
     "passwordsDontMatch": "Les mots de passe ne correspondent pas",
+    "invalidEmail": "Veuillez saisir une adresse e-mail valide",
     "wrongPassword": "Votre mot de passe actuel est incorrect.",
     "passwordFailed": "Impossible de mettre à jour votre mot de passe. Veuillez réessayer."
   }

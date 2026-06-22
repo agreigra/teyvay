@@ -7,7 +7,9 @@
     "firstName": "First name",
     "lastName": "Last name",
     "birthdate": "Date of birth",
-    "birthdatePlaceholder": "Select your date of birth"
+    "birthdatePlaceholder": "Select your date of birth",
+    "email": "Email (optional)",
+    "emailPlaceholder": "you@example.com"
   },
   "save": "Save changes",
   "saving": "Saving…",
@@ -43,6 +45,7 @@
     "deleteFailed": "Couldn't deactivate your account. Please try again.",
     "passwordTooShort": "Password must be at least {{min}} characters",
     "passwordsDontMatch": "Passwords don't match",
+    "invalidEmail": "Please enter a valid email address",
     "wrongPassword": "Your current password is incorrect.",
     "passwordFailed": "Couldn't update your password. Please try again."
   }

@@ -18,6 +18,8 @@
     "lastNameLabel": "Nom",
     "birthdateLabel": "Date de naissance",
     "birthdatePlaceholder": "Sélectionnez votre date de naissance",
+    "emailLabel": "E-mail (facultatif)",
+    "emailPlaceholder": "vous@exemple.com",
     "passwordLabel": "Mot de passe",
     "confirmLabel": "Confirmer le mot de passe",
     "submit": "Continuer",
@@ -61,6 +63,7 @@
   "signOut": "Se déconnecter",
   "errors": {
     "invalidPhone": "Veuillez saisir un numéro de téléphone valide",
+    "invalidEmail": "Veuillez saisir une adresse e-mail valide",
     "nameRequired": "Veuillez saisir votre prénom et votre nom",
     "ageTooYoung": "Vous devez avoir au moins {{min}} ans",
     "invalidCode": "Code invalide ou expiré",
