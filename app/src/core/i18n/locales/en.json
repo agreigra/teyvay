@@ -31,7 +31,28 @@
     "supportUnavailable": "Support is unavailable right now."
   },
   "about": {
-    "body": "Teyvay is a marketplace for Mauritania that connects sellers and buyers. Browse listings, and contact sellers directly on WhatsApp to arrange your purchase.",
+    "whatTitle": "What is Teyvay?",
+    "whatBody": "Teyvay is a secure, anonymous marketplace where users post and browse listings without revealing their identity.",
+    "featAnon": "Anonymous trading",
+    "featSecure": "Safe & trusted",
+    "featAdmin": "All deals via admin",
+    "howTitle": "How does it work?",
+    "step1Title": "Secure sign-up",
+    "step1Body": "Register with your phone number and create your protected account.",
+    "step2Title": "Post a listing",
+    "step2Body": "Publish your product; an admin reviews it before it goes live.",
+    "step3Title": "Order via admin",
+    "step3Body": "Buyers contact the admin only, to keep everyone safe.",
+    "step4Title": "Close the deal",
+    "step4Body": "The deal is completed under full admin supervision.",
+    "rulesTitle": "Safety rules",
+    "rule1": "Posting phone numbers or personal contact info is not allowed.",
+    "rule2": "Misleading ads or illegal products are not allowed.",
+    "rule3": "All transactions happen only through the platform admin.",
+    "rule4": "Admins may remove any violating content without notice.",
+    "privacyTitle": "Seller identity protected",
+    "privacyBody": "All personal data (phone, WhatsApp, name) is completely hidden from users. Only admins can view it.",
+    "footer": "Ti Fay / Teyvay · 2026",
     "version": "Version"
   }
 }

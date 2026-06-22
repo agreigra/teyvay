@@ -31,7 +31,28 @@
     "supportUnavailable": "L'assistance n'est pas disponible pour le moment."
   },
   "about": {
-    "body": "Teyvay est une place de marché pour la Mauritanie qui met en relation vendeurs et acheteurs. Parcourez les annonces et contactez les vendeurs directement sur WhatsApp pour finaliser votre achat.",
+    "whatTitle": "Qu'est-ce que Teyvay ?",
+    "whatBody": "Teyvay est une place de marché sécurisée et anonyme où les utilisateurs publient et parcourent des annonces sans révéler leur identité.",
+    "featAnon": "Échanges anonymes",
+    "featSecure": "Sûr et fiable",
+    "featAdmin": "Toutes les transactions via l'administration",
+    "howTitle": "Comment ça marche ?",
+    "step1Title": "Inscription sécurisée",
+    "step1Body": "Inscrivez-vous avec votre numéro de téléphone et créez votre compte protégé.",
+    "step2Title": "Publier une annonce",
+    "step2Body": "Publiez votre produit ; un administrateur le valide avant sa mise en ligne.",
+    "step3Title": "Commande via l'administration",
+    "step3Body": "Les acheteurs contactent uniquement l'administration, pour la sécurité de tous.",
+    "step4Title": "Conclure la transaction",
+    "step4Body": "La transaction se fait sous la supervision complète de l'administration.",
+    "rulesTitle": "Règles de sécurité",
+    "rule1": "Il est interdit de publier des numéros de téléphone ou des coordonnées personnelles.",
+    "rule2": "Les annonces trompeuses ou les produits illégaux sont interdits.",
+    "rule3": "Toutes les transactions se font uniquement via l'administration de la plateforme.",
+    "rule4": "L'administration peut supprimer tout contenu non conforme sans préavis.",
+    "privacyTitle": "Identité du vendeur protégée",
+    "privacyBody": "Toutes les données personnelles (téléphone, WhatsApp, nom) sont totalement masquées aux utilisateurs. Seule l'administration peut les consulter.",
+    "footer": "Ti Fay / Teyvay · 2026",
     "version": "Version"
   }
 }

@@ -22,10 +22,9 @@ As admin I can see all the annoucements, I can filter them by user, I can see al
 - big spacing between the header and the page content when I scroll it gets hidden before reaching the header bottom
 - redesign language switcher icon and user icon
   when I am on home page list is not clickable
--
+- review the product form to be multilanguage
 
 //need to be done
-review the product form to be multilanguage and the support and info pages
 phone selector country code selector
 user should be able to change his password from his profile
 and when he forget his password he should be able to reset it
