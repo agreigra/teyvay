@@ -46,3 +46,7 @@ new button to delete user completly
 add a notification module
 
 unit tests
+
+share a link
+
+numbre of views
